@@ -25,7 +25,6 @@ public class SpaceImage {
     @Column(name = "realname")
     private String realname;
 
-
     @Column(name = "titleyn")
     private int titleyn;
 
@@ -37,7 +36,5 @@ public class SpaceImage {
 
     @Column(name = "create_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private boolean create_at;
-
-
+    private Timestamp create_at;
 }

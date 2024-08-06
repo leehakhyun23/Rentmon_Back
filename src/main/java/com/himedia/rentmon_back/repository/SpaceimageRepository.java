@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SpaceimageRepository extends JpaRepository<SpaceImage, Long> {
 
+
 }
