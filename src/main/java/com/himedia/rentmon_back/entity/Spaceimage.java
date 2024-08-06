@@ -7,9 +7,9 @@ import lombok.Getter;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Spaceimage")
+@Table(name = "SpaceImage")
 @Getter
-public class Spaceimage {
+public class SpaceImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,18 +22,19 @@ public class Spaceimage {
     @Column(name = "originalname")
     private String originalname;
 
+    @Column(name = "realname")
+    private String realname;
+
     @Column(name = "titleyn")
     private int titleyn;
 
     @Column(name = "extension")
-    private Timestamp extension;
+    private String extension;
 
     @Column(name = "size")
     private int size;
 
     @Column(name = "create_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private boolean create_at;
-
-
+    private Timestamp create_at;
 }
