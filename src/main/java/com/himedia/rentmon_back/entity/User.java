@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 @Entity
 public class User {
     @Id
-
     @Column(name = "userid")
     private String userid;
 
@@ -50,7 +49,6 @@ public class User {
 
     @Column(name = "snsid")
     private String snsid;
-
 
     @Column(name = "created_at")
     @CreationTimestamp
