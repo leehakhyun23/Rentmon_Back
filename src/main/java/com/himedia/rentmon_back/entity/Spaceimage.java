@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Spaceimage")
+@Table(name = "SpaceImage")
 @Getter
 public class SpaceImage {
 
@@ -22,11 +22,15 @@ public class SpaceImage {
     @Column(name = "originalname")
     private String originalname;
 
+    @Column(name = "realname")
+    private String realname;
+
+
     @Column(name = "titleyn")
     private int titleyn;
 
     @Column(name = "extension")
-    private Timestamp extension;
+    private String extension;
 
     @Column(name = "size")
     private int size;
