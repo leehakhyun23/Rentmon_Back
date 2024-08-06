@@ -1,17 +1,17 @@
 package com.himedia.rentmon_back.dto;
 
 import jakarta.persistence.Id;
+import com.himedia.rentmon_back.entity.SpaceFacility;
+import com.himedia.rentmon_back.entity.SpaceImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.sql.Timestamp;
 import java.util.List;
 
 @Data
 public class SpaceDTO {
-
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -36,4 +36,15 @@ public class SpaceDTO {
         private List<String> spaceHashTags;
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class ResponseSpaceView {
+        private int sseq;
+        private String title;
+        private String subTitle;
+
+        private List<SpaceFacility> facilities;
+        private List<SpaceImage> images;
+    }
 }
