@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 @Table(name = "spaceimage")
 @Getter
 public class SpaceImage {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "siseq")
@@ -23,6 +24,9 @@ public class SpaceImage {
     @Column(name = "realname")
     private String realName;
 
+    @Column(name = "realname")
+    private String realname;
+
     @Column(name = "titleyn")
     private boolean titleYn;
 
@@ -30,9 +34,9 @@ public class SpaceImage {
     private String extension;
 
     @Column(name = "size")
-    private Long size;
+    private int size;
 
-    @Column(name = "created_at")
-    private Timestamp created_at;
-
+    @Column(name = "create_at")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    private Timestamp create_at;
 }
