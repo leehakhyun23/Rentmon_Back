@@ -5,7 +5,7 @@ import lombok.Getter;
 
 
 @Entity
-@Table(name = "HashSpace")
+@Table(name = "Hashspace")
 @Getter
 public class HashSpace {
 
