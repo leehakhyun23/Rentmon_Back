@@ -15,6 +15,6 @@ public class SpaceFacility {
     @Column(name = "sseq")
     private int sseq;
 
-    @Column(name = "f_num")
-    private int f_num;
+    @Column(name = "fnum")
+    private int fnum;
 }

@@ -1,12 +1,13 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "spaceimage")
+@Table(name = "spaceImage")
 @Getter
 public class SpaceImage {
 
@@ -18,17 +19,14 @@ public class SpaceImage {
     @Column(name = "sseq")
     private int sseq;
 
-    @Column(name = "originame")
-    private String origiName;
-
-    @Column(name = "realname")
-    private String realName;
+    @Column(name = "originname")
+    private String originame;
 
     @Column(name = "realname")
     private String realname;
 
     @Column(name = "titleyn")
-    private boolean titleYn;
+    private boolean titleyn;
 
     @Column(name = "extension")
     private String extension;

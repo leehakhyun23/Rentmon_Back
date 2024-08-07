@@ -9,8 +9,8 @@ import lombok.Getter;
 public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "b_num")
-    private int b_num;
+    @Column(name = "bnum")
+    private int bnum;
 
     @Column(name = "bank")
     private String bank;

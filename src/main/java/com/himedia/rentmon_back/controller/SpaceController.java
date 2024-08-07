@@ -21,27 +21,17 @@ public class SpaceController {
     private final SpaceService ss;
 
     @GetMapping("/getSpaceList")
-    public ResponseEntity<List<SpaceDTO.SpaceList>> getSpaceList(@RequestParam(value="word", required = false) String word) {
+    public ResponseEntity<List<SpaceDTO.SpaceList>> getSpaceList() {
         try{
             List<SpaceDTO.SpaceList> spaces = new ArrayList<>();
 
             spaces = ss.getSpaceList();
 
 
-            //spaces에다가 먼저 Space를 조회해 값을 넣어준다.
-
-            //spaces에다가 먼저 images를 조회해 값을 넣어준다.
-            //spaces에다가 먼저 hashtags를 조회해 값을 넣어준다.
-
-            //spaces에다가 찜 개수를 세서 넣어준다
-            //spaces에다가
-
-
-
-
             return ResponseEntity.ok(spaces);
         } catch (Exception e){
             e.printStackTrace();
+
 
             return ResponseEntity.badRequest().build();
         }

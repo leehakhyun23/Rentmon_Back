@@ -11,11 +11,11 @@ public class Grade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "g_num")
-    private int g_num;
+    @Column(name = "gnum")
+    private int gnum;
 
-    @Column(name = "g_name")
-    private String g_name;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "sale")
     private int sale;

@@ -14,14 +14,14 @@ public class Facility {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "f_num")
-    private int f_num;
+    @Column(name = "fnum")
+    private int fnum;
 
-    @Column(name = "f_name")
-    private String f_name;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "f_icon")
-    private String f_icon;
+    @Column(name = "icon")
+    private String icon;
 
 
 
