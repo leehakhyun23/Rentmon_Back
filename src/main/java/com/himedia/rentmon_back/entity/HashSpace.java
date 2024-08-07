@@ -3,18 +3,21 @@ package com.himedia.rentmon_back.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+
 @Entity
-@Table(name = "SpaceFacility")
+@Table(name = "HashSpace")
 @Getter
-public class SpaceFacility {
+public class HashSpace {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sfseq")
-    private int sfseq;
+    @Column(name = "hsseq")
+    private int hsseq;
 
     @Column(name = "sseq")
     private int sseq;
 
-    @Column(name = "fnum")
-    private int fnum;
+    @Column(name = "hseq")
+    private int hseq;
+
 }

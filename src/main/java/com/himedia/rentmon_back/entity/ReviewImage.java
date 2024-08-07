@@ -7,26 +7,22 @@ import lombok.Getter;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "spaceImage")
+@Table(name = "ReviewImage")
 @Getter
-public class SpaceImage {
-
+public class ReviewImage {
     @Id
+    @Column(name = "riseq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "siseq")
-    private int siseq;
+    private int riseq;
 
-    @Column(name = "sseq")
-    private int sseq;
+    @Column(name = "rseq")
+    private int rseq;
 
     @Column(name = "originname")
-    private String originame;
+    private String originname;
 
     @Column(name = "realname")
     private String realname;
-
-    @Column(name = "titleyn")
-    private boolean titleyn;
 
     @Column(name = "extension")
     private String extension;
@@ -34,7 +30,7 @@ public class SpaceImage {
     @Column(name = "size")
     private int size;
 
-    @Column(name = "create_at")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp create_at;
+
+
+
 }

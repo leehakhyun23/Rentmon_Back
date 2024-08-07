@@ -4,13 +4,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "InquiryCategory")
+@Table(name = "Category")
 @Getter
-public class InquiryCategory {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "icnum")
-    private int icnum;
+    @Column(name = "cnum")
+    private int cnum;
 
     @Column(name = "name")
     private String name;
