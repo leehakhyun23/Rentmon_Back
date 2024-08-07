@@ -26,7 +26,6 @@ public class Member {
     @Column(name = "role")
     private String role;
 
-
     @Column(name = "created_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;

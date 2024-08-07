@@ -18,8 +18,8 @@ public class ReviewImage {
     @Column(name = "rseq")
     private int rseq;
 
-    @Column(name = "originame")
-    private String originame;
+    @Column(name = "originname")
+    private String originname;
 
     @Column(name = "realname")
     private String realname;

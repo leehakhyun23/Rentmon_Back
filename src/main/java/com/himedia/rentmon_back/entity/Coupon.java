@@ -12,22 +12,22 @@ import java.sql.Timestamp;
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "c_num")
-    private int c_num;
+    @Column(name = "cnum")
+    private int cnum;
 
     @Column(name = "userid")
     private String userid;
 
-    @Column(name = "couponStr")
-    private String couponStr;
+    @Column(name = "couponstr")
+    private String couponstr;
 
     @Column(name = "discount")
     private int discount;
 
-    @Column(name = "limitDate")
+    @Column(name = "limitdate")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp limitDate;
+    private Timestamp limitdate;
 
-    @Column(name = "useYn")
-    private boolean useYn;
+    @Column(name = "useyn")
+    private boolean useyn;
 }

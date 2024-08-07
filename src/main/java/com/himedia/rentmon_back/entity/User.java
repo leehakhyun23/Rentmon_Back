@@ -21,8 +21,8 @@ public class User {
     @Column(name = "cseq")
     private int cseq;
 
-    @Column(name = "g_num")
-    private int g_num;
+    @Column(name = "gnum")
+    private int gnum;
 
     @Column(name = "pwd")
     private String pwd;
