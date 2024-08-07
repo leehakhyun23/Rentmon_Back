@@ -40,8 +40,7 @@ public class SpaceService {
             space.setPrice(onlyspace.getPrice());
             space.setHostid(onlyspace.getHostid());
             space.setCnum(onlyspace.getCnum());
-            space.setProvince(onlyspace.getProvince())
-            ;
+            space.setProvince(onlyspace.getProvince());
             space.setTown(onlyspace.getTown());
             space.setVillage(onlyspace.getVillage());
             space.setCreated_at(onlyspace.getCreated_at());
