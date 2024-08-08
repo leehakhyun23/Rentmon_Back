@@ -1,16 +1,21 @@
 package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.SpaceDTO;
+import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
+import com.himedia.rentmon_back.repository.ReservationRepository;
 import com.himedia.rentmon_back.repository.SpaceRepository;
 import com.himedia.rentmon_back.repository.SpaceimageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -19,6 +24,7 @@ public class SpaceService {
 
     private final SpaceRepository sr;
     private final SpaceimageRepository sir;
+    private final ReservationRepository rr;
 
 
 
@@ -51,5 +57,12 @@ public class SpaceService {
             list.add(space);
         }
         return list;
+    }
+
+    public Reservation findByUserid(String userid) {
+        Pageable pageable = PageRequest.of(0, 1); // 첫 페이지, 1개 항목
+        List<Reservation> reservations = rr.findLatestByUserid(userid, pageable);
+        System.out.println( reservations.get(0));
+        return reservations.get(0);
     }
 }

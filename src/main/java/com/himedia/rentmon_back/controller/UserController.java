@@ -23,7 +23,6 @@ public class UserController {
     @GetMapping("/getuseinfo")
     public ResponseEntity<User> getUseInfo(@RequestParam("userid") String userid){
         User user = us.getUserInfo(userid);
-        if(user == null) ResponseEntity.badRequest().build();
         return ResponseEntity.ok(user);
     }
 }
