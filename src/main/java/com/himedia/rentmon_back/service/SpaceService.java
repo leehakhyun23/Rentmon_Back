@@ -2,7 +2,7 @@ package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Space;
-import com.himedia.rentmon_back.repository.HashSpaceRepository;
+import com.himedia.rentmon_back.repository.HashSearchRepository;
 import com.himedia.rentmon_back.repository.SpaceRepository;
 import com.himedia.rentmon_back.repository.SpaceimageRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -20,7 +21,8 @@ public class SpaceService {
 
     private final SpaceRepository sr;
     private final SpaceimageRepository sir;
-    private final HashSpaceRepository hsr;
+    private final HashSearchRepository hsr;
+
 
 
 
@@ -30,10 +32,12 @@ public class SpaceService {
         SpaceDTO spaceDTO = new SpaceDTO();
 
 
-        for ( Space onlyspace : onlySpaceList){
-            int sseq = onlyspace.getSseq();
 
+        for ( Space onlyspace : onlySpaceList){
             SpaceDTO.SpaceList space = spaceDTO.new SpaceList();
+
+            // space에 담긴 정보 조회
+            int sseq = onlyspace.getSseq();
             space.setSseq(sseq);
             space.setTitle(onlyspace.getTitle());
             space.setContent(onlyspace.getContent());
@@ -60,5 +64,39 @@ public class SpaceService {
             list.add(space);
         }
         return list;
+    }
+
+    public SpaceDTO.SpaceList getSpace(int sseq) {
+        SpaceDTO spaceDTO = new SpaceDTO();
+        SpaceDTO.SpaceList result = spaceDTO.new SpaceList();
+
+        // Space에 담긴 정보 조회
+        Optional<Space> onlyspace = sr.findBySseq(sseq);
+        if (onlyspace.isPresent()) {
+            result.setSseq(sseq);
+            result.setTitle(onlyspace.get().getTitle());
+            result.setContent(onlyspace.get().getContent());
+            result.setPrice(onlyspace.get().getPrice());
+            result.setHostid(onlyspace.get().getHostid());
+            result.setCnum(onlyspace.get().getCnum());
+            result.setProvince(onlyspace.get().getProvince());
+            result.setTown(onlyspace.get().getTown());
+            result.setVillage(onlyspace.get().getVillage());
+            result.setCreated_at(onlyspace.get().getCreated_at());
+        }
+        else {
+            return null;
+        }
+
+        // 이미지 조회
+        ArrayList a = sir.findBySseq( sseq );
+        result.setSpaceImages(a);
+
+        // 해시태그 조회
+        ArrayList b = hsr.findBySseq( sseq );
+        result.setSpaceHashTags(b);
+
+        return result;
+
     }
 }

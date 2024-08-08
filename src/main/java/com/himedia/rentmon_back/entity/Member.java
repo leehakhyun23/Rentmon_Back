@@ -9,7 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Inquiry")
+@Table(name = "Member")
 @Getter
 public class Member {
     @Id

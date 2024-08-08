@@ -23,8 +23,8 @@ public class Reservation {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
 
-    @Column(name = "hostid")
-    private String hostid;
+    @Column(name = "userid")
+    private String userid;
 
     @Column(name = "sseq")
     private int sseq;
