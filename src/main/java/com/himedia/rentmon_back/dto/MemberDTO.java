@@ -27,12 +27,13 @@ public class MemberDTO extends User {
     private Timestamp created_at;
 
     public MemberDTO(String username, String password , Timestamp created_at,
-                  String role) {
+                  String role, int mseq) {
         super(username, password, List.of(new SimpleGrantedAuthority(role)));
         this.userid = username;
         this.pwd = password;
         this.role = role;
         this.created_at = created_at;
+        this.mseq = mseq;
     }
     public Map<String, Object> getClaims(){
         Map<String, Object> datamap = new HashMap<>();

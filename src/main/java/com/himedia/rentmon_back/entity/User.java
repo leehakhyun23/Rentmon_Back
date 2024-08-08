@@ -1,14 +1,15 @@
 package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
+@Getter
 @Entity
 public class User {
     @Id
-
     @Column(name = "userid")
     private String userid;
 
@@ -32,6 +33,9 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "profileimg")
+    private String profileimg;
 
     @Column(name = "category1")
     private String category1;
