@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "ReviewImage")
+@Table(name = "Reviewimage")
 @Getter
 public class ReviewImage {
     @Id

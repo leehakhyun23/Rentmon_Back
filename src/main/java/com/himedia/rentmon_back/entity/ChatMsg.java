@@ -6,7 +6,7 @@ import lombok.Getter;
 
 
 @Entity
-@Table(name = "ChatMsg")
+@Table(name = "Chatmsg")
 @Getter
 public class ChatMsg {
     @Id
