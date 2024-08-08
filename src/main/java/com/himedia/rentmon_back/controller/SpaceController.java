@@ -1,6 +1,7 @@
 package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.dto.SpaceDTO;
+import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.service.SpaceService;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,11 @@ public class SpaceController {
 
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping("/getreserve")
+    public Reservation getreserve(@RequestParam("userid") String userid) {
+        return ss.findByUserid(userid);
     }
 
 }

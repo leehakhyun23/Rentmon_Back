@@ -1,7 +1,7 @@
 package com.himedia.rentmon_back.dto;
 
 import com.himedia.rentmon_back.entity.SpaceFacility;
-import com.himedia.rentmon_back.entity.SpaceImage;
+import com.himedia.rentmon_back.entity.Spaceimage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -48,6 +48,6 @@ public class SpaceDTO {
         private String subTitle;
 
         private List<SpaceFacility> facilities;
-        private List<SpaceImage> images;
+        private List<Spaceimage> images;
     }
 }
