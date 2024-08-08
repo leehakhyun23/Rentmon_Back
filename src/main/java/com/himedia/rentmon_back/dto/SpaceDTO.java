@@ -34,7 +34,7 @@ public class SpaceDTO {
         private int zzimCount;
 
         // spaceimage 테이블
-        private List<SpaceImage> spaceImages;
+        private List<Spaceimage> spaceimages;
 
         // spacehash 테이블
         private List<HashSpace> spaceHashTags;
