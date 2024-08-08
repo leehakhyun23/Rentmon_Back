@@ -8,7 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 @Getter
 public class User {
     @Id
@@ -21,14 +21,15 @@ public class User {
     @Column(name = "cseq")
     private int cseq;
 
-    @Column(name = "gnum")
-    private int gnum;
-
     @Column(name = "pwd")
     private String pwd;
 
     @Column(name = "name")
     private String name;
+
+    @OneToOne
+    @JoinColumn(name = "gnum")
+    private Grade grade;
 
     @Column(name = "phone")
     private String phone;
@@ -56,6 +57,9 @@ public class User {
 
     @Column(name = "snsid")
     private String snsid;
+
+    @Column(name = "islogin")
+    private boolean islogin;
 
     @Column(name = "created_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")

@@ -1,6 +1,7 @@
 package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.himedia.rentmon_back.dto.AdminDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -8,7 +9,7 @@ import java.sql.Timestamp;
 
 
 @Entity
-@Table(name = "Declaration")
+@Table(name = "declaration")
 @Getter
 public class Declaration {
     @Id
@@ -34,5 +35,8 @@ public class Declaration {
     private Timestamp replydate;
 
     @Column(name = "writer")
-    private String writer;
+    private int writer;
+
+    @Column(name = "sseq")
+    private int sseq;
 }
