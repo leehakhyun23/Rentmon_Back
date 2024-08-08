@@ -73,8 +73,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/member/login")) return true;
         //리프레쉬 요청
         if(path.startsWith("/member/refresh"))return true;
-        if(path.startsWith("/space/getSpaceList")) return true;
-
+        if(path.startsWith("/space")) return true;
+        if(path.startsWith("/space_images"))
+            return true;
         return false;
     }
 }

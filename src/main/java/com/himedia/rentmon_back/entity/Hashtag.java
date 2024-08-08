@@ -14,4 +14,5 @@ public class Hashtag {
 
     @Column(name = "word")
     private String word;
+
 }
