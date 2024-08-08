@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 @Getter
 @Entity
 @Table(name = "User")
-@Getter
 public class User {
     @Id
     @Column(name = "userid")
