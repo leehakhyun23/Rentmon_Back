@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,6 +9,8 @@ import java.sql.Timestamp;
 
 @Getter
 @Entity
+@Table(name = "User")
+@Getter
 public class User {
     @Id
     @Column(name = "userid")
@@ -55,8 +58,7 @@ public class User {
     @Column(name = "snsid")
     private String snsid;
 
-
     @Column(name = "created_at")
-    @CreationTimestamp
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
 }

@@ -4,14 +4,14 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "InquiryCategory")
+@Table(name = "Hashtag")
 @Getter
-public class InquiryCategory {
+public class Hashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "icnum")
-    private int icnum;
+    @Column(name = "hseq")
+    private int hseq;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "word")
+    private String word;
 }
