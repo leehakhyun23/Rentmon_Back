@@ -58,7 +58,7 @@ public class SpaceService {
 
             // spaceimages 조회
             ArrayList a = sir.findBySseq( sseq );
-            space.setSpaceImages(a);
+            space.setSpaceimages(a);
 
             // hashspace 조회
             ArrayList b = hsr.findBySseq( sseq );
@@ -102,7 +102,7 @@ public class SpaceService {
 
         // 이미지 조회
         ArrayList a = sir.findBySseq( sseq );
-        result.setSpaceImages(a);
+        result.setSpaceimages(a);
 
         // 해시태그 조회
         ArrayList b = hsr.findBySseq( sseq );
