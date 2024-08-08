@@ -20,7 +20,6 @@ public class MemberController {
     private final CustomSecurityService customSecurityService;
     private final MemberService ms;
 
-
     @GetMapping("/refresh/{refreshToken}")
     public Map<String, Object> refresh( @RequestHeader("Authorization") String authHeader, @PathVariable("refreshToken") String refreshToken) throws CustomJWTException {
         return ms.refreshToken(authHeader , refreshToken);
