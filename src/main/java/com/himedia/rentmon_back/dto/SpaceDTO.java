@@ -34,6 +34,8 @@ public class SpaceDTO {
 
         private List<String> spaceImages;
         private List<String> spaceHashTags;
+
+
     }
 
     @Data

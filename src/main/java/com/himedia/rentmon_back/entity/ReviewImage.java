@@ -1,38 +1,36 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "spaceimage")
+@Table(name = "ReviewImage")
 @Getter
-public class SpaceImage {
+public class ReviewImage {
     @Id
+    @Column(name = "riseq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "siseq")
-    private int siseq;
+    private int riseq;
 
-    @Column(name = "sseq")
-    private int sseq;
+    @Column(name = "rseq")
+    private int rseq;
 
     @Column(name = "originame")
-    private String origiName;
+    private String originame;
 
     @Column(name = "realname")
-    private String realName;
-
-    @Column(name = "titleyn")
-    private boolean titleYn;
+    private String realname;
 
     @Column(name = "extension")
     private String extension;
 
     @Column(name = "size")
-    private Long size;
+    private int size;
 
-    @Column(name = "created_at")
-    private Timestamp created_at;
+
+
 
 }
