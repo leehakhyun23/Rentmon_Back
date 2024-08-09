@@ -18,11 +18,12 @@ public class SpaceController {
 
     private final SpaceService ss;
 
-    @GetMapping("/getSpaceList")
-    public ResponseEntity<List<SpaceDTO.SpaceList>> getSpaceList() {
+    @GetMapping("/getSpaceList/{page}")
+    public ResponseEntity<List<SpaceDTO>> getSpaceList(@PathVariable int page) {
         try{
-            List<SpaceDTO.SpaceList> spaces = new ArrayList<>();
-            spaces = ss.getSpaceList();
+            int size = 6;
+            List<SpaceDTO> spaces = new ArrayList<>();
+            spaces = ss.getSpaceList(page, size);
             return ResponseEntity.ok(spaces);
         } catch (Exception e){
             e.printStackTrace();
@@ -37,9 +38,9 @@ public class SpaceController {
     }
 
     @GetMapping("/getSpace/{sseq}")
-    public ResponseEntity<SpaceDTO.SpaceList> getSpace(@PathVariable("sseq") int sseq) {
+    public ResponseEntity<SpaceDTO> getSpace(@PathVariable("sseq") int sseq) {
         try{
-            SpaceDTO.SpaceList space = ss.getSpace(sseq);
+            SpaceDTO space = ss.getSpace(sseq);
             return ResponseEntity.ok(space);
         } catch(Exception e){
             e.printStackTrace();
