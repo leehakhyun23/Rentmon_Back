@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "Review")
@@ -37,4 +38,7 @@ public class Review {
 
     @Column(name = "userid")
     private String userid;
+
+    @OneToMany
+    List<ReviewImage> images;
 }

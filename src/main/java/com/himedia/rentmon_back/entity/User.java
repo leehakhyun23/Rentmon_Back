@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
 @Data
 @Entity
-@Table(name = "User")
+@Table(name = "user")
+@Getter
 public class User {
     @Id
     @Column(name = "userid")
@@ -35,6 +34,10 @@ public class User {
 
     @Column(name = "name")
     private String name;
+
+    @OneToOne
+    @JoinColumn(name = "gnum")
+    private Grade grade;
 
     @Column(name = "phone")
     private String phone;
@@ -62,6 +65,9 @@ public class User {
 
     @Column(name = "snsid")
     private String snsid;
+
+    @Column(name = "islogin")
+    private boolean islogin;
 
     @Column(name = "created_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")

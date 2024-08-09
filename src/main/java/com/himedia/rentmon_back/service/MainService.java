@@ -8,11 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class MainService {
-    @Autowired
-    private final UserRepository ur;
-
-    public MainService(UserRepository ur) {
-        this.ur = ur;
-    }
 
 }
