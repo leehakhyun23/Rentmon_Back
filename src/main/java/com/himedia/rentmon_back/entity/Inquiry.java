@@ -35,8 +35,8 @@ public class Inquiry {
     @Column(name = "userid")
     private String userid;
 
-    @Column(name = "ic_num")
-    private int ic_num;
+    @Column(name = "icnum")
+    private int icnum;
 
 
 }

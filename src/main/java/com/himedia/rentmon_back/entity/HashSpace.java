@@ -3,9 +3,11 @@ package com.himedia.rentmon_back.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.List;
+
 
 @Entity
-@Table(name = "HashSpace")
+@Table(name = "Hashspace")
 @Getter
 public class HashSpace {
 

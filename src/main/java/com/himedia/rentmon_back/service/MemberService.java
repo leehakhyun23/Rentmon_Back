@@ -2,6 +2,7 @@ package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.repository.HostRepository;
+import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.security.util.CustomJWTException;
 import com.himedia.rentmon_back.security.util.JWTUtil;
@@ -28,7 +29,7 @@ public class MemberService {
         if(authHeader == null || authHeader.length() < 7) throw  new CustomJWTException("INVALID_HEADER");
         //추출한 내용의 7번째 글자부터 끌까지 추출
         String accessToken = authHeader.substring(7);
-        if(trfu.checkExpriedToken(accessToken)){ //기간이 지나면 true, 안지났으면 false리턴
+        if(!trfu.checkExpriedToken(accessToken)){ //기간이 지나면 true, 안지났으면 false리턴
             return Map.of("accessToken", accessToken , "refreshToken", refreshToken);
         }
         //accessToken 기간 만료시 refresh 토큰으로 재 검증
@@ -45,4 +46,5 @@ public class MemberService {
     public void insertMember(Member member){
         memberRepository.save(member);
     }
+
 }
