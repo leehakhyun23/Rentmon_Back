@@ -1,7 +1,8 @@
 package com.himedia.rentmon_back.service;
 
-import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.entity.Member;
+import com.himedia.rentmon_back.repository.HostRepository;
+import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.security.util.CustomJWTException;
 import com.himedia.rentmon_back.security.util.JWTUtil;
@@ -17,7 +18,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final MemberRepository memberRepository;
+    private final HostRepository hostRepository;
     private TokenRefreshUtil trfu = new TokenRefreshUtil();
+
 
     public Map<String, Object> refreshToken(String authHeader, String refreshToken) throws CustomJWTException {
 
@@ -39,6 +43,8 @@ public class MemberService {
        return Map.of("accessToken", newAccessToken, "refreshToken", newRefreshToken);
     }
 
-
+    public void insertMember(Member member){
+        memberRepository.save(member);
+    }
 
 }

@@ -11,6 +11,7 @@ import com.himedia.rentmon_back.service.HostService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,14 +24,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
 @RequestMapping("/host")
+@RequiredArgsConstructor
 public class HostController {
-
-    @Autowired
-    HostService hs;
+    private final HostService hs;
 
     @Value("${kakao.client_id}")
     private String client_id;
@@ -131,36 +132,20 @@ public class HostController {
         return result;
     }
 
+    @GetMapping("/gethostinfo")
+    public Host localLogin(@RequestParam("userid") String userid) {
+        return hs.getHostLogin(userid);
+    }
+
     @PostMapping("/join")
-    public HashMap<String, Object> join( @RequestBody Host host){
-        HashMap<String, Object> result = new HashMap<String, Object>();
+    public Map<String, Object> join( @RequestBody Host host){
+        Map<String, Object> result = new HashMap<String, Object>();
         PasswordEncoder pe = cc.passwordEncoder();
         host.setPwd( pe.encode(host.getPwd()) );
-        hs.insertHost(host);
+        hs.insertMember(host);
         result.put("msg", "ok");
         return result;
     }
-
-
-//    @PostMapping("/locallogin")
-//    public HashMap<String , Object> localLogin(@RequestBody Host host, HttpServletRequest request ) {
-//        HashMap<String , Object> result = new HashMap<>();
-//        Host host1 = hs.getHost( host.getHostid() );
-//        if(host1 == null ) {
-//            result.put("msg", "해당 아이디가 없습니다");
-//        }else if( !host1.getPwd().equals( host.getPwd() ) ) {
-//            result.put("msg", "패스워드가 틀립니다.");
-//        }
-////        else if( host1.get().equals("N")){
-////            result.put("msg", "현재 아이디가 비활성화되어있습니다. 관리자에 아이디 재가입 및 활성화를 문의하세요");
-////        }
-//        else {
-//            HttpSession session = request.getSession();
-//            session.setAttribute("loginHost", host1);
-//            result.put("msg", "ok");
-//        }
-//        return result;
-//    }
 //
 //    @GetMapping("/getLoginHost")
 //    public HashMap<String, Object> getLoginHost(HttpServletRequest request) {
