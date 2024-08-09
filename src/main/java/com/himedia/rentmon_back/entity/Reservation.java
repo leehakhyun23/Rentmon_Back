@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -9,15 +10,10 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-<<<<<<< HEAD:src/main/java/com/himedia/rentmon_back/entity/Spaceimage.java
-@Table(name = "spaceimage")
 @Getter
-public class SpaceImage {
-=======
 @Table(name = "Reservation")
 @Data
 public class Reservation {
->>>>>>> danbi:src/main/java/com/himedia/rentmon_back/entity/Reservation.java
     @Id
     @Column(name = "rseq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +44,7 @@ public class Reservation {
 
 
     @OneToMany(mappedBy = "sseq", cascade = CascadeType.ALL)
-    private List<Spaceimage> spaceimage;
+    private List<SpaceImage> spaceimage;
 
 
 }

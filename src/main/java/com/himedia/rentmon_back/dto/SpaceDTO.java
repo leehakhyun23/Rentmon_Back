@@ -2,7 +2,7 @@ package com.himedia.rentmon_back.dto;
 
 import com.himedia.rentmon_back.entity.HashSpace;
 import com.himedia.rentmon_back.entity.SpaceFacility;
-import com.himedia.rentmon_back.entity.Spaceimage;
+import com.himedia.rentmon_back.entity.SpaceImage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +34,7 @@ public class SpaceDTO {
         private int zzimCount;
 
         // spaceimage 테이블
-        private List<Spaceimage> spaceimages;
+        private List<SpaceImage> spaceimages;
 
         // spacehash 테이블
         private List<HashSpace> spaceHashTags;
@@ -49,6 +49,6 @@ public class SpaceDTO {
         private String subTitle;
 
         private List<SpaceFacility> facilities;
-        private List<Spaceimage> images;
+        private List<SpaceImage> images;
     }
 }
