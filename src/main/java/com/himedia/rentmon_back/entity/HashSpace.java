@@ -2,22 +2,26 @@ package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
 
 
 @Entity
 @Table(name = "HashSpace")
 @Getter
+@Setter
 public class HashSpace {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "hsseq")
     private int hsseq;
 
-    @Column(name = "sseq")
-    private int sseq;
+    @OneToOne
+    @JoinColumn(name = "sseq")
+    private Space sseq;
 
-    @Column(name = "hseq")
-    private int hseq;
-
+    @OneToMany
+    @JoinColumn(name = "hseq")
+    private List<Hashtag> hseq;
 }

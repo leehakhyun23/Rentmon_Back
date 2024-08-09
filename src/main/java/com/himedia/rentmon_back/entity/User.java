@@ -3,7 +3,6 @@ package com.himedia.rentmon_back.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
