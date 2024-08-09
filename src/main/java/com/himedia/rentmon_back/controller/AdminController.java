@@ -32,16 +32,16 @@ public class AdminController {
         return ResponseEntity.ok(userList);
     }
 
-    @GetMapping("/host")
-    public ResponseEntity<List<AdminHostDTO>> getHostList() {
-        List<AdminHostDTO> hostList = adminService.getHostList();
-
-        if (hostList.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(hostList);
-    }
+//    @GetMapping("/host")
+//    public ResponseEntity<List<AdminHostDTO>> getHostList() {
+//        List<AdminHostDTO> hostList = adminService.getHostList();
+//
+//        if (hostList.isEmpty()) {
+//            return ResponseEntity.noContent().build();
+//        }
+//
+//        return ResponseEntity.ok(hostList);
+//    }
 
     @GetMapping("/inquiry")
     public ResponseEntity<List<Inquiry>> getInquiryList() {

@@ -27,7 +27,7 @@ public class SpaceDTO {
     private Timestamp created_at;
 
     // spaceimage 테이블
-    private List<Spaceimage> images;
+    private List<SpaceImage> images;
 
     // spacehash 테이블
     private List<HashSpace> hashtags;

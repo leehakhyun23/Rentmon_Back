@@ -25,9 +25,9 @@ public class AdminService {
         return userRepository.findAll();
     }
 
-    public List<AdminHostDTO> getHostList() {
-        return hostRepository.findHostBySpaceJpql();
-    }
+//    public List<AdminHostDTO> getHostList() {
+//        return hostRepository.findHostBySpaceJpql();
+//    }
 
 //    public List<DeclarationDTO> getDeclarationList() {
 //        return declarationRepository.findAllByDeclaration();

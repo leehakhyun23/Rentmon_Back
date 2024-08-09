@@ -20,9 +20,6 @@ public class SpaceImage {
     @Column(name = "realname")
     private String realName;
 
-    @Column(name = "realname")
-    private String realname;
-
     @Column(name = "titleyn")
     private boolean titleYn;
 

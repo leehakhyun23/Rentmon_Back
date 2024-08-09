@@ -35,10 +35,6 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @OneToOne
-    @JoinColumn(name = "gnum")
-    private Grade grade;
-
     @Column(name = "phone")
     private String phone;
 
