@@ -3,12 +3,14 @@ package com.himedia.rentmon_back.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "space")
 @Getter
+@Setter
 public class Space {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

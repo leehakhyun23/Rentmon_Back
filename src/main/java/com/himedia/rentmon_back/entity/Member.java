@@ -2,9 +2,7 @@ package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
@@ -17,14 +15,15 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int mseq;
 
-    @Column(name = "userid")
+    @Column(name = "userid", nullable = false, length = 50)
     private String userid;
 
-    @Column(name = "pwd")
+    @Column(name = "pwd", nullable = false, length = 1000)
     private String pwd;
 
     @Column(name = "role")
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 
     @Column(name = "created_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")

@@ -14,13 +14,13 @@ public class Inquiry {
     @Column(name = "iseq")
     private int iseq;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false, length = 100)
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
 
@@ -37,6 +37,4 @@ public class Inquiry {
 
     @Column(name = "icnum")
     private int icnum;
-
-
 }

@@ -1,9 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
@@ -14,18 +11,19 @@ public class Host {
     @Column(name = "hostid")
     private String hostid;
 
-    @Column(name = "pwd")
+    @Column(name = "pwd", nullable = false, length = 1000)
     private String pwd;
 
-    @Column(name = "name")
+    @Column(name = "name", updatable = false, length = 20)
     private String name;
 
-    @Column(name = "phone")
+    @Column(name = "phone", nullable = false, length = 20)
     private String phone;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, length = 50)
     private String email;
 
-    @Column(name = "mseq")
-    private int mseq;
+    @JoinColumn(name = "mseq")
+    @OneToOne
+    private Member mseq;
 }

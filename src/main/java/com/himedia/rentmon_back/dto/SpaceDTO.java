@@ -1,10 +1,13 @@
 package com.himedia.rentmon_back.dto;
 
+import com.himedia.rentmon_back.entity.HashSpace;
+import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.SpaceFacility;
 import com.himedia.rentmon_back.entity.SpaceImage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -33,10 +36,12 @@ public class SpaceDTO {
         private int zzimCount;
 
         // spaceimage 테이블
-        private List<String> spaceImages;
+        private List<SpaceImage> spaceImages;
 
         // spacehash 테이블
-        private List<String> spaceHashTags;
+        private List<HashSpace> spaceHashTags;
+
+        private List<Review> reviews;
     }
 
     @Data

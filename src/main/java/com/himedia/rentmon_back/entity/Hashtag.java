@@ -12,6 +12,6 @@ public class Hashtag {
     @Column(name = "hseq")
     private int hseq;
 
-    @Column(name = "word")
+    @Column(name = "word", nullable = false, length = 50)
     private String word;
 }
