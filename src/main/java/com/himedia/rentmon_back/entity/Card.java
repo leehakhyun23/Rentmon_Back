@@ -9,17 +9,17 @@ import lombok.Getter;
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "c_seq")
+    @Column(name = "cseq")
     private int cseq;
 
-    @Column(name = "b_num")
+    @Column(name = "bnum")
     private int bnum;
 
     @Column(name = "cardnum")
     private String cardnum;
 
-    @Column(name = "monthYear")
-    private int monthYear;
+    @Column(name = "monthyear")
+    private int monthyear;
 
     @Column(name = "cvc")
     private int cvc;

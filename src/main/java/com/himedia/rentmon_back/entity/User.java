@@ -2,12 +2,14 @@ package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
-@Getter
+@Data
 @Entity
 @Table(name = "User")
 public class User {
@@ -18,11 +20,15 @@ public class User {
     @Column(name = "mseq")
     private int mseq;
 
-    @Column(name = "cseq")
-    private int cseq;
 
-    @Column(name = "gnum")
-    private int gnum;
+    @ManyToOne
+    @JoinColumn(name = "cseq")
+    private Card cseq;
+
+
+    @ManyToOne
+    @JoinColumn(name = "gnum")
+    private Grade gnum;
 
     @Column(name = "pwd")
     private String pwd;

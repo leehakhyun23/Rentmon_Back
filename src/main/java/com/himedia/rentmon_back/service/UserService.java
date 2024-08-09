@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.service;
 
+import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,4 +15,6 @@ public class UserService {
     public User getUserInfo(String userid) {
         return ur.findByUserid(userid);
     }
+
+
 }
