@@ -8,12 +8,15 @@ import com.himedia.rentmon_back.repository.HashSearchRepository;
 import com.himedia.rentmon_back.repository.SpaceRepository;
 import com.himedia.rentmon_back.repository.SpaceimageRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -72,10 +75,12 @@ public class SpaceService {
 
     public Reservation findByUserid(String userid) {
         Pageable pageable = PageRequest.of(0, 1); // 첫 페이지, 1개 항목
-        List<Reservation> reservations = rr.findLatestByUserid(userid, pageable);
-        System.out.println( reservations.get(0));
-        return reservations.get(0);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime threeHoursLater = now.plus(3, ChronoUnit.DAYS);
 
+        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid, now, threeHoursLater, pageable);
+        if(rs !=null && rs.hasContent())return rs.getContent().get(0);
+        else return null;
     }
 
     public SpaceDTO.SpaceList getSpace(int sseq) {
