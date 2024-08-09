@@ -28,7 +28,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         try {
             String accessToken = authHeaderStr.substring(7);
-            Map<String, Object> claims = new HashMap<>();
+//            Map<String, Object> claims = new HashMap<>();
+            Map<String, Object> claims = JWTUtil.validateToken(accessToken);
             claims = JWTUtil.validateToken(accessToken);
 
             log.info("JWT claims: " + claims);
@@ -36,6 +37,14 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             int mseq = (int)claims.get("mseq");
             String userid = (String) claims.get("userid");
             String pwd = (String) claims.get("pwd");
+            String email = (String) claims.get("email");
+            String nickname = (String) claims.get("nickname");
+            String phone = (String) claims.get("phone");
+            String snsid = (String) claims.get("snsid");
+            String provider = (String) claims.get("provider");
+            String profileimg = (String) claims.get("profileimg");
+            String profilemsg = (String) claims.get("intro");
+
             String role = (String) claims.get("role");
             Timestamp createAt = (Timestamp) claims.get("create_at");
 
@@ -73,7 +82,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/member/login")) return true;
         //리프레쉬 요청
         if(path.startsWith("/member/refresh"))return true;
-
+        if(path.startsWith("/space/getSpaceList")) return true;
         if(path.startsWith("/space")) return true;
         if(path.startsWith("/space_images"))
             return true;

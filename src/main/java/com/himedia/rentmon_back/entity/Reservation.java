@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "Reservation")
 @Data
 public class Reservation {
@@ -43,7 +44,7 @@ public class Reservation {
 
 
     @OneToMany(mappedBy = "sseq", cascade = CascadeType.ALL)
-    private List<Spaceimage> spaceimage;
+    private List<SpaceImage> spaceimage;
 
 
 }

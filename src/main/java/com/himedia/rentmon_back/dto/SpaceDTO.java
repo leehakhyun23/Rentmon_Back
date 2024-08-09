@@ -44,5 +44,4 @@ public class SpaceDTO {
     // review 리스트 조회
     private List<Review> reviews;
 
-
 }
