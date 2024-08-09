@@ -34,7 +34,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
             log.info("JWT claims: " + claims);
 
-            int mseq = Integer.parseInt((String) claims.get("mseq"));
+            int mseq = (int)claims.get("mseq");
             String userid = (String) claims.get("userid");
             String pwd = (String) claims.get("pwd");
             String email = (String) claims.get("email");
@@ -49,7 +49,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             Timestamp createAt = (Timestamp) claims.get("create_at");
 
 
-            MemberDTO memberDTO = new MemberDTO( userid , pwd , createAt , role );
+            MemberDTO memberDTO = new MemberDTO( userid , pwd , createAt , role , mseq );
 
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities());
@@ -82,6 +82,10 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/member/login")) return true;
         //리프레쉬 요청
         if(path.startsWith("/member/refresh"))return true;
+        if(path.startsWith("/space/getSpaceList")) return true;
+        if(path.startsWith("/space")) return true;
+        if(path.startsWith("/space_images"))
+            return true;
 
         return false;
     }

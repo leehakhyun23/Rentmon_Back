@@ -9,11 +9,11 @@ import lombok.Getter;
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cseq")
+    @Column(name = "c_seq")
     private int cseq;
 
     @Column(name = "b_num")
-    private int b_num;
+    private int bnum;
 
     @Column(name = "cardnum")
     private String cardnum;

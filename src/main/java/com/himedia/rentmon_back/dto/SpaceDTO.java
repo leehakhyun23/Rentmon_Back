@@ -1,10 +1,9 @@
 package com.himedia.rentmon_back.dto;
 
-import jakarta.persistence.Id;
+import com.himedia.rentmon_back.entity.HashSpace;
 import com.himedia.rentmon_back.entity.SpaceFacility;
-import com.himedia.rentmon_back.entity.SpaceImage;
+import com.himedia.rentmon_back.entity.Spaceimage;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
@@ -16,26 +15,29 @@ public class SpaceDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public class SpaceList{
+        // space 테이블에서 획득
         private int sseq;
         private String title;
         private String content;
         private int price;
         private String hostid;
-        private int c_num;
-
+        private int cnum;
         private String province;
         private String town;
         private String village;
-
-        private int reviewCount;
-        private int zzimCount;
-
         private Timestamp created_at;
 
-        private List<String> spaceImages;
-        private List<String> spaceHashTags;
+        // review 테이블
+        private int reviewCount;
 
+        // zzim 테이블
+        private int zzimCount;
 
+        // spaceimage 테이블
+        private List<Spaceimage> spaceimages;
+
+        // spacehash 테이블
+        private List<HashSpace> spaceHashTags;
     }
 
     @Data
@@ -47,6 +49,6 @@ public class SpaceDTO {
         private String subTitle;
 
         private List<SpaceFacility> facilities;
-        private List<SpaceImage> images;
+        private List<Spaceimage> images;
     }
 }

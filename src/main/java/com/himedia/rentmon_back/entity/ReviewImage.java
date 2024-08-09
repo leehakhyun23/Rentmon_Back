@@ -7,7 +7,7 @@ import lombok.Getter;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "ReviewImage")
+@Table(name = "Reviewimage")
 @Getter
 public class ReviewImage {
     @Id
@@ -18,8 +18,8 @@ public class ReviewImage {
     @Column(name = "rseq")
     private int rseq;
 
-    @Column(name = "originame")
-    private String originame;
+    @Column(name = "originname")
+    private String originname;
 
     @Column(name = "realname")
     private String realname;

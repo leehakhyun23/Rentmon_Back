@@ -6,7 +6,7 @@ import lombok.Getter;
 
 
 @Entity
-@Table(name = "ChatMsg")
+@Table(name = "Chatmsg")
 @Getter
 public class ChatMsg {
     @Id
@@ -14,8 +14,8 @@ public class ChatMsg {
     @Column(name = "cmseq")
     private int cmseq;
 
-    @Column(name = "is_fid")
-    private String is_fid;
+    @Column(name = "isfid")
+    private String isfid;
 
     @Column(name = "content")
     private String content;
