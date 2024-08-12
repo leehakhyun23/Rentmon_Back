@@ -35,8 +35,9 @@ public class Review {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp replydate;
 
-    @Column(name = "sseq")
-    private int sseq;
+    @ManyToOne
+    @JoinColumn(name = "sseq")
+    private Space space;
 
     @Column(name = "userid")
     private String userid;
