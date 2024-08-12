@@ -14,8 +14,8 @@ public class SpaceImage {
     @Column(name = "sseq")
     private int sseq;
 
-    @Column(name = "originame")
-    private String origiName;
+    @Column(name = "originname")
+    private String originName;
 
     @Column(name = "realname")
     private String realName;
@@ -26,7 +26,7 @@ public class SpaceImage {
     @Column(name = "extension")
     private String extension;
 
-    @Column(name = "create_at")
+    @Column(name = "created_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp create_at;
+    private Timestamp created_at;
 }
