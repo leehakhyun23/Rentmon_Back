@@ -1,6 +1,8 @@
 package com.himedia.rentmon_back.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.himedia.rentmon_back.dto.UserDTO;
+import com.himedia.rentmon_back.dto.usersnsdto.GoogleApi;
 import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
@@ -9,16 +11,21 @@ import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.repository.UserRepository;
+import com.himedia.rentmon_back.util.MailSend;
+import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Calendar;
 import java.util.Optional;
 
 @Service
@@ -29,6 +36,8 @@ public class UserSnsLoginService {
     private final MemberRepository mr;
     private final UserRepository ur;
     private final PasswordEncoder pe;
+    private final MailSend ms;
+    private final ServletContext context;
     public OAuthToken getKakaoToken(String code, String kakaoclinetId, String redirectUri) {
         OAuthToken token = new OAuthToken();
         try {
@@ -104,6 +113,8 @@ public class UserSnsLoginService {
             user.setUserid(String.valueOf(kakaoProfile.getId()));
             user.setMseq(joinkakaoMember.getMseq());
             user.setPwd(joinkakaoMember.getPwd());
+            user.setProvider("kakao");
+            user.setSnsid(joinkakaoMember.getUserid());
             user.setName(kakaoProfile.getProperties().getNickname());
             user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
@@ -149,6 +160,31 @@ public class UserSnsLoginService {
         return oAuthToken;
     }
 
+    public Optional<Member> getNaverMember(NaverApi naverapi) {
+        Optional<Member> member = mr.findByUseridAndRole(String.valueOf(naverapi.getResponse().getId()), "user");
+        if(member.isEmpty()){
+            Member joinNaverMember = new Member();
+            joinNaverMember.setUserid(String.valueOf(naverapi.getResponse().getId()));
+            joinNaverMember.setRole("user");
+            joinNaverMember.setPwd(pe.encode("naver"));
+            mr.save(joinNaverMember);
+
+            User user = new User();
+            user.setUserid(String.valueOf(joinNaverMember.getUserid()));
+            user.setMseq(joinNaverMember.getMseq());
+            user.setPwd(joinNaverMember.getPwd());
+            user.setName(naverapi.getResponse().getName());
+            user.setSnsid(joinNaverMember.getUserid());
+            user.setProvider("naver");
+            user.setEmail(naverapi.getResponse().getEmail());
+            user.setGnum(new Grade(1, "bronze", 0));
+            ur.save(user);
+            member = Optional.of(joinNaverMember);
+        }
+
+        return member;
+    }
+
     public NaverApi getLoginAPI(String accessToken) throws MalformedURLException {
         NaverApi naverApi =null;
         URL url = new URL("https://openapi.naver.com/v1/nid/me");
@@ -175,5 +211,142 @@ public class UserSnsLoginService {
         }
 
         return naverApi;
+    }
+
+
+    public OAuthToken getGoogleToken(String code, String googleClientId, String googleClientPw, String googleRedirectUri) {
+        OAuthToken oAuthToken = null;
+
+        try {
+            URL url = new URL("https://oauth2.googleapis.com/token");
+            HttpURLConnection conn  = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+            conn.setDoOutput(true);
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("code=").append(URLEncoder.encode(code, "UTF-8"))
+                    .append("&client_id=").append(URLEncoder.encode(googleClientId, "UTF-8"))
+                    .append("&client_secret=").append(URLEncoder.encode(googleClientPw, "UTF-8"))
+                    .append("&redirect_uri=").append(URLEncoder.encode(googleRedirectUri, "UTF-8"))
+                    .append("&grant_type=authorization_code");
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
+            bw.write(sb.toString());
+            bw.flush();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder sbkey = new StringBuilder();
+            String input = "";
+            while ((input = br.readLine()) != null) {
+                sbkey.append(input);
+            }
+            br.close();
+            ObjectMapper mapper = new ObjectMapper();
+            oAuthToken = mapper.readValue(sbkey.toString(), OAuthToken.class);
+            System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(oAuthToken));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return oAuthToken;
+    }
+
+    public GoogleApi getGoogleProfile(String accessToken) throws MalformedURLException {
+        GoogleApi googleApi = null;
+        URL url = new URL("https://www.googleapis.com/oauth2/v2/userinfo");
+        try {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization","Bearer "+accessToken);
+            conn.setDoOutput(true);
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+                System.out.println(line);
+            }
+            ObjectMapper mapper = new ObjectMapper();
+            googleApi = mapper.readValue(sb.toString(), GoogleApi.class);
+            System.out.println(googleApi);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return googleApi;
+    }
+
+    public Optional<Member> getGoogleMember(GoogleApi googleapi) {
+        Optional<Member> member = mr.findByUseridAndRole(googleapi.getId(), "user");
+        if(member.isEmpty()){
+            Member joinGoogleMember = new Member();
+            joinGoogleMember.setUserid(googleapi.getId());
+            joinGoogleMember.setRole("user");
+            joinGoogleMember.setPwd(pe.encode("google"));
+            mr.save(joinGoogleMember);
+
+            User user = new User();
+            user.setUserid(joinGoogleMember.getUserid());
+            user.setMseq(joinGoogleMember.getMseq());
+            user.setPwd(joinGoogleMember.getPwd());
+            user.setName(googleapi.getName());
+            user.setSnsid(joinGoogleMember.getUserid());
+            user.setProvider("google");
+            user.setEmail(googleapi.getEmail());
+            user.setGnum(new Grade(1, "bronze", 0));
+            ur.save(user);
+            member = Optional.of(joinGoogleMember);
+        }
+
+        return member;
+    }
+
+    public Boolean isUesrTrue(String userid) {
+        User user = ur.findByUserid(userid);
+        if(user != null) return true;
+        else return false;
+    }
+
+    public String mailSender(String email) {
+       return ms.setEmail(email);
+    }
+
+
+    public void joinUser(UserDTO userDTO, MultipartFile profileimg) {
+        Member member  = new Member();
+        member.setUserid(userDTO.getUserid());
+        member.setRole("user");
+        member.setPwd(pe.encode(userDTO.getPassword()));
+        member = mr.save(member);
+
+        User user = new User();
+        user.setUserid(member.getUserid());
+        user.setMseq(member.getMseq());
+        user.setPwd(member.getPwd());
+        user.setPhone(userDTO.getPhone());
+        user.setGnum(new Grade(1, "bronze", 0));
+        user.setEmail(userDTO.getEmail());
+        user.setName(userDTO.getName());
+        if(profileimg !=null) user.setProfileimg(saveFile(profileimg));
+        ur.save(user);
+    }
+
+    private String saveFile(MultipartFile profileimg) {
+        String result = "";
+        String realpath = context.getRealPath("/profile_images");
+        Calendar today = Calendar.getInstance();
+        long dt = today.getTimeInMillis();
+        String filename = profileimg.getOriginalFilename();
+        String fn1 = filename.substring(0, filename.indexOf(".") );
+        String fn2 = filename.substring(filename.indexOf(".") );
+        String uploadPath = realpath + "/" + fn1 + dt + fn2;
+        try {
+            profileimg.transferTo( new File(uploadPath) );
+            result = fn1 + dt + fn2;
+        } catch (IllegalStateException | IOException e) {e.printStackTrace();}
+        return result;
     }
 }
