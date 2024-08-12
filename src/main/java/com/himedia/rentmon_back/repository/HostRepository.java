@@ -21,11 +21,11 @@ public interface HostRepository extends JpaRepository<Host, String> {
 //
 //    void widtDrawal(String hostid);
 
-    Optional<Host> findByEmail(String email);
-
-    Optional<Host> findBySnsid(String id);
-
-    Optional<Host> findByname(String name);
+//    Optional<Host> findByEmail(String email);
+//
+//    Optional<Host> findBySnsid(String id);
+//
+//    Optional<Host> findByname(String name);
 
     Host findByHostid(String hostid);
 }

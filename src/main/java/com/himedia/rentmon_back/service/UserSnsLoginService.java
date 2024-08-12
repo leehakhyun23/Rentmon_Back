@@ -129,7 +129,8 @@ public class UserSnsLoginService {
             host.setHostid(String.valueOf(kakaoProfile.getId()));
             host.setMseq(new Member(joinkakaoMember.getMseq(), "", "", "", null));
             host.setPwd(joinkakaoMember.getPwd());
-            host.setName(kakaoProfile.getProperties().getNickname());
+            host.setNickname(kakaoProfile.getProperties().getNickname());
+            host.setProvider("kakao");
             hr.save(host);
             member = Optional.of(joinkakaoMember);
         }
