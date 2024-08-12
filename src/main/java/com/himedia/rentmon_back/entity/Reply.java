@@ -22,7 +22,7 @@ public class Reply {
 
     @ManyToOne
     @JoinColumn(name = "postid")
-    private Post post; // Assuming a `Post` entity exists
+    private Post post;
 
     @Column(name = "writedate")
     private Timestamp writedate;
