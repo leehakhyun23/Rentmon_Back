@@ -2,10 +2,12 @@ package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 
 import java.sql.Timestamp;
 
+@Data
 @Entity
 @Table(name = "user")
 @Getter
@@ -17,18 +19,21 @@ public class User {
     @Column(name = "mseq")
     private int mseq;
 
-    @Column(name = "cseq")
-    private int cseq;
+
+    @ManyToOne
+    @JoinColumn(name = "cseq")
+    private Card cseq;
+
+
+    @ManyToOne
+    @JoinColumn(name = "gnum")
+    private Grade gnum;
 
     @Column(name = "pwd")
     private String pwd;
 
     @Column(name = "name")
     private String name;
-
-    @OneToOne
-    @JoinColumn(name = "gnum")
-    private Grade grade;
 
     @Column(name = "phone")
     private String phone;

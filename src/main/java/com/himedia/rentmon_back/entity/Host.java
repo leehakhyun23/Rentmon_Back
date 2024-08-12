@@ -2,10 +2,12 @@ package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "host")
 @Getter
+@Setter
 public class Host {
     @Id
     @Column(name = "hostid")
@@ -26,4 +28,13 @@ public class Host {
     @JoinColumn(name = "mseq")
     @OneToOne
     private Member mseq;
+    @Column(name = "provider")
+    private String provider;
+
+    @Column(name = "snsid")
+    private String snsid;
+
+    @Column(name = "nickname")
+    private String nickname;
+
 }

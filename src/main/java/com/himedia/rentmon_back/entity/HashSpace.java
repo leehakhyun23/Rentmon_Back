@@ -6,9 +6,11 @@ import lombok.Setter;
 
 import java.util.List;
 
+import java.util.List;
+
 
 @Entity
-@Table(name = "HashSpace")
+@Table(name = "Hashspace")
 @Getter
 @Setter
 public class HashSpace {
