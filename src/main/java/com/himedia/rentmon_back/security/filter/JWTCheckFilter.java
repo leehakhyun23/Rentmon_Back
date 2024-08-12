@@ -81,6 +81,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/favicon.ico")) return true;
         //유저 회원가입
         if(path.startsWith("/user/join")) return true;
+        
         if(path.startsWith("/space/getSpaceList")) return true;
         if(path.startsWith("/space")) return true;
         
