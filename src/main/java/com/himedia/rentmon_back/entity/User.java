@@ -4,26 +4,26 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
-@Data
 @Entity
 @Table(name = "user")
 @Getter
+@Setter
 public class User {
     @Id
     @Column(name = "userid")
     private String userid;
 
-    @Column(name = "mseq")
-    private int mseq;
-
+    @ManyToOne
+    @JoinColumn(name = "mseq")
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "cseq")
     private Card cseq;
-
 
     @ManyToOne
     @JoinColumn(name = "gnum")
@@ -62,10 +62,10 @@ public class User {
     @Column(name = "snsid")
     private String snsid;
 
-    @Column(name = "islogin")
+    @Column(name = "islogin", columnDefinition = "TINYINT DEFAULT 1")
     private boolean islogin;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
 }

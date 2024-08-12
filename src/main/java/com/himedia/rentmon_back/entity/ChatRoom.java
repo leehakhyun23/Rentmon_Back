@@ -25,10 +25,11 @@ public class ChatRoom {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private String created_at;
 
-    @Column(name = "userid")
-    private String userid;
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
 
-    @Column(name = "hostid")
-    private String hostid;
-
+    @ManyToOne
+    @JoinColumn(name = "hostid")
+    private Host host;
 }

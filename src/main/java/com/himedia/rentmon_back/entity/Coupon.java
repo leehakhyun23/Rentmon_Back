@@ -17,8 +17,9 @@ public class Coupon {
     @Column(name = "cnum")
     private int cnum;
 
-    @Column(name = "userid")
-    private String userid;
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
 
     @Column(name = "couponstr", nullable = false, length = 30)
     private String couponstr;

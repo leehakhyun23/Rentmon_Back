@@ -2,10 +2,12 @@ package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Surcharge")
 @Getter
+@Setter
 public class Surcharge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +20,7 @@ public class Surcharge {
     @Column(name = "price")
     private int price;
 
-    @Column(name = "sseq")
-    private int sseq;
-
-
-
+    @ManyToOne
+    @JoinColumn(name = "sseq")
+    private Space space;
 }

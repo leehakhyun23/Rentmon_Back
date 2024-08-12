@@ -25,9 +25,10 @@ public class Host {
     @Column(name = "email", nullable = false, length = 50)
     private String email;
 
+    @ManyToOne
     @JoinColumn(name = "mseq")
-    @OneToOne
-    private Member mseq;
+    private Member member;
+
     @Column(name = "provider")
     private String provider;
 

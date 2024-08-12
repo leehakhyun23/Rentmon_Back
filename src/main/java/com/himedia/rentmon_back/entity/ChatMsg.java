@@ -26,8 +26,8 @@ public class ChatMsg {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private String created_at;
 
+    @ManyToOne
     @JoinColumn(name = "crseq")
-    @OneToOne
-    private ChatRoom crseq;
+    private ChatRoom chatroom;
 
 }

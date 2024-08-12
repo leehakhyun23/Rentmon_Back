@@ -3,11 +3,13 @@ package com.himedia.rentmon_back.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 @Entity
 @Table(name = "Inquiry")
 @Getter
+@Setter
 public class Inquiry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +33,11 @@ public class Inquiry {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp replydate;
 
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
 
-    @Column(name = "userid")
-    private String userid;
-
-    @Column(name = "icnum")
-    private int icnum;
+    @ManyToOne
+    @JoinColumn(name = "icnum")
+    private InquiryCategory inquirycategory;
 }

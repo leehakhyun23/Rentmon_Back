@@ -10,9 +10,9 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-@Getter
 @Table(name = "Reservation")
-@Data
+@Getter
+@Setter
 public class Reservation {
     @Id
     @Column(name = "rseq")
@@ -31,20 +31,14 @@ public class Reservation {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
 
-    @Column(name = "userid")
-    private String userid;
-
-    @Column(name = "sseq")
-    private int sseq;
-
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "sseq", insertable = false, updatable = false)
     private Space space;
 
-
-    @OneToMany(mappedBy = "sseq", cascade = CascadeType.ALL)
-    private List<SpaceImage> spaceimage;
-
-
+//    @OneToMany(mappedBy = "sseq", cascade = CascadeType.ALL)
+//    private List<SpaceImage> spaceimage;
 }

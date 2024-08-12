@@ -37,11 +37,11 @@ public class Declaration {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp replydate;
 
-    @JoinColumn(name = "writer")
     @ManyToOne
+    @JoinColumn(name = "writer")
     private Member writer;
 
-    @JoinColumn(name = "sseq")
     @ManyToOne
-    private Space sseq;
+    @JoinColumn(name = "sseq")
+    private Space space;
 }

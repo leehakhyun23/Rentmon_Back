@@ -3,12 +3,14 @@ package com.himedia.rentmon_back.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "Payment")
 @Getter
+@Setter
 public class Payment {
     @Id
     @Column(name = "pseq")
@@ -22,9 +24,11 @@ public class Payment {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
 
-    @Column(name = "hostid")
-    private String hostid;
+    @ManyToOne
+    @JoinColumn(name = "hostid")
+    private Host host;
 
-    @Column(name = "sseq")
-    private int sseq;
+    @ManyToOne
+    @JoinColumn(name = "sseq")
+    private Space space;
 }

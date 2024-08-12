@@ -17,8 +17,9 @@ public class Closed {
     @Column(name = "closed")
     private int closed;
 
-    @Column(name = "sseq")
-    private int sseq;
+    @ManyToOne
+    @JoinColumn(name = "sseq")
+    private Space space;
 
     @Column(name = "startdate")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")

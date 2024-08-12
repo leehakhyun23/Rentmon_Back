@@ -2,18 +2,21 @@ package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Reviewimage")
 @Getter
+@Setter
 public class ReviewImage {
     @Id
     @Column(name = "riseq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int riseq;
 
-    @Column(name = "rseq")
-    private int rseq;
+    @ManyToOne
+    @JoinColumn(name = "rseq")
+    private Review review;
 
     @Column(name = "originname")
     private String originname;

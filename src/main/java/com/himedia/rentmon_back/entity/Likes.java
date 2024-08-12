@@ -5,16 +5,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Hashtag")
+@Table(name = "likes")
 @Getter
 @Setter
-public class Hashtag {
+public class Likes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hseq")
-    private int hseq;
+    @Column(name = "id")
+    private int id;
 
-    @Column(name = "word", nullable = false, length = 50)
-    private String word;
+    @Column(name = "likenick")
+    private String likenick;
 
+    @Column(name = "postid")
+    private int postid;
 }
