@@ -5,8 +5,10 @@ import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
 import com.himedia.rentmon_back.entity.Grade;
+import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.entity.User;
+import com.himedia.rentmon_back.repository.HostRepository;
 import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ import java.util.Optional;
 @Log4j2
 public class UserSnsLoginService {
     private final MemberRepository mr;
+    private final HostRepository hr;
     private final UserRepository ur;
     private final PasswordEncoder pe;
     public OAuthToken getKakaoToken(String code, String kakaoclinetId, String redirectUri) {
@@ -107,6 +110,27 @@ public class UserSnsLoginService {
             user.setName(kakaoProfile.getProperties().getNickname());
             user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
+            member = Optional.of(joinkakaoMember);
+        }
+
+        return member;
+    }
+
+    public Optional<Member> getKakaoHost(KakaoProfile kakaoProfile) {
+        Optional<Member> member = mr.findByUseridAndRole(String.valueOf(kakaoProfile.getId()), "host");
+        if(member.isEmpty()){
+            Member joinkakaoMember = new Member();
+            joinkakaoMember.setUserid(String.valueOf(kakaoProfile.getId()));
+            joinkakaoMember.setRole("host");
+            joinkakaoMember.setPwd(pe.encode("kakao"));
+            mr.save(joinkakaoMember);
+
+            Host host = new Host();
+            host.setHostid(String.valueOf(kakaoProfile.getId()));
+            host.setMseq(new Member(joinkakaoMember.getMseq(), "", "", "", null));
+            host.setPwd(joinkakaoMember.getPwd());
+            host.setName(kakaoProfile.getProperties().getNickname());
+            hr.save(host);
             member = Optional.of(joinkakaoMember);
         }
 

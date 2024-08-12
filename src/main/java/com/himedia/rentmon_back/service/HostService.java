@@ -67,6 +67,10 @@ public class HostService {
         hr.save(host);
     }
 
+    public Host getHostInfo(String hostid) {
+        return hr.findByHostid(hostid);
+    }
+
 
 //    public Host getHost(String hostid) {return hr.getHost(hostid);}
 //

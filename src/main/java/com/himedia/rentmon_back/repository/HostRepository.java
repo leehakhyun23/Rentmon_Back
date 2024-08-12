@@ -3,6 +3,7 @@ package com.himedia.rentmon_back.repository;
 import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.dto.AdminHostDTO;
 import com.himedia.rentmon_back.entity.Host;
+import com.himedia.rentmon_back.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -25,4 +26,6 @@ public interface HostRepository extends JpaRepository<Host, String> {
     Optional<Host> findBySnsid(String id);
 
     Optional<Host> findByname(String name);
+
+    Host findByHostid(String hostid);
 }

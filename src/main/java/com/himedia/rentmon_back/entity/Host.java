@@ -1,6 +1,8 @@
 package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +30,7 @@ public class Host {
     @JoinColumn(name = "mseq")
     @OneToOne
     private Member mseq;
+
     @Column(name = "provider")
     private String provider;
 
