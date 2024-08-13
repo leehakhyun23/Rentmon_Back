@@ -14,34 +14,58 @@ import java.util.List;
 @AllArgsConstructor
 public class SpaceDTO {
     //Space 테이블 조회
-    @Id
+
     private int sseq;
-    private String title;
-    private String content;
     private int price;
-    private String hostid;
-    private int cnum;
+    private String title;
+    private String subtitle;
+    private String content;
+    private int starttime;
+    private int endtime;
+    private String caution;
+    private String zipcode;
     private String province;
     private String town;
     private String village;
+    private String addressdetail;
+    private int mintime;
+    private int personnal;
+    private int maxpersonnal;
     private Timestamp created_at;
 
+    //ManyToOne으로 참조되는 데이터
+    private String hostid;
+    private int cnum;
+    private int fnum;
+
     // spaceimage 테이블
-    private List<SpaceImage> images;
+    private List<String> imageNames;    //SpaceImage의 realName 목록
 
-    // spacehash 테이블
-    private List<HashSpace> hashtags;
+    public static SpaceDTO fromEntity(Space space) {
+        SpaceDTO dto = new SpaceDTO();
+        dto.setSseq(space.getSseq());
+        dto.setAddressdetail(space.getAddressdetail());
+        dto.setCaution(space.getCaution());
+        dto.setContent(space.getContent());
+        dto.setCreated_at(space.getCreated_at());
+        dto.setEndtime(space.getEndtime());
+        dto.setMaxpersonnal(space.getMaxpersonnal());
+        dto.setMintime(space.getMintime());
+        dto.setPersonnal(space.getPersonnal());
+        dto.setPrice(space.getPrice());
+        dto.setProvince(space.getProvince());
+        dto.setStarttime(space.getStarttime());
+        dto.setSubtitle(space.getSubtitle());
+        dto.setTitle(space.getTitle());
+        dto.setTown(space.getTown());
+        dto.setVillage(space.getVillage());
+        dto.setZipcode(space.getZipcode());
 
-    // spaceFaciliity 테이블 조회
-    private List<SpaceFacility> facilities;
 
-    // surcharge 테이블 조회
-    private List<Surcharge> surcharges;
+        dto.setCnum(space.getCategory() != null ? space.getCategory().getCnum() : 0);
+        dto.setFnum(space.getFee() != null ? space.getFee().getFnum() : 0);
+        dto.setHostid(space.getHost() != null ? space.getHost().getHostid() : null);
 
-    // zzim 테이블
-    private int zzimCount;
-
-    // review 리스트 조회
-    private List<Review> reviews;
-
+        return dto;
+    }
 }
