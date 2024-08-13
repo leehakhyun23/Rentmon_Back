@@ -14,8 +14,8 @@ import java.sql.Timestamp;
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cnum")
-    private int cnum;
+    @Column(name = "cseq")
+    private int cseq;
 
     @Column(name = "userid")
     private String userid;

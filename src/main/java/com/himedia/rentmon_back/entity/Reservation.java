@@ -36,6 +36,7 @@ public class Reservation {
     @Column(name = "sseq")
     private int sseq;
 
+
     @ManyToOne
     @JoinColumn(name = "sseq", insertable = false, updatable = false)
     private Space space;

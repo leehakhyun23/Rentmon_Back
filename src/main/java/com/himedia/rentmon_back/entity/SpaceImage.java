@@ -15,7 +15,7 @@ public class SpaceImage {
     private int sseq;
 
     @Column(name = "originname")
-    private String originName;
+    private String originname;
 
     @Column(name = "realname")
     private String realName;

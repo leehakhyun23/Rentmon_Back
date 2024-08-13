@@ -37,12 +37,20 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
     implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
     implementation 'com.google.code.gson:gson:2.9.0'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+
+    //이메일
+    implementation 'jakarta.mail:jakarta.mail-api:2.0.1'
+    runtimeOnly 'com.sun.mail:jakarta.mail:2.0.1'
+    // Spring Context Support
 }
 
 tasks.named('test') {
