@@ -126,35 +126,5 @@ public class HostController {
 
     }
 
-//
-//    private String googleClinet_id="325806549360-rfnkgftjf45c468fs66jrf24k1o1ga8t.apps.googleusercontent.com";
-//    private String gooleRedirect_uri ="http://localhost:8070/host/sns/googlelogin";
-//    private String googleClientPw= "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";
-//    @RequestMapping("/sns/googlestart")
-//    public @ResponseBody String getgooleLogin(){
-//        String a = "<script  type='text/javascript'>" +
-//                "location.href='https://accounts.google.com/o/oauth2/v2/auth?"
-//                +"client_id="+googleClinet_id+
-//                "&redirect_uri="+gooleRedirect_uri+
-//                "&response_type=code" +
-//                "&scope=email profile"
-//                +"';" +
-//                "</script>";
-//        return a;
-//    }
-//
-//    @RequestMapping("/sns/googlelogin")
-//    public void logingoole(@RequestParam("code") String code ,HttpServletResponse response) {
-//        System.out.println(code);
-//        OAuthToken oAuthToken = usersls.getGoogleToken(code, googleClinet_id, googleClientPw, gooleRedirect_uri);
-//        GoogleApi googleapi = null;
-//        try {
-//            googleapi = usersls.getGoogleProfile(oAuthToken.getAccess_token());
-//            Optional<Member> member = usersls.getGoogleHost(googleapi);
-//            response.sendRedirect("http://localhost:3000/getsnshostinfo/" + member.get().getUserid() + "/google");
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+
 }
