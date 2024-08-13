@@ -22,8 +22,6 @@ public class Space {
     private String host;          // 호스트아이디
     @Column(name = "cnum")
     private int cnum;              // 분류 아이디
-    @Column(name = "fnum")
-    private int fnum;              // 요금제 아이디
     @Column(name = "price")
     private int price;              // 가격
     @Column(name = "title")

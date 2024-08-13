@@ -88,6 +88,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/profile_images")) return true;
 
 
+
         return false;
     }
 }
