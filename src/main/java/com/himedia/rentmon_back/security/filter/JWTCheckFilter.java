@@ -78,6 +78,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/space_images"))
             return true;
 
+
         return false;
     }
 }

@@ -1,6 +1,7 @@
 package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.SpaceDTO;
+import com.himedia.rentmon_back.entity.Closed;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.repository.ReservationRepository;
@@ -14,8 +15,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -28,7 +33,7 @@ public class SpaceService {
     private final ReservationRepository rr;
     private final HashSearchRepository hsr;
 
-
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public List<SpaceDTO.SpaceList> getSpaceList() {
         List<Space>onlySpaceList = sr.findAll( Sort.by(Sort.Direction.DESC, "sseq"));
@@ -110,6 +115,52 @@ public class SpaceService {
 
         return result;
 
+    }
+
+    public int insertSpace(Map<String, String> paramSpace) {
+        Space space = new Space();
+        space.setCnum(Integer.parseInt(paramSpace.get("cnum")));
+        space.setTitle(paramSpace.get("title"));
+        space.setSubtitle(paramSpace.get("subtitle"));
+        space.setPrice(Integer.parseInt(paramSpace.get("price")));
+        space.setPersonnal(Integer.parseInt(paramSpace.get("personnal")));
+        space.setMaxpersonnal(Integer.parseInt(paramSpace.get("maxpersonnal")));
+        space.setContent(paramSpace.get("content"));
+        space.setCaution(paramSpace.get("caution"));
+        space.setZipcode(paramSpace.get("zipcode"));
+        space.setProvince(paramSpace.get("province"));
+        space.setTown(paramSpace.get("town"));
+        space.setVillage(paramSpace.get("village"));
+        space.setAddressdetail(paramSpace.get("address_detail"));
+        space.setHostid(paramSpace.get("hostid"));
+        try {
+            // Convert starttime and endtime from String to Timestamp
+            space.setStarttime(convertStringToTimestamp(paramSpace.get("starttime")));
+            space.setEndtime(convertStringToTimestamp(paramSpace.get("endtime")));
+        } catch (Exception e) {
+            e.printStackTrace(); // Print the stack trace for debugging
+        }
+
+        // Save the Space entity
+        Space savedSpace = sr.save(space);
+        return savedSpace.getSseq();
+    }
+
+    private Timestamp convertStringToTimestamp(String dateStr) throws Exception {
+        if (dateStr == null || dateStr.isEmpty()) {
+            throw new IllegalArgumentException("Date string is null or empty"); // Better error handling
+        }
+        try {
+            // Parse the date string to ZonedDateTime
+            ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateStr, DateTimeFormatter.ISO_DATE_TIME);
+            // Convert ZonedDateTime to Instant
+            Instant instant = zonedDateTime.toInstant();
+            // Convert Instant to Timestamp
+            return Timestamp.from(instant);
+        } catch (Exception e) {
+            // Provide more information about what went wrong
+            throw new IllegalArgumentException("Failed to parse date string: " + dateStr, e);
+        }
     }
 
 }
