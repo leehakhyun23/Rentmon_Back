@@ -2,25 +2,27 @@ package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Table(name = "Card")
+@Table(name = "card")
 @Getter
+@Setter
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "c_seq")
+    @Column(name = "cseq")
     private int cseq;
 
-    @Column(name = "b_num")
+    @Column(name = "bnum")
     private int bnum;
 
-    @Column(name = "cardnum")
+    @Column(name = "cardnum", nullable = false, length = 20)
     private String cardnum;
 
-    @Column(name = "monthYear")
-    private int monthYear;
+    @Column(name = "monthyear")
+    private int monthyear;
 
-    @Column(name = "cvc")
+    @Column(name = "cvc", nullable = false)
     private int cvc;
 }

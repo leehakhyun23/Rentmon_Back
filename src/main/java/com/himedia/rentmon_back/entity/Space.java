@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Space")
-@Data
+@Table(name = "space")
+@Getter
+@Setter
 public class Space {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +19,7 @@ public class Space {
     private int sseq;               // 기본키
 
     @Column(name = "hostid")
-    private String hostid;          // 호스트아이디
+    private String host;          // 호스트아이디
     @Column(name = "cnum")
     private int cnum;              // 분류 아이디
     @Column(name = "price")

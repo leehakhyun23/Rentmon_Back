@@ -1,54 +1,47 @@
 package com.himedia.rentmon_back.dto;
 
-import com.himedia.rentmon_back.entity.HashSpace;
-import com.himedia.rentmon_back.entity.SpaceFacility;
-import com.himedia.rentmon_back.entity.Spaceimage;
+import com.himedia.rentmon_back.entity.*;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SpaceDTO {
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class SpaceList{
-        // space 테이블에서 획득
-        private int sseq;
-        private String title;
-        private String content;
-        private int price;
-        private String hostid;
-        private int cnum;
-        private String province;
-        private String town;
-        private String village;
-        private Timestamp created_at;
+    //Space 테이블 조회
+    @Id
+    private int sseq;
+    private String title;
+    private String content;
+    private int price;
+    private String hostid;
+    private int cnum;
+    private String province;
+    private String town;
+    private String village;
+    private Timestamp created_at;
 
-        // review 테이블
-        private int reviewCount;
+    // spaceimage 테이블
+    private List<SpaceImage> images;
 
-        // zzim 테이블
-        private int zzimCount;
+    // spacehash 테이블
+    private List<HashSpace> hashtags;
 
-        // spaceimage 테이블
-        private List<Spaceimage> spaceimages;
+    // spaceFaciliity 테이블 조회
+    private List<SpaceFacility> facilities;
 
-        // spacehash 테이블
-        private List<HashSpace> spaceHashTags;
-    }
+    // surcharge 테이블 조회
+    private List<Surcharge> surcharges;
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class ResponseSpaceView {
-        private int sseq;
-        private String title;
-        private String subTitle;
+    // zzim 테이블
+    private int zzimCount;
 
-        private List<SpaceFacility> facilities;
-        private List<Spaceimage> images;
-    }
+    // review 리스트 조회
+    private List<Review> reviews;
+
 }

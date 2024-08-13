@@ -4,11 +4,9 @@ import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Closed;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
-import com.himedia.rentmon_back.repository.ReservationRepository;
-import com.himedia.rentmon_back.repository.HashSearchRepository;
-import com.himedia.rentmon_back.repository.SpaceRepository;
-import com.himedia.rentmon_back.repository.SpaceimageRepository;
+import com.himedia.rentmon_back.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,60 +33,64 @@ public class SpaceService {
     private final SpaceimageRepository sir;
     private final ReservationRepository rr;
     private final HashSearchRepository hsr;
+    private final ReviewRepository rvr;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public List<SpaceDTO.SpaceList> getSpaceList() {
-        List<Space>onlySpaceList = sr.findAll( Sort.by(Sort.Direction.DESC, "sseq"));
-        List<SpaceDTO.SpaceList> list = new ArrayList<>();
-        SpaceDTO spaceDTO = new SpaceDTO();
+    public List<SpaceDTO> getSpaceList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Space> pageResult = sr.findAll(pageable);
+        List<SpaceDTO> spaces = new ArrayList<>();
 
-
-
-        for ( Space onlyspace : onlySpaceList){
-            SpaceDTO.SpaceList space = spaceDTO.new SpaceList();
+        for ( Space space : pageResult.getContent()){
+            SpaceDTO spaceDTO = new SpaceDTO();
 
             // space에 담긴 정보 조회
-            int sseq = onlyspace.getSseq();
-            space.setSseq(sseq);
-            space.setTitle(onlyspace.getTitle());
-            space.setContent(onlyspace.getContent());
-            space.setPrice(onlyspace.getPrice());
-            space.setHostid(onlyspace.getHostid());
-            space.setCnum(onlyspace.getCnum());
-            space.setProvince(onlyspace.getProvince());
-            space.setTown(onlyspace.getTown());
-            space.setVillage(onlyspace.getVillage());
-            space.setCreated_at(onlyspace.getCreated_at());
+            int sseq = space.getSseq();
+            spaceDTO.setSseq(sseq);
+            spaceDTO.setTitle(space.getTitle());
+            spaceDTO.setContent(space.getContent());
+            spaceDTO.setPrice(space.getPrice());
+            spaceDTO.setHostid(space.getHostid());
+            spaceDTO.setCnum(space.getCnum());
+            spaceDTO.setProvince(space.getProvince());
+            spaceDTO.setTown(space.getTown());
+            spaceDTO.setVillage(space.getVillage());
+            spaceDTO.setCreated_at(space.getCreated_at());
 
 
             // 찜수 조회, 리뷰 수 조회는 member가 완성되면 작성
 
             // spaceimages 조회
             ArrayList a = sir.findBySseq( sseq );
-            space.setSpaceimages(a);
+            spaceDTO.setImages(a);
 
             // hashspace 조회
             ArrayList b = hsr.findBySseq( sseq );
-            space.setSpaceHashTags(b);
+            spaceDTO.setHashtags(b);
+
+            // reviews 조회
+//            ArrayList c= rvr.findBySseq( sseq );
+//            spaceDTO.setReviews(c);
 
             // List에 추가
-            list.add(space);
+            spaces.add(spaceDTO);
         }
-        return list;
+        return spaces;
     }
 
     public Reservation findByUserid(String userid) {
         Pageable pageable = PageRequest.of(0, 1); // 첫 페이지, 1개 항목
-        List<Reservation> reservations = rr.findLatestByUserid(userid, pageable);
-        System.out.println( reservations.get(0));
-        return reservations.get(0);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime threeHoursLater = now.plus(3, ChronoUnit.DAYS);
 
+        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid, now, threeHoursLater, pageable);
+        if(rs !=null && rs.hasContent())return rs.getContent().get(0);
+        else return null;
     }
 
-    public SpaceDTO.SpaceList getSpace(int sseq) {
-        SpaceDTO spaceDTO = new SpaceDTO();
-        SpaceDTO.SpaceList result = spaceDTO.new SpaceList();
+    public SpaceDTO getSpace(int sseq) {
+        SpaceDTO result = new SpaceDTO();
 
         // Space에 담긴 정보 조회
         Optional<Space> onlyspace = sr.findBySseq(sseq);
@@ -105,13 +110,17 @@ public class SpaceService {
             return null;
         }
 
-        // 이미지 조회
+        // spaceimages 조회
         ArrayList a = sir.findBySseq( sseq );
-        result.setSpaceimages(a);
+        result.setImages(a);
 
-        // 해시태그 조회
+        // hashspace 조회
         ArrayList b = hsr.findBySseq( sseq );
-        result.setSpaceHashTags(b);
+        result.setHashtags(b);
+
+//        // reviews 조회
+////        ArrayList c= rvr.findBySseq( sseq );
+//        result.setReviews(c);
 
         return result;
 

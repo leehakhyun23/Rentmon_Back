@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "Reservation")
 @Data
 public class Reservation {
@@ -41,9 +41,8 @@ public class Reservation {
     @JoinColumn(name = "sseq", insertable = false, updatable = false)
     private Space space;
 
-
     @OneToMany(mappedBy = "sseq", cascade = CascadeType.ALL)
-    private List<Spaceimage> spaceimage;
+    private List<SpaceImage> spaceimage;
 
 
 }

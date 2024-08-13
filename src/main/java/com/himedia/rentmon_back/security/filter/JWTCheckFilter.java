@@ -28,14 +28,15 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
         try {
             String accessToken = authHeaderStr.substring(7);
-            Map<String, Object> claims = new HashMap<>();
-            claims = JWTUtil.validateToken(accessToken);
+//            Map<String, Object> claims = new HashMap<>();
+            Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 
             log.info("JWT claims: " + claims);
 
-            int mseq = (int)claims.get("mseq");
+            int mseq = (int) claims.get("mseq");
             String userid = (String) claims.get("userid");
             String pwd = (String) claims.get("pwd");
+
             String role = (String) claims.get("role");
             Timestamp createAt = (Timestamp) claims.get("create_at");
 
@@ -73,10 +74,19 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/member/login")) return true;
         //리프레쉬 요청
         if(path.startsWith("/member/refresh"))return true;
+
+        //유저 sns 로그인
+        if(path.startsWith("/user/sns"))return true;
+        if(path.startsWith("/favicon.ico")) return true;
+        //유저 회원가입
+        if(path.startsWith("/user/join")) return true;
+        
         if(path.startsWith("/space/getSpaceList")) return true;
         if(path.startsWith("/space")) return true;
-        if(path.startsWith("/space_images"))
-            return true;
+        if(path.startsWith("/space_images")) return true;
+        if(path.startsWith("/review")) return true;
+        if(path.startsWith("/profile_images")) return true;
+
 
 
         return false;

@@ -2,28 +2,29 @@ package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "member")
 @Getter
+@Setter
 public class Member {
     @Id
     @Column(name = "mseq")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int mseq;
 
-    @Column(name = "userid")
+    @Column(name = "userid", nullable = false, length = 50)
     private String userid;
 
-    @Column(name = "pwd")
+    @Column(name = "pwd", nullable = false, length = 1000)
     private String pwd;
 
-    @Column(name = "role")
+//    @Column(name = "role")
+//    @Enumerated(EnumType.STRING)
     private String role;
 
     @Column(name = "created_at")

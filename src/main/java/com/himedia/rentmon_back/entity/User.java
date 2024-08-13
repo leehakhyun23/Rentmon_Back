@@ -2,14 +2,15 @@ package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 
-@Getter
+@Data
 @Entity
-@Table(name = "User")
+@Table(name = "user")
+@Getter
 public class User {
     @Id
     @Column(name = "userid")
@@ -18,11 +19,15 @@ public class User {
     @Column(name = "mseq")
     private int mseq;
 
-    @Column(name = "cseq")
-    private int cseq;
 
-    @Column(name = "gnum")
-    private int gnum;
+    @ManyToOne
+    @JoinColumn(name = "cseq")
+    private Card cseq;
+
+
+    @ManyToOne
+    @JoinColumn(name = "gnum")
+    private Grade gnum;
 
     @Column(name = "pwd")
     private String pwd;
@@ -40,13 +45,13 @@ public class User {
     private String profileimg;
 
     @Column(name = "category1")
-    private String category1;
+    private Integer category1;
 
     @Column(name = "category2")
-    private String category2;
+    private Integer category2;
 
     @Column(name = "category3")
-    private String category3;
+    private Integer category3;
 
     @Column(name = "station")
     private String station;
@@ -56,6 +61,9 @@ public class User {
 
     @Column(name = "snsid")
     private String snsid;
+
+    @Column(name = "islogin")
+    private boolean islogin;
 
     @Column(name = "created_at")
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
