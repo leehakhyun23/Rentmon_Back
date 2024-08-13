@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "space")
@@ -70,16 +71,19 @@ public class Space {
     private String addressdetail;  // 상세주소
 
     @Column(name = "mintime")
-    private int mintime;           // 최소이용시간
+    private Integer mintime;           // 최소이용시간
 
     @Column(name = "personnal")
-    private int personnal;          // 인원
+    private Integer personnal;          // 인원
 
     @Column(name = "maxpersonnal")
-    private int maxpersonnal;      // 최대인원
+    private Integer maxpersonnal;      // 최대인원
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;   // 등록일
+
+    @OneToMany(mappedBy = "space", fetch = FetchType.LAZY)
+    List<Review> reviews;
 }

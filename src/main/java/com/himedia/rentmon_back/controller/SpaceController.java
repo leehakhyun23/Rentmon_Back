@@ -42,9 +42,9 @@ public class SpaceController {
     }
 
     @GetMapping("/getSpace/{sseq}")
-    public ResponseEntity<SpaceDTO> getSpace(@PathVariable("sseq") int sseq) {
+    public ResponseEntity<Space> getSpace(@PathVariable("sseq") int sseq) {
         try{
-            SpaceDTO space = ss.getSpace(sseq);
+            Space space = ss.getSpace(sseq);
             return ResponseEntity.ok(space);
         } catch(Exception e){
             e.printStackTrace();

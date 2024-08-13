@@ -1,6 +1,7 @@
 package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,9 +23,9 @@ public class Review {
     private String content;
 
     @Column(name = "rate")
-    private int rate;
+    private Integer rate;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
@@ -39,14 +40,14 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "sseq")
+    @JsonIgnore
     private Space space;
 
     @ManyToOne
     @JoinColumn(name = "userid")
+    @JsonIgnore
     private User user;
 
-    @OneToMany
+    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY)
     List<ReviewImage> images;
-
-
 }

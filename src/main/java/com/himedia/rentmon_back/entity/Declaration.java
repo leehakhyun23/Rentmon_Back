@@ -38,10 +38,22 @@ public class Declaration {
     private Timestamp replydate;
 
     @ManyToOne
-    @JoinColumn(name = "writer")
-    private Member writer;
+    @JoinColumn(name = "userid")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "hostid")
+    private Host host;
 
     @ManyToOne
     @JoinColumn(name = "sseq")
     private Space space;
+
+    @PrePersist
+    @PreUpdate
+    private void validate() {
+        if ((user != null && host != null) || (user == null && host == null)) {
+            throw new IllegalArgumentException("Either user_id or host_id must be set, but not both.");
+        }
+    }
 }

@@ -97,49 +97,10 @@ public class SpaceService {
         return null;
     }
 
-    public SpaceDTO getSpace(int sseq) {
-        SpaceDTO result = new SpaceDTO();
+    public Space getSpace(int sseq) {
+        Optional<Space> os = sr.findBySseq(sseq);
 
-        // Space에 담긴 정보 조회
-        Optional<Space> onlyspace = sr.findBySseq(sseq);
-        if (onlyspace.isPresent()) {
-            result.setSseq(sseq);
-            result.setTitle(onlyspace.get().getTitle());
-            result.setContent(onlyspace.get().getContent());
-            result.setPrice(onlyspace.get().getPrice());
-//            result.setHostid(onlyspace.get().getHostid());
-//            result.setCnum(onlyspace.get().getCnum());
-            result.setProvince(onlyspace.get().getProvince());
-            result.setTown(onlyspace.get().getTown());
-            result.setVillage(onlyspace.get().getVillage());
-            result.setCreated_at(onlyspace.get().getCreated_at());
-        }
-        else {
-            return null;
-        }
-
-        // spaceimages 조회
-//        ArrayList a = sir.findBySseq( sseq );
-//        result.setImages(a);
-//
-//        // hashspace 조회
-//        ArrayList b = hsr.findBySseq( sseq );
-//        result.setHashtags(b);
-//
-//        // reviews 조회
-//        ArrayList c= rvr.findBySseq( sseq );
-//        result.setReviews(c);
-
-        // hashspace 조회
-        ArrayList b = hsr.findBySseq( sseq );
-        result.setHashtags(b);
-
-//        // reviews 조회
-////        ArrayList c= rvr.findBySseq( sseq );
-//        result.setReviews(c);
-
-        return result;
-
+        return os.orElseThrow(() -> new RuntimeException("Space not found with sseq: " + sseq));
     }
 
     public int insertSpace(Map<String, String> paramSpace) {
