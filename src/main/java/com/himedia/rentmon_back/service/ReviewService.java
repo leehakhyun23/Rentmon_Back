@@ -28,34 +28,34 @@ public class ReviewService {
         for (String imageName : images) {
             ReviewImage reviewImage = new ReviewImage();
             reviewImage.setRealname(imageName);
-            reviewImage.setRseq(rseq); // Review 엔티티와 연관 설정
+//            reviewImage.setRseq(rseq); // Review 엔티티와 연관 설정
 
             reviewImageRepository.save(reviewImage);
         }
 
     }
 
-    public List<ReviewDTO> getReviewList(int sseq) {
-        List<ReviewDTO> reviews = new ArrayList<>();
-        List<Review> reviewList = reviewRepository.findBySseq(sseq);
+    public List<Review> getReviewList() {
+//        List<ReviewDTO> reviews = new ArrayList<>();
+        List<Review> reviewList = reviewRepository.findAll();
 
-        for ( Review review : reviewList){
-            ReviewDTO reviewDTO = new ReviewDTO();
+//        for ( Review review : reviewList){
+//            ReviewDTO reviewDTO = new ReviewDTO();
+//
+//            // Review에 담긴 정보 조회
+//            reviewDTO.setRseq(review.getRseq());
+//            reviewDTO.setContent(review.getContent());
+//            reviewDTO.setRate(review.getRate());
+//            reviewDTO.setReply(review.getReply());
+//
+//            // ReviewImage 조회
+//            ArrayList<ReviewImage> a = reviewImageRepository.findByRseq( reviewDTO.getRseq() );
+//            reviewDTO.setImages(a);
+//
+//            //List에 추가
+////            reviews.add(reviewDTO);
+//        }
 
-            // Review에 담긴 정보 조회
-            reviewDTO.setRseq(review.getRseq());
-            reviewDTO.setContent(review.getContent());
-            reviewDTO.setRate(review.getRate());
-            reviewDTO.setReply(review.getReply());
-
-            // ReviewImage 조회
-            ArrayList<ReviewImage> a = reviewImageRepository.findByRseq( reviewDTO.getRseq() );
-            reviewDTO.setImages(a);
-
-            //List에 추가
-            reviews.add(reviewDTO);
-        }
-
-        return reviews;
+        return reviewList;
     }
 }

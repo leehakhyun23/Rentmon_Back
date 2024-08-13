@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
 
-    Collection<Object> findByUserid(String userid);
+//    Collection<Object> findByUserid(String userid);
 }

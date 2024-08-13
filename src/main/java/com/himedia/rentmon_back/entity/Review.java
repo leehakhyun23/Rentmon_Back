@@ -47,4 +47,6 @@ public class Review {
 
     @OneToMany
     List<ReviewImage> images;
+
+
 }

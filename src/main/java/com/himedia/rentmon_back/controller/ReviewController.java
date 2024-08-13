@@ -4,6 +4,7 @@ import com.himedia.rentmon_back.dto.ReviewDTO;
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.Space;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.service.ReviewService;
 import com.himedia.rentmon_back.service.SpaceService;
 import jakarta.servlet.ServletContext;
@@ -38,9 +39,11 @@ public class ReviewController {
         List<String> images = (List<String>) data.get("images");
 
 
+
         Review review = new Review();
-        review.setUserid(userid);
-        review.setSseq(sseq);
+//        review.setUser(new User(user));
+//        review.setUserid(userid);
+//        review.setSseq(sseq);
 //        review.setCreated_at(created_at);
         review.setRate(rate);
         review.setContent(content);
@@ -51,9 +54,9 @@ public class ReviewController {
     }
 
     @GetMapping("/getReviews")
-    public ResponseEntity<List<ReviewDTO>> getReview(@RequestParam int sseq){
+    public ResponseEntity<List<Review>> getReview(){
         try{
-            List<ReviewDTO> reviews = reviewService.getReviewList(sseq);
+            List<Review> reviews = reviewService.getReviewList();
             return ResponseEntity.ok(reviews);
         } catch (Exception e){
             e.printStackTrace();

@@ -30,11 +30,11 @@ public class UserService {
     public Map<String , Integer> getMenuCount(String userid) {
         Map<String , Integer> menus = new HashMap<>();
         LocalDateTime now = LocalDateTime.now();
-        menus.put("couponCount",cr.findByUserid(userid,now).size());
-        menus.put("reservCount",rr.findByUserid(userid ,now).size());
-        menus.put("usesapceCount",rr.findByUseridWithused(userid ,now).size());
-        menus.put("zzimCount",zr.findByUserid(userid).size());
-        menus.put("inquiryCount", ir.findByUserid(userid).size());
+//        menus.put("couponCount",cr.findByUserid(userid,now).size());
+//        menus.put("reservCount",rr.findByUserid(userid ,now).size());
+//        menus.put("usesapceCount",rr.findByUseridWithused(userid ,now).size());
+//        menus.put("zzimCount",zr.findByUserid(userid).size());
+//        menus.put("inquiryCount", ir.findByUserid(userid).size());
 
 
         return menus;

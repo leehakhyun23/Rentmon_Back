@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface ZzimRepositroy extends JpaRepository<Zzim, Integer> {
 
-    List<Zzim> findByUserid(String userid);
+//    List<Zzim> findByUserid(String userid);
 }

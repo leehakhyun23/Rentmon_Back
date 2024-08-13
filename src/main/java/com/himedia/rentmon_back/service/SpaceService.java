@@ -144,7 +144,7 @@ public class SpaceService {
 
     public int insertSpace(Map<String, String> paramSpace) {
         Space space = new Space();
-        space.setCnum(Integer.parseInt(paramSpace.get("cnum")));
+//        space.setCnum(Integer.parseInt(paramSpace.get("cnum")));
         space.setTitle(paramSpace.get("title"));
         space.setSubtitle(paramSpace.get("subtitle"));
         space.setPrice(Integer.parseInt(paramSpace.get("price")));
@@ -157,7 +157,7 @@ public class SpaceService {
         space.setTown(paramSpace.get("town"));
         space.setVillage(paramSpace.get("village"));
         space.setAddressdetail(paramSpace.get("address_detail"));
-        space.setHostid(paramSpace.get("hostid"));
+//        space.setHostid(paramSpace.get("hostid"));
         try {
             // Convert starttime and endtime from String to Timestamp
             space.setStarttime(convertStringToTimestamp(paramSpace.get("starttime")));

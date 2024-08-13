@@ -226,7 +226,7 @@ public class UserSnsLoginService {
 
             Host host = new Host();
             host.setHostid(String.valueOf(joinNaverMember.getUserid()));
-            host.setMseq(new Member(joinNaverMember.getMseq(), "", "", "", null));
+//            host.setMseq(new Member(joinNaverMember.getMseq(), "", "", "", null));
             host.setPwd(joinNaverMember.getPwd());
             host.setNickname(naverapi.getResponse().getNickname());
             host.setProvider("naver");
@@ -367,7 +367,7 @@ public class UserSnsLoginService {
 
             Host host = new Host();
             host.setHostid(joinGoogleMember.getUserid());
-            host.setMseq(new Member(joinGoogleMember.getMseq(), "", "", "", null));
+//            host.setMseq(new Member(joinGoogleMember.getMseq(), "", "", "", null));
             host.setPwd(joinGoogleMember.getPwd());
             host.setNickname(googleapi.getName());
             host.setProvider("google");
