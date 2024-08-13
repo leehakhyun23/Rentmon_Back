@@ -32,4 +32,13 @@ public class Member {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
 
+    public Member() {}
+
+    public Member(int mseq, String userid, String pwd, String role, Timestamp created_at) {
+        this.mseq = mseq;
+        this.userid = userid;
+        this.pwd = pwd;
+        this.role = role;
+        this.created_at = created_at;
+    }
 }
