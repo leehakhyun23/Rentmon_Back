@@ -7,8 +7,10 @@ import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
 import com.himedia.rentmon_back.entity.Grade;
+import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.entity.User;
+import com.himedia.rentmon_back.repository.HostRepository;
 import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.repository.UserRepository;
 import com.himedia.rentmon_back.util.MailSend;
@@ -35,10 +37,12 @@ import java.util.Optional;
 @Log4j2
 public class UserSnsLoginService {
     private final MemberRepository mr;
+    private final HostRepository hr;
     private final UserRepository ur;
     private final PasswordEncoder pe;
     private final MailSend ms;
     private final ServletContext context;
+
     public OAuthToken getKakaoToken(String code, String kakaoclinetId, String redirectUri) {
         OAuthToken token = new OAuthToken();
         try {
@@ -125,6 +129,28 @@ public class UserSnsLoginService {
         return member;
     }
 
+    public Optional<Member> getKakaoHost(KakaoProfile kakaoProfile) {
+        Optional<Member> member = mr.findByUseridAndRole(String.valueOf(kakaoProfile.getId()), "host");
+        if(member.isEmpty()){
+            Member joinkakaoMember = new Member();
+            joinkakaoMember.setUserid(String.valueOf(kakaoProfile.getId()));
+            joinkakaoMember.setRole("host");
+            joinkakaoMember.setPwd(pe.encode("kakao"));
+            mr.save(joinkakaoMember);
+
+            Host host = new Host();
+            host.setHostid(String.valueOf(kakaoProfile.getId()));
+            host.setMseq(new Member(joinkakaoMember.getMseq(), "", "", "", null));
+            host.setPwd(joinkakaoMember.getPwd());
+            host.setNickname(kakaoProfile.getProperties().getNickname());
+            host.setProvider("kakao");
+            hr.save(host);
+            member = Optional.of(joinkakaoMember);
+        }
+
+        return member;
+    }
+
     public OAuthToken getNaverToken(String code, String state, String naverClinetId, String naverRedirectUri) {
         OAuthToken oAuthToken = null;
         try {
@@ -180,6 +206,28 @@ public class UserSnsLoginService {
             user.setEmail(naverapi.getResponse().getEmail());
             user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
+            member = Optional.of(joinNaverMember);
+        }
+
+        return member;
+    }
+
+    public Optional<Member> getNaverHost(NaverApi naverapi) {
+        Optional<Member> member = mr.findByUseridAndRole(String.valueOf(naverapi.getResponse().getId()), "host");
+        if(member.isEmpty()){
+            Member joinNaverMember = new Member();
+            joinNaverMember.setUserid(String.valueOf(naverapi.getResponse().getId()));
+            joinNaverMember.setRole("host");
+            joinNaverMember.setPwd(pe.encode("naver"));
+            mr.save(joinNaverMember);
+
+            Host host = new Host();
+            host.setHostid(String.valueOf(joinNaverMember.getUserid()));
+            host.setMseq(new Member(joinNaverMember.getMseq(), "", "", "", null));
+            host.setPwd(joinNaverMember.getPwd());
+            host.setNickname(naverapi.getResponse().getNickname());
+            host.setProvider("naver");
+            hr.save(host);
             member = Optional.of(joinNaverMember);
         }
 
@@ -305,9 +353,37 @@ public class UserSnsLoginService {
         return member;
     }
 
+    public Optional<Member> getGoogleHost(GoogleApi googleapi) {
+        Optional<Member> member = mr.findByUseridAndRole(googleapi.getId(), "host");
+        if(member.isEmpty()){
+            Member joinGoogleMember = new Member();
+            joinGoogleMember.setUserid(googleapi.getId());
+            joinGoogleMember.setRole("host");
+            joinGoogleMember.setPwd(pe.encode("google"));
+            mr.save(joinGoogleMember);
+
+            Host host = new Host();
+            host.setHostid(joinGoogleMember.getUserid());
+            host.setMseq(new Member(joinGoogleMember.getMseq(), "", "", "", null));
+            host.setPwd(joinGoogleMember.getPwd());
+            host.setNickname(googleapi.getName());
+            host.setProvider("google");
+            hr.save(host);
+            member = Optional.of(joinGoogleMember);
+        }
+
+        return member;
+    }
+
     public Boolean isUesrTrue(String userid) {
         User user = ur.findByUserid(userid);
         if(user != null) return true;
+        else return false;
+    }
+
+    public Boolean isHostTrue(String hostid) {
+        Host host = hr.findByHostid(hostid);
+        if(host != null) return true;
         else return false;
     }
 
