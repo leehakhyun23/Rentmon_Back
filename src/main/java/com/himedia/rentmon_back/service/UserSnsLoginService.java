@@ -41,6 +41,7 @@ public class UserSnsLoginService {
     private final PasswordEncoder pe;
     private final MailSend ms;
     private final ServletContext context;
+
     public OAuthToken getKakaoToken(String code, String kakaoclinetId, String redirectUri) {
         OAuthToken token = new OAuthToken();
         try {
@@ -210,6 +211,28 @@ public class UserSnsLoginService {
         return member;
     }
 
+    public Optional<Member> getNaverHost(NaverApi naverapi) {
+        Optional<Member> member = mr.findByUseridAndRole(String.valueOf(naverapi.getResponse().getId()), "host");
+        if(member.isEmpty()){
+            Member joinNaverMember = new Member();
+            joinNaverMember.setUserid(String.valueOf(naverapi.getResponse().getId()));
+            joinNaverMember.setRole("host");
+            joinNaverMember.setPwd(pe.encode("naver"));
+            mr.save(joinNaverMember);
+
+            Host host = new Host();
+            host.setHostid(String.valueOf(joinNaverMember.getUserid()));
+            host.setMseq(new Member(joinNaverMember.getMseq(), "", "", "", null));
+            host.setPwd(joinNaverMember.getPwd());
+            host.setNickname(naverapi.getResponse().getNickname());
+            host.setProvider("naver");
+            hr.save(host);
+            member = Optional.of(joinNaverMember);
+        }
+
+        return member;
+    }
+
     public NaverApi getLoginAPI(String accessToken) throws MalformedURLException {
         NaverApi naverApi =null;
         URL url = new URL("https://openapi.naver.com/v1/nid/me");
@@ -329,9 +352,37 @@ public class UserSnsLoginService {
         return member;
     }
 
+    public Optional<Member> getGoogleHost(GoogleApi googleapi) {
+        Optional<Member> member = mr.findByUseridAndRole(googleapi.getId(), "host");
+        if(member.isEmpty()){
+            Member joinGoogleMember = new Member();
+            joinGoogleMember.setUserid(googleapi.getId());
+            joinGoogleMember.setRole("host");
+            joinGoogleMember.setPwd(pe.encode("google"));
+            mr.save(joinGoogleMember);
+
+            Host host = new Host();
+            host.setHostid(joinGoogleMember.getUserid());
+            host.setMseq(new Member(joinGoogleMember.getMseq(), "", "", "", null));
+            host.setPwd(joinGoogleMember.getPwd());
+            host.setNickname(googleapi.getName());
+            host.setProvider("google");
+            hr.save(host);
+            member = Optional.of(joinGoogleMember);
+        }
+
+        return member;
+    }
+
     public Boolean isUesrTrue(String userid) {
         User user = ur.findByUserid(userid);
         if(user != null) return true;
+        else return false;
+    }
+
+    public Boolean isHostTrue(String hostid) {
+        Host host = hr.findByHostid(hostid);
+        if(host != null) return true;
         else return false;
     }
 
