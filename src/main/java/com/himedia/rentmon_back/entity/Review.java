@@ -25,23 +25,19 @@ public class Review {
     private int rate;
 
     @Column(name = "created_at")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Timestamp created_at;
 
     @Column(name = "reply")
     private String reply;
 
     @Column(name = "replydate")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Timestamp replydate;
 
-    @ManyToOne
-    @JoinColumn(name = "sseq")
-    private Space space;
+    @Column(name = "sseq")
+    private int sseq;
 
     @Column(name = "userid")
     private String userid;
-
-    @OneToMany
-    List<ReviewImage> images;
 }

@@ -36,11 +36,9 @@ public class Reservation {
     @Column(name = "sseq")
     private int sseq;
 
-
     @ManyToOne
     @JoinColumn(name = "sseq", insertable = false, updatable = false)
     private Space space;
-
 
     @OneToMany(mappedBy = "sseq", cascade = CascadeType.ALL)
     private List<SpaceImage> spaceimage;

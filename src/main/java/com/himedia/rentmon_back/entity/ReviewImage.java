@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Reviewimage")
+@Table(name = "reviewimage")
 @Getter
 @Setter
 public class ReviewImage {
@@ -26,9 +26,8 @@ public class ReviewImage {
     @Column(name = "size")
     private int size;
 
-    @ManyToOne
-    @JoinColumn(name = "rseq")
-    private Review review;
+    @Column(name = "rseq")
+    private int rseq;
 
 
 

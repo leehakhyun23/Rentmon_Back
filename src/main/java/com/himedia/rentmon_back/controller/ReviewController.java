@@ -1,9 +1,11 @@
 package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.dto.ReviewDTO;
+import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.service.ReviewService;
+import com.himedia.rentmon_back.service.SpaceService;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,50 +26,39 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ReviewController {
 
-
-    private final ReviewService rs;
+    private final SpaceService spaceService;
+    private final ReviewService reviewService;
 
     @PostMapping("/InsertReview")
     public ResponseEntity<Review> InsertReview(@RequestBody Map<String ,Object> data){
         String userid = (String) data.get("userid");
         int rate = (Integer) data.get("rate");
         String content = (String) data.get("content");
-        String created_at_str = (String) data.get("created_at");
-//
-//        // 문자열을 Timestamp로 변환하는 과정
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");  // 문자열 포맷에 맞게 조정
-//        Timestamp created_at = null;
-//        try {
-//            Date date = sdf.parse(created_at_str);
-//            created_at = new Timestamp(date.getTime());
-//        } catch (ParseException e) {
-//            e.printStackTrace();  // 에러 로그
-//            // 적절한 에러 처리를 추가
-//        }
-
-
+        int sseq = (Integer) data.get("sseq");
         List<String> images = (List<String>) data.get("images");
-        Map<String, Object> spaceMap = (Map<String, Object>) data.get("space");
-        Space space = convertMapToSpace(spaceMap);  // Map을 Space로 변환하는 메서드
 
 
         Review review = new Review();
         review.setUserid(userid);
-        review.setSpace(space);
+        review.setSseq(sseq);
 //        review.setCreated_at(created_at);
         review.setRate(rate);
         review.setContent(content);
 
-        rs.InsertReview(review, images);
+        reviewService.InsertReview(review, images);
 
        return ResponseEntity.ok(new Review());
     }
 
-    private Space convertMapToSpace(Map<String, Object> spaceMap) {
-        // Space 객체 생성 및 필드 설정
-        Space space = new Space();
-        // 필드 설정 로직 추가
-        return space;
+    @GetMapping("/getReviews")
+    public ResponseEntity<List<ReviewDTO>> getReview(@RequestParam int sseq){
+        try{
+            List<ReviewDTO> reviews = reviewService.getReviewList(sseq);
+            return ResponseEntity.ok(reviews);
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Autowired

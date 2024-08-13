@@ -23,7 +23,7 @@ public class ReviewDTO {
     private String userid;
     private Timestamp created_at;
 
-    private List<String> images;
+    private List<ReviewImage> images;
 
 
 

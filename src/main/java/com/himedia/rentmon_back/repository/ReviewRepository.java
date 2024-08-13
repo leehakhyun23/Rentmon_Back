@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<Review, Integer> {
-    ArrayList findBySpace(Space space);
+public interface ReviewRepository extends JpaRepository<Review, Long> {
+    ArrayList findBySseq(int sseq);
 }
