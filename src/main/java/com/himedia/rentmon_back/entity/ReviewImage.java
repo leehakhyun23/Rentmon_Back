@@ -29,8 +29,4 @@ public class ReviewImage {
 
     @Column(name = "size")
     private int size;
-
-
-
-
 }

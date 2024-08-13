@@ -27,7 +27,7 @@ public class SpaceImage {
     @Column(name = "realname")
     private String realName;
 
-    @Column(name = "titleyn")
+    @Column(name = "titleyn", nullable = false)
     private boolean titleYn;
 
     @Column(name = "extension")

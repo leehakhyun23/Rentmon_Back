@@ -1,8 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,4 +44,7 @@ public class Host {
     @Column(name = "nickname")
     private String nickname;
 
+    public void setMseq(int mseq) {
+        this.member.setMseq(mseq);
+    }
 }

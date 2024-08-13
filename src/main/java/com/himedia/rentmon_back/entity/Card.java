@@ -21,9 +21,9 @@ public class Card {
     @Column(name = "cardnum", nullable = false, length = 20)
     private String cardnum;
 
-    @Column(name = "monthyear")
+    @Column(name = "monthyear", nullable = false, length = 4)
     private String monthyear;
 
-    @Column(name = "cvc", nullable = false)
+    @Column(name = "cvc", nullable = false, length = 3)
     private int cvc;
 }

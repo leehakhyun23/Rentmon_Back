@@ -110,11 +110,14 @@ public class UserSnsLoginService {
             joinkakaoMember.setUserid(String.valueOf(kakaoProfile.getId()));
             joinkakaoMember.setRole("user");
             joinkakaoMember.setPwd(pe.encode("kakao"));
+            joinkakaoMember.setNickname(kakaoProfile.getProperties().getNickname());
             mr.save(joinkakaoMember);
 
-            User user = new User();
+            int mseq = mr.findByUseridOne(joinkakaoMember.getUserid());
+
+            User user = new User(new Member());
             user.setUserid(String.valueOf(kakaoProfile.getId()));
-            user.setMseq(joinkakaoMember.getMseq());
+            user.setMseq(mseq);
             user.setPwd(joinkakaoMember.getPwd());
             user.setProvider("kakao");
             user.setSnsid(joinkakaoMember.getUserid());
@@ -138,7 +141,7 @@ public class UserSnsLoginService {
 
             Host host = new Host();
             host.setHostid(String.valueOf(kakaoProfile.getId()));
-            host.setMseq(new Member(joinkakaoMember.getMseq(), "", "", "", null));
+            host.setMseq(joinkakaoMember.getMseq());
             host.setPwd(joinkakaoMember.getPwd());
             host.setNickname(kakaoProfile.getProperties().getNickname());
             host.setProvider("kakao");

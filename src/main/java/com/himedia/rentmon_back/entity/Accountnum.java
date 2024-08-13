@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Accountnum {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "aseq")
@@ -19,6 +18,6 @@ public class Accountnum {
     @JoinColumn(name = "bnum")
     private Bank bank;
 
-    @Column(name = "accountnum")
+    @Column(name = "accountnum", nullable = false, length = 20)
     private String accountnum;
 }

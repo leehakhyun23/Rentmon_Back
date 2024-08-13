@@ -3,6 +3,7 @@ package com.himedia.rentmon_back.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
 @Table(name = "user")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
     @Id
     @Column(name = "userid")
@@ -64,8 +66,16 @@ public class User {
     @Column(name = "islogin", columnDefinition = "TINYINT DEFAULT 1")
     private boolean islogin;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
+
+    public User(Member member) {
+        this.member = member;
+    }
+
+    public void setMseq(int mseq) {
+        this.member.setMseq(mseq);
+    }
 }

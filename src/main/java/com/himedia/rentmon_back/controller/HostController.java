@@ -5,21 +5,17 @@ import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
 import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Member;
-import com.himedia.rentmon_back.entity.User;
-
 import com.himedia.rentmon_back.security.CustomSecurityConfig;
 import com.himedia.rentmon_back.service.HostService;
 import com.himedia.rentmon_back.service.UserService;
 import com.himedia.rentmon_back.service.UserSnsLoginService;
-import com.himedia.rentmon_back.util.KakaoEception;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -68,10 +64,10 @@ public class HostController {
         OAuthToken oAuthToken = usersls.getKakaoToken(code,kakaoclinet_id,redirect_uri);
         KakaoProfile kakaoProfile = usersls.getKakaoProfile(oAuthToken);
         try {
-            if(kakaoProfile == null) throw new KakaoEception("카카오 로그인 실패" , "oAutoToken도 같이 확인해주세요.");
+//            if(kakaoProfile == null) throw new KakaoEception("카카오 로그인 실패" , "oAutoToken도 같이 확인해주세요.");
             Optional<Member> member = usersls.getKakaoHost(kakaoProfile);
             response.sendRedirect("http://localhost:3000/getsnshostinfo/"+member.get().getUserid());
-        } catch (KakaoEception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +44,8 @@ public class SpaceService {
             spaceDTO.setTitle(space.getTitle());
             spaceDTO.setContent(space.getContent());
             spaceDTO.setPrice(space.getPrice());
-            spaceDTO.setHostid(space.getHostid());
-            spaceDTO.setCnum(space.getCnum());
+//            spaceDTO.setHostid(space.getHostid());
+//            spaceDTO.setCnum(space.getCnum());
             spaceDTO.setProvince(space.getProvince());
             spaceDTO.setTown(space.getTown());
             spaceDTO.setVillage(space.getVillage());
@@ -56,16 +55,16 @@ public class SpaceService {
             // 찜수 조회, 리뷰 수 조회는 member가 완성되면 작성
 
             // spaceimages 조회
-            ArrayList a = sir.findBySseq( sseq );
-            spaceDTO.setImages(a);
-
-            // hashspace 조회
-            ArrayList b = hsr.findBySseq( sseq );
-            spaceDTO.setHashtags(b);
-
-            // reviews 조회
-            ArrayList c= rvr.findBySseq( sseq );
-            spaceDTO.setReviews(c);
+//            ArrayList a = sir.findBySseq( sseq );
+//            spaceDTO.setImages(a);
+//
+//            // hashspace 조회
+//            ArrayList b = hsr.findBySseq( sseq );
+//            spaceDTO.setHashtags(b);
+//
+//            // reviews 조회
+//            ArrayList c= rvr.findBySseq( sseq );
+//            spaceDTO.setReviews(c);
 
             // List에 추가
             spaces.add(spaceDTO);
@@ -78,9 +77,10 @@ public class SpaceService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime threeHoursLater = now.plus(3, ChronoUnit.DAYS);
 
-        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid, now, threeHoursLater, pageable);
-        if(rs !=null && rs.hasContent())return rs.getContent().get(0);
-        else return null;
+//        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid, now, threeHoursLater, pageable);
+//        if(rs !=null && rs.hasContent())return rs.getContent().get(0);
+//        else return null;
+        return null;
     }
 
     public SpaceDTO getSpace(int sseq) {
@@ -93,8 +93,8 @@ public class SpaceService {
             result.setTitle(onlyspace.get().getTitle());
             result.setContent(onlyspace.get().getContent());
             result.setPrice(onlyspace.get().getPrice());
-            result.setHostid(onlyspace.get().getHostid());
-            result.setCnum(onlyspace.get().getCnum());
+//            result.setHostid(onlyspace.get().getHostid());
+//            result.setCnum(onlyspace.get().getCnum());
             result.setProvince(onlyspace.get().getProvince());
             result.setTown(onlyspace.get().getTown());
             result.setVillage(onlyspace.get().getVillage());
@@ -105,16 +105,16 @@ public class SpaceService {
         }
 
         // spaceimages 조회
-        ArrayList a = sir.findBySseq( sseq );
-        result.setImages(a);
-
-        // hashspace 조회
-        ArrayList b = hsr.findBySseq( sseq );
-        result.setHashtags(b);
-
-        // reviews 조회
-        ArrayList c= rvr.findBySseq( sseq );
-        result.setReviews(c);
+//        ArrayList a = sir.findBySseq( sseq );
+//        result.setImages(a);
+//
+//        // hashspace 조회
+//        ArrayList b = hsr.findBySseq( sseq );
+//        result.setHashtags(b);
+//
+//        // reviews 조회
+//        ArrayList c= rvr.findBySseq( sseq );
+//        result.setReviews(c);
 
         return result;
 
