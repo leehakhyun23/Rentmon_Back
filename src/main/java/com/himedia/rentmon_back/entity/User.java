@@ -45,13 +45,13 @@ public class User {
     private String profileimg;
 
     @Column(name = "category1")
-    private String category1;
+    private Integer category1;
 
     @Column(name = "category2")
-    private String category2;
+    private Integer category2;
 
     @Column(name = "category3")
-    private String category3;
+    private Integer category3;
 
     @Column(name = "station")
     private String station;

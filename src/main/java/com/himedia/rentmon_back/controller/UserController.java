@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -83,7 +84,6 @@ public class UserController {
     @RequestMapping("/sns/naverlogin")
     public void loginnaver(@RequestParam("code") String code,@RequestParam("state") String state ,HttpServletResponse response){
         OAuthToken oAuthToken = usersls.getNaverToken(code,state,naverClinet_id,naverRedirect_uri);
-
         try {
             NaverApi naverapi = usersls.getLoginAPI(oAuthToken.getAccess_token());
             if(naverapi == null) throw new SnsException("네이버 로그인 실패");
@@ -92,8 +92,6 @@ public class UserController {
         } catch (SnsException | IOException e) {
             throw new RuntimeException(e);
         } 
-
-
     }
 
 
@@ -151,16 +149,21 @@ public class UserController {
 
     @PostMapping("/join/categoryset")
     public ResponseEntity<String> joincategoryset(@RequestBody Map<String, Object> data ){
-        List<String> category = (List<String>) data.get("category");
+        List<Integer> category = (List<Integer>) data.get("category");
         String station = (String) data.get("station");
+        String userid = (String) data.get("userid");
 
-        System.out.println(category);
-        System.out.println(station);
-//        usersls.insertInterest(category, station);
-
+        usersls.insertInterest(category, station,userid);
         return ResponseEntity.ok("ok");
     }
 
+    @RequestMapping("/menucountarray")
+    public ResponseEntity<Map<String , Integer>> menucountarray(@RequestParam ("userid") String userid){
+
+        Map<String , Integer> list = us.getMenuCount(userid);
+
+        return ResponseEntity.ok(list);
+    }
 
 
 }
