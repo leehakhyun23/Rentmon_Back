@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -424,5 +425,14 @@ public class UserSnsLoginService {
             result = fn1 + dt + fn2;
         } catch (IllegalStateException | IOException e) {e.printStackTrace();}
         return result;
+    }
+
+    public void insertInterest(List<Integer> category, String station, String userid) {
+        User user = ur.findByUserid(userid);
+        user.setCategory1(category.get(0));
+        user.setCategory2(category.get(1));
+        user.setCategory3(category.get(2));
+        user.setStation(station);
+        ur.save(user);
     }
 }

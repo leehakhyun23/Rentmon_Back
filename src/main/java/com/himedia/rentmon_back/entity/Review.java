@@ -3,6 +3,7 @@ package com.himedia.rentmon_back.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "Review")
 @Getter
+@Setter
 public class Review {
     @Id
     @Column(name = "rseq")
@@ -23,14 +25,14 @@ public class Review {
     private int rate;
 
     @Column(name = "created_at")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Timestamp created_at;
 
     @Column(name = "reply")
     private String reply;
 
     @Column(name = "replydate")
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private Timestamp replydate;
 
     @Column(name = "sseq")
@@ -38,7 +40,4 @@ public class Review {
 
     @Column(name = "userid")
     private String userid;
-
-    @OneToMany
-    List<ReviewImage> images;
 }

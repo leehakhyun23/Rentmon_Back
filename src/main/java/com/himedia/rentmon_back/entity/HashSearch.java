@@ -4,9 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import org.hibernate.annotations.Immutable;
 
 @Entity
-@Table(name = "Hashsearch")
+@Immutable
+@Table(name = "HASHSEARCH")
 @Getter
 public class HashSearch {
 
