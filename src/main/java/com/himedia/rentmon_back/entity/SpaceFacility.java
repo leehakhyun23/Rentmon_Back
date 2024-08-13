@@ -2,19 +2,23 @@ package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Spacefacility")
 @Getter
+@Setter
 public class SpaceFacility {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sfseq")
     private int sfseq;
 
-    @Column(name = "sseq")
-    private int sseq;
+    @ManyToOne
+    @JoinColumn(name = "sseq")
+    private Space space;
 
-    @Column(name = "fnum")
-    private int fnum;
+    @ManyToOne
+    @JoinColumn(name = "fnum")
+    private Facility facility;
 }

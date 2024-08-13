@@ -7,8 +7,6 @@ import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
 import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Member;
-import com.himedia.rentmon_back.entity.User;
-
 import com.himedia.rentmon_back.security.CustomSecurityConfig;
 import com.himedia.rentmon_back.service.HostService;
 import com.himedia.rentmon_back.service.UserService;
@@ -17,13 +15,12 @@ import com.himedia.rentmon_back.util.MailSend;
 import com.himedia.rentmon_back.util.SnsException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

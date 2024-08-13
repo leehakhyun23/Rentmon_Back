@@ -1,8 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,9 +25,15 @@ public class Host {
 //    @Column(name = "email", nullable = false, length = 50)
 //    private String email;
 
+    @Column(name = "phone", nullable = false, length = 20)
+    private String phone;
+
+    @Column(name = "email", nullable = false, length = 50)
+    private String email;
+
+    @ManyToOne
     @JoinColumn(name = "mseq")
-    @OneToOne
-    private Member mseq;
+    private Member member;
 
     @Column(name = "provider")
     private String provider;
@@ -40,4 +44,7 @@ public class Host {
     @Column(name = "nickname")
     private String nickname;
 
+    public void setMseq(int mseq) {
+        this.member.setMseq(mseq);
+    }
 }

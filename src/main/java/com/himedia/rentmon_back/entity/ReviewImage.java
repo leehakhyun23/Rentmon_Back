@@ -14,6 +14,10 @@ public class ReviewImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int riseq;
 
+    @ManyToOne
+    @JoinColumn(name = "rseq")
+    private Review review;
+
     @Column(name = "originname")
     private String originname;
 
@@ -25,11 +29,4 @@ public class ReviewImage {
 
     @Column(name = "size")
     private int size;
-
-    @Column(name = "rseq")
-    private int rseq;
-
-
-
-
 }

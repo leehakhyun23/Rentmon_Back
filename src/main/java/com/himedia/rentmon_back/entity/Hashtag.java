@@ -2,10 +2,12 @@ package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Hashtag")
 @Getter
+@Setter
 public class Hashtag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,5 +16,4 @@ public class Hashtag {
 
     @Column(name = "word", nullable = false, length = 50)
     private String word;
-
 }
