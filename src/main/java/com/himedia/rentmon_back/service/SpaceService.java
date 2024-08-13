@@ -64,8 +64,8 @@ public class SpaceService {
             spaceDTO.setHashtags(b);
 
             // reviews 조회
-            ArrayList c= rvr.findBySseq( sseq );
-            spaceDTO.setReviews(c);
+//            ArrayList c= rvr.findBySseq( sseq );
+//            spaceDTO.setReviews(c);
 
             // List에 추가
             spaces.add(spaceDTO);
@@ -112,9 +112,9 @@ public class SpaceService {
         ArrayList b = hsr.findBySseq( sseq );
         result.setHashtags(b);
 
-        // reviews 조회
-        ArrayList c= rvr.findBySseq( sseq );
-        result.setReviews(c);
+//        // reviews 조회
+////        ArrayList c= rvr.findBySseq( sseq );
+//        result.setReviews(c);
 
         return result;
 
