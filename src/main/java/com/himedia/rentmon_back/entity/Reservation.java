@@ -37,9 +37,8 @@ public class Reservation {
     @Column(name = "sseq")
     private int sseq;
 
-    @OneToOne
-    @JoinColumn(name = "cseq", insertable = false, updatable = false)
-    private Coupon cseq;
+    @Column(name = "cseq")
+    private int cseq;
 
 
     @ManyToOne
