@@ -7,7 +7,6 @@ import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 
 @Entity
-@Table(name = "VIEW_hashsearch")
 @Immutable
 @Subselect("SELECT hs.hsseq, hs.sseq, hs.hseq h.word FROM hashspace hs JOIN hashtag h ON hs.hseq = h.hseq")
 @Getter
