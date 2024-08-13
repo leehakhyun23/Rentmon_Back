@@ -37,6 +37,7 @@ public class SpaceImage {
     private long size;
 
     @Column(name = "create_at")
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp create_at;
 }

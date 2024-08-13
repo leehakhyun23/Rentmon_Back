@@ -25,6 +25,7 @@ public class Review {
     private int rate;
 
     @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
 
@@ -32,6 +33,7 @@ public class Review {
     private String reply;
 
     @Column(name = "replydate")
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp replydate;
 

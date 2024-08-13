@@ -22,7 +22,7 @@ public class Card {
     private String cardnum;
 
     @Column(name = "monthyear")
-    private int monthyear;
+    private String monthyear;
 
     @Column(name = "cvc", nullable = false)
     private int cvc;

@@ -3,9 +3,11 @@ package com.himedia.rentmon_back.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Immutable;
 
 @Entity
-@Table(name = "Hashsearch")
+@Table(name = "VIEW_hashsearch")
+@Immutable
 @Getter
 @Setter
 public class HashSearch {

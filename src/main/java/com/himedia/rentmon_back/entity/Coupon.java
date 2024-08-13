@@ -28,6 +28,7 @@ public class Coupon {
     private int discount;
 
     @Column(name = "limitdate", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp limitdate;
 
