@@ -19,7 +19,7 @@ public class ReservationService {
 
     public int getReservation(String userid) {
         LocalDateTime now = LocalDateTime.now();
-//        List<Reservation> list= rr.findByUserid(userid ,now);
+//        List<Reservation> list= rr.findByUseridList(userid ,now);
         return 0;
     }
 }

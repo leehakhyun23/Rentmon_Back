@@ -1,6 +1,8 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +21,7 @@ public class SpaceImage {
 
     @ManyToOne
     @JoinColumn(name = "sseq")
+    @JsonIgnore
     private Space space;
 
     @Column(name = "originame")
@@ -34,7 +37,7 @@ public class SpaceImage {
     private String extension;
 
     @Column(name = "size")
-    private long size;
+    private Long size;
 
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)

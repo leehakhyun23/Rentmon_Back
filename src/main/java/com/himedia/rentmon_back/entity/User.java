@@ -76,6 +76,7 @@ public class User {
     }
 
     public void setMseq(int mseq) {
+        this.member = new Member();
         this.member.setMseq(mseq);
     }
 }

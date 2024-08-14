@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "host")
 @Getter
@@ -43,6 +45,7 @@ public class Host {
 
     @Column(name = "nickname")
     private String nickname;
+
 
     public void setMseq(int mseq) {
         this.member.setMseq(mseq);
