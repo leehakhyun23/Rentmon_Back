@@ -43,8 +43,8 @@ public class MemberService {
        return Map.of("accessToken", newAccessToken, "refreshToken", newRefreshToken);
     }
 
-    public void insertMember(Member member){
-        memberRepository.save(member);
+    public int insertMember(Member member){
+        return memberRepository.save(member).getMseq();
     }
 
 }

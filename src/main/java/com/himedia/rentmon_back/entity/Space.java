@@ -19,7 +19,7 @@ public class Space {
     private int sseq;               // 기본키
 
     @Column(name = "hostid")
-    private String host;          // 호스트아이디
+    private String hostid;          // 호스트아이디
     @Column(name = "cnum")
     private int cnum;              // 분류 아이디
     @Column(name = "price")

@@ -74,6 +74,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/member/login")) return true;
         //리프레쉬 요청
         if(path.startsWith("/member/refresh"))return true;
+        if(path.startsWith("/member/join"))return true;
 
         //유저 sns 로그인
         if(path.startsWith("/user/sns"))return true;

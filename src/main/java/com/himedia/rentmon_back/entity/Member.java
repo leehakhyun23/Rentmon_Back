@@ -23,11 +23,15 @@ public class Member {
     @Column(name = "pwd", nullable = false, length = 1000)
     private String pwd;
 
+    @Column(name = "nickname", nullable = false)
+    private String nickname;
+
 //    @Column(name = "role")
 //    @Enumerated(EnumType.STRING)
     private String role;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;
 

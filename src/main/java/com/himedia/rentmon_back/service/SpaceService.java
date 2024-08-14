@@ -51,7 +51,7 @@ public class SpaceService {
             spaceDTO.setTitle(space.getTitle());
             spaceDTO.setContent(space.getContent());
             spaceDTO.setPrice(space.getPrice());
-            spaceDTO.setHostid(space.getHostid());
+//            spaceDTO.setHostid(space.getHostid());
             spaceDTO.setCnum(space.getCnum());
             spaceDTO.setProvince(space.getProvince());
             spaceDTO.setTown(space.getTown());
@@ -99,7 +99,7 @@ public class SpaceService {
             result.setTitle(onlyspace.get().getTitle());
             result.setContent(onlyspace.get().getContent());
             result.setPrice(onlyspace.get().getPrice());
-            result.setHostid(onlyspace.get().getHostid());
+//            result.setHostid(onlyspace.get().getHostid());
             result.setCnum(onlyspace.get().getCnum());
             result.setProvince(onlyspace.get().getProvince());
             result.setTown(onlyspace.get().getTown());
@@ -141,7 +141,7 @@ public class SpaceService {
         space.setTown(paramSpace.get("town"));
         space.setVillage(paramSpace.get("village"));
         space.setAddressdetail(paramSpace.get("address_detail"));
-        space.setHostid(paramSpace.get("hostid"));
+//        space.setHostid(paramSpace.get("hostid"));
         try {
             // Convert starttime and endtime from String to Timestamp
             space.setStarttime(convertStringToTimestamp(paramSpace.get("starttime")));
