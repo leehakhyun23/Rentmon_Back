@@ -30,15 +30,6 @@ public class SpaceImage {
     @Column(name = "realname")
     private String realName;
 
-    @Column(name = "titleyn", nullable = false)
-    private boolean titleYn;
-
-    @Column(name = "extension")
-    private String extension;
-
-    @Column(name = "size")
-    private Long size;
-
     @Column(name = "create_at")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")

@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Entity
 @Table(name = "space")
@@ -27,10 +29,6 @@ public class Space {
     @JoinColumn(name = "cnum")
     private Category category;              // 분류 아이디
 
-    @ManyToOne
-    @JoinColumn(name = "fnum")
-    private Fee fee;              // 요금제 아이디
-
     @Column(name = "price")
     private int price;              // 가격
 
@@ -44,14 +42,10 @@ public class Space {
     private String content;         // 내용
 
     @Column(name = "starttime")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp starttime;    // 이용시작 시간
+    private Integer starttime;    // 이용시작 시간
 
     @Column(name = "endtime")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp endtime;      // 마감시간
+    private Integer endtime;      // 마감시간
 
     @Column(name = "caution")
     private String caution;         // 주의사항
@@ -70,12 +64,6 @@ public class Space {
 
     @Column(name = "addressdetail")
     private String addressdetail;  // 상세주소
-
-    @Column(name = "mintime")
-    private int mintime;           // 최소이용시간
-
-    @Column(name = "personnal")
-    private int personnal;          // 인원
 
     @Column(name = "maxpersonnal")
     private int maxpersonnal;      // 최대인원

@@ -1,6 +1,7 @@
 package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,8 +46,9 @@ public class Review {
     @JoinColumn(name = "userid")
     private User user;
 
-    @OneToMany
-    List<ReviewImage> images;
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ReviewImage> images;
 
 
 }
