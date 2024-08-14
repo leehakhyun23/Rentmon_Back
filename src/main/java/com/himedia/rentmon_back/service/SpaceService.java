@@ -1,7 +1,6 @@
 package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.SpaceDTO;
-import com.himedia.rentmon_back.entity.Closed;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.entity.SpaceImage;

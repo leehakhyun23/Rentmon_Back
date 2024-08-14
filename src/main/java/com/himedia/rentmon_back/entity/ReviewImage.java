@@ -24,9 +24,4 @@ public class ReviewImage {
     @Column(name = "realname")
     private String realname;
 
-    @Column(name = "extension")
-    private String extension;
-
-    @Column(name = "size")
-    private int size;
 }

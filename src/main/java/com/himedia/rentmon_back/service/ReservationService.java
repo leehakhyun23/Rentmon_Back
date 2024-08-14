@@ -22,4 +22,8 @@ public class ReservationService {
 //        List<Reservation> list= rr.findByUserid(userid ,now);
         return 0;
     }
+
+    public void InsertReserve(Reservation reservation) {
+        rr.save(reservation);
+    }
 }

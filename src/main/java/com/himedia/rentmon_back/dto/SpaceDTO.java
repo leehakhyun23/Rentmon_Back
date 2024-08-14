@@ -63,7 +63,6 @@ public class SpaceDTO {
 
 
         dto.setCnum(space.getCategory() != null ? space.getCategory().getCnum() : 0);
-        dto.setFnum(space.getFee() != null ? space.getFee().getFnum() : 0);
         dto.setHostid(space.getHost() != null ? space.getHost().getHostid() : null);
 
         return dto;
