@@ -70,6 +70,10 @@ public class HostService {
         return hr.findByHostid(hostid);
     }
 
+    public Host findByHostid(String hostid) {
+        return hr.findByHostid(hostid);
+    }
+
 
 //    public Host getHost(String hostid) {return hr.getHost(hostid);}
 //

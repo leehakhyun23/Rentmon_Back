@@ -21,12 +21,13 @@ public class Host {
 
 //    @Column(name = "name", updatable = false, length = 20)
 //    private String name;
-//
-    @Column(name = "phone", nullable = false, length = 20)
-    private String phone;
 
     @Column(name = "email", nullable = false, length = 50)
     private String email;
+
+    @Column(name = "phone", nullable = false, length = 20)
+    private String phone;
+
 
     @ManyToOne
     @JoinColumn(name = "mseq")
