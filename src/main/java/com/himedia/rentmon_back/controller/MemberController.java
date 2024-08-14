@@ -25,7 +25,7 @@ public class MemberController {
     private final CustomSecurityService customSecurityService;
     private final MemberService ms;
     private final HostService hs;
-    CustomSecurityConfig cc;
+    private final CustomSecurityConfig cc;
 
     @GetMapping("/refresh/{refreshToken}")
     public Map<String, Object> refresh( @RequestHeader("Authorization") String authHeader, @PathVariable("refreshToken") String refreshToken) throws CustomJWTException {
@@ -33,12 +33,13 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public HashMap<String, Object> join( @RequestBody Member member){
-        HashMap<String, Object> result = new HashMap<String, Object>();
+    public Map<String, Object> join(@RequestBody Member member){
+        Map<String, Object> result = new HashMap<>();
         PasswordEncoder pe = cc.passwordEncoder();
         member.setPwd( pe.encode(member.getPwd()) );
-        ms.insertMember(member);
+        int mseq = ms.insertMember(member);
         result.put("msg", "ok");
+        result.put("mseq", mseq);
         return result;
     }
 }

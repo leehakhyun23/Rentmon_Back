@@ -12,6 +12,8 @@ import java.util.List;
 
 @Repository
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
+    @Query("SELECT COUNT(c)  from Coupon c where c.user.userid = :userid AND c.useyn = true AND c.limitdate > :now")
+    Integer findByUseridCount(String userid, LocalDateTime now);
 
 //    @Query("SELECT c from Coupon c where c.userid = :userid AND c.useyn = true AND c.limitdate > :now")
 //    List<Coupon> findByUserid(@Param("userid") String userid , @Param("now") LocalDateTime now );

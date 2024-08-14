@@ -18,20 +18,25 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+
 @RestController
 @RequestMapping("/space")
 @RequiredArgsConstructor
 public class SpaceController {
 
-    private final SpaceService ss;
+    private final SpaceService spaceService;
 
     @GetMapping("/getSpaceList/{page}")
     public ResponseEntity<List<SpaceDTO>> getSpaceList(@PathVariable int page) {
         try{
             int size = 6;
-            List<SpaceDTO> spaces = new ArrayList<>();
-            spaces = ss.getSpaceList(page, size);
-            return ResponseEntity.ok(spaces);
+            List<SpaceDTO> spaceList = spaceService.getSpaceList(page, size);
+            return ResponseEntity.ok(spaceList);
         } catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
@@ -40,14 +45,14 @@ public class SpaceController {
 
     @GetMapping("/getreserve")
     public Reservation getreserve(@RequestParam("userid") String userid) {
-        return ss.findByUserid(userid);
+        return spaceService.findByUserid(userid);
 
     }
 
     @GetMapping("/getSpace/{sseq}")
     public ResponseEntity<SpaceDTO> getSpace(@PathVariable("sseq") int sseq) {
         try{
-            SpaceDTO space = ss.getSpace(sseq);
+            SpaceDTO space = spaceService.getSpace(sseq);
             return ResponseEntity.ok(space);
         } catch(Exception e){
             e.printStackTrace();
@@ -58,7 +63,7 @@ public class SpaceController {
     @PostMapping("/insertSpace")
     public ResponseEntity<Integer> insertSpace(@RequestBody Map<String, String> space) {
         System.out.println(space.toString());
-        int sseq = ss.insertSpace(space);
+        int sseq = spaceService.insertSpace(space);
         return ResponseEntity.ok(sseq);
     }
 

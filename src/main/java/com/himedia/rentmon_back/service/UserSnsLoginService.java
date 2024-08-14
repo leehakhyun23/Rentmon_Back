@@ -120,7 +120,6 @@ public class UserSnsLoginService {
             User user = new User(new Member());
             user.setUserid(String.valueOf(kakaoProfile.getId()));
             user.setMseq(mseq);
-            user.setPwd(joinkakaoMember.getPwd());
             user.setProvider("kakao");
             user.setSnsid(joinkakaoMember.getUserid());
             user.setName(kakaoProfile.getProperties().getNickname());
@@ -202,7 +201,6 @@ public class UserSnsLoginService {
             User user = new User();
             user.setUserid(String.valueOf(joinNaverMember.getUserid()));
             user.setMseq(joinNaverMember.getMseq());
-            user.setPwd(joinNaverMember.getPwd());
             user.setName(naverapi.getResponse().getName());
             user.setSnsid(joinNaverMember.getUserid());
             user.setProvider("naver");
@@ -226,7 +224,8 @@ public class UserSnsLoginService {
 
             Host host = new Host();
             host.setHostid(String.valueOf(joinNaverMember.getUserid()));
-//            host.setMseq(new Member(joinNaverMember.getMseq(), "", "", "", null));
+            host.setMseq(joinNaverMember.getMseq());
+
             host.setPwd(joinNaverMember.getPwd());
             host.setNickname(naverapi.getResponse().getNickname());
             host.setProvider("naver");
@@ -343,7 +342,6 @@ public class UserSnsLoginService {
             User user = new User();
             user.setUserid(joinGoogleMember.getUserid());
             user.setMseq(joinGoogleMember.getMseq());
-            user.setPwd(joinGoogleMember.getPwd());
             user.setName(googleapi.getName());
             user.setSnsid(joinGoogleMember.getUserid());
             user.setProvider("google");
@@ -367,7 +365,8 @@ public class UserSnsLoginService {
 
             Host host = new Host();
             host.setHostid(joinGoogleMember.getUserid());
-//            host.setMseq(new Member(joinGoogleMember.getMseq(), "", "", "", null));
+            host.setMseq(joinGoogleMember.getMseq());
+
             host.setPwd(joinGoogleMember.getPwd());
             host.setNickname(googleapi.getName());
             host.setProvider("google");
@@ -405,7 +404,6 @@ public class UserSnsLoginService {
         User user = new User();
         user.setUserid(member.getUserid());
         user.setMseq(member.getMseq());
-        user.setPwd(member.getPwd());
         user.setPhone(userDTO.getPhone());
         user.setGnum(new Grade(1, "bronze", 0));
         user.setEmail(userDTO.getEmail());
