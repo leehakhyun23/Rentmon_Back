@@ -42,6 +42,7 @@ public class Host {
     @Column(name = "nickname")
     private String nickname;
 
+
     public Host() {
         this.member = new Member();
     }
