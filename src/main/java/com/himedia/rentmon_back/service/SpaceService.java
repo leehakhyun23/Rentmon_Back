@@ -64,10 +64,10 @@ public class SpaceService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime threeHoursLater = now.plus(3, ChronoUnit.DAYS);
 
-//        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid, now, threeHoursLater, pageable);
-//        if(rs !=null && rs.hasContent())return rs.getContent().get(0);
-//        else return null;
-        return null;
+        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid,now, threeHoursLater, pageable);
+        System.out.println(rs.getContent());
+        if(rs !=null && rs.hasContent())return rs.getContent().get(0);
+        else return null;
     }
 
     public int insertSpace(Map<String, String> paramSpace) {
