@@ -60,7 +60,7 @@ public class User {
     @Column(name = "snsid")
     private String snsid;
 
-    @Column(name = "islogin", columnDefinition = "TINYINT DEFAULT 1")
+    @Column(name = "islogin", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
     private boolean islogin;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

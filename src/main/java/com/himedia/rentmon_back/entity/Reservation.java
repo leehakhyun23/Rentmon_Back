@@ -46,6 +46,4 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "sseq")
     private Space space;
-
-
 }
