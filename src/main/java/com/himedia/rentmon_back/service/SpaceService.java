@@ -76,7 +76,6 @@ public class SpaceService {
         space.setTitle(paramSpace.get("title"));
         space.setSubtitle(paramSpace.get("subtitle"));
         space.setPrice(Integer.parseInt(paramSpace.get("price")));
-        space.setPersonnal(Integer.parseInt(paramSpace.get("personnal")));
         space.setMaxpersonnal(Integer.parseInt(paramSpace.get("maxpersonnal")));
         space.setContent(paramSpace.get("content"));
         space.setCaution(paramSpace.get("caution"));

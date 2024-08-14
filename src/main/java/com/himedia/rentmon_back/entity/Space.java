@@ -63,12 +63,6 @@ public class Space {
     @Column(name = "addressdetail")
     private String addressdetail;  // 상세주소
 
-    @Column(name = "mintime")
-    private int mintime;           // 최소이용시간
-
-    @Column(name = "personnal")
-    private int personnal;          // 인원
-
     @Column(name = "maxpersonnal")
     private int maxpersonnal;      // 최대인원
 

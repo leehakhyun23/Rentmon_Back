@@ -36,7 +36,6 @@ public class SpaceDTO {
     //ManyToOne으로 참조되는 데이터
     private String hostid;
     private int cnum;
-    private int fnum;
 
     // spaceimage 테이블
     private List<String> imageNames;    //SpaceImage의 realName 목록
@@ -50,8 +49,6 @@ public class SpaceDTO {
         dto.setCreated_at(space.getCreated_at());
         dto.setEndtime(space.getEndtime());
         dto.setMaxpersonnal(space.getMaxpersonnal());
-        dto.setMintime(space.getMintime());
-        dto.setPersonnal(space.getPersonnal());
         dto.setPrice(space.getPrice());
         dto.setProvince(space.getProvince());
         dto.setStarttime(space.getStarttime());
