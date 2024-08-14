@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -20,42 +21,27 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewImageRepository reviewImageRepository;
 
-    public void InsertReview(Review review, List<String> images) {
+    public void InsertReview(ReviewDTO reviewDTO) {
+        //Review Entity 내용 추출 후 review 저장
+        Review review = ReviewDTO.toEntity(reviewDTO);
         Review savedReview = reviewRepository.save(review);
         int rseq = savedReview.getRseq();
 
         // Images를 추출해서 reviewImage에 save
-        for (String imageName : images) {
-            ReviewImage reviewImage = new ReviewImage();
-            reviewImage.setRealname(imageName);
-            reviewImage.setRseq(rseq); // Review 엔티티와 연관 설정
-
+        for (ReviewImage reviewImage : reviewDTO.getImages()) {
             reviewImageRepository.save(reviewImage);
         }
-
     }
 
     public List<ReviewDTO> getReviewList(int sseq) {
-        List<ReviewDTO> reviews = new ArrayList<>();
-        List<Review> reviewList = reviewRepository.findBySseq(sseq);
+        // 특정 sseq 값으로 리뷰 리스트를 조회
+        List<Review> reviews = reviewRepository.findBySpaceSseq(sseq);
 
-        for ( Review review : reviewList){
-            ReviewDTO reviewDTO = new ReviewDTO();
-
-            // Review에 담긴 정보 조회
-            reviewDTO.setRseq(review.getRseq());
-            reviewDTO.setContent(review.getContent());
-            reviewDTO.setRate(review.getRate());
-            reviewDTO.setReply(review.getReply());
-
-            // ReviewImage 조회
-            ArrayList<ReviewImage> a = reviewImageRepository.findByRseq( reviewDTO.getRseq() );
-            reviewDTO.setImages(a);
-
-            //List에 추가
-            reviews.add(reviewDTO);
-        }
-
-        return reviews;
+        // 각 Review를 ReviewDTO로 변환
+        return reviews.stream().map(review -> {
+            ReviewDTO dto = ReviewDTO.fromEntity(review);
+            dto.setImages(review.getImages()); // Review에 연결된 ReviewImage 리스트를 설정
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

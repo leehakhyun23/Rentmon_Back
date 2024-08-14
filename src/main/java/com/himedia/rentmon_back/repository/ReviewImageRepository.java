@@ -9,5 +9,5 @@ import java.util.ArrayList;
 
 @Repository
 public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> {
-    ArrayList<ReviewImage> findByRseq(int rseq);
+//    ArrayList<ReviewImage> findByRseq(int rseq);
 }

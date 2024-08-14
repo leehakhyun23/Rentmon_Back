@@ -3,6 +3,9 @@ package com.himedia.rentmon_back.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+
+import java.util.List;
+
 @Entity
 @Table(name = "host")
 @Getter
@@ -25,8 +28,14 @@ public class Host {
     @Column(name = "email", nullable = false, length = 50)
     private String email;
 
+    @Column(name = "phone", nullable = false, length = 20)
+    private String phone;
+
+    @Column(name = "email", nullable = false, length = 50)
+    private String email;
+
+    @ManyToOne
     @JoinColumn(name = "mseq")
-    @OneToOne
     private Member member;
 
     @Column(name = "provider")

@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,22 +15,15 @@ public class ReviewImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int riseq;
 
+    @ManyToOne
+    @JoinColumn(name = "rseq")
+    @JsonIgnore
+    private Review review;
+
     @Column(name = "originname")
     private String originname;
 
     @Column(name = "realname")
     private String realname;
-
-    @Column(name = "extension")
-    private String extension;
-
-    @Column(name = "size")
-    private int size;
-
-    @Column(name = "rseq")
-    private int rseq;
-
-
-
 
 }

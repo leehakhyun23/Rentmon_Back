@@ -1,24 +1,24 @@
 package com.himedia.rentmon_back.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Zzim")
 @Getter
+@Setter
 public class Zzim {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "zseq")
-    private String zseq;
+    private int zseq;
 
-    @Column(name = "userid")
-    private String userid;
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
 
-    @Column(name = "sseq")
-    private int sseq;
-
-
+    @ManyToOne
+    @JoinColumn(name = "sseq")
+    private Space space;
 }

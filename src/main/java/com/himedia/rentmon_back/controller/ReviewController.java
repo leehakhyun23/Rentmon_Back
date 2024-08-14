@@ -4,6 +4,7 @@ import com.himedia.rentmon_back.dto.ReviewDTO;
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.Space;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.service.ReviewService;
 import com.himedia.rentmon_back.service.SpaceService;
 import jakarta.servlet.ServletContext;
@@ -30,32 +31,18 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/InsertReview")
-    public ResponseEntity<Review> InsertReview(@RequestBody Map<String ,Object> data){
-        String userid = (String) data.get("userid");
-        int rate = (Integer) data.get("rate");
-        String content = (String) data.get("content");
-        int sseq = (Integer) data.get("sseq");
-        List<String> images = (List<String>) data.get("images");
-
-
-        Review review = new Review();
-        review.setUserid(userid);
-        review.setSseq(sseq);
-//        review.setCreated_at(created_at);
-        review.setRate(rate);
-        review.setContent(content);
-
-        reviewService.InsertReview(review, images);
+    public ResponseEntity<Review> InsertReview(@RequestBody ReviewDTO reviewDTO){
+        reviewService.InsertReview(reviewDTO);
 
        return ResponseEntity.ok(new Review());
     }
 
-    @GetMapping("/getReviews")
-    public ResponseEntity<List<ReviewDTO>> getReview(@RequestParam int sseq){
+    @GetMapping("/GetReviews/{sseq}")
+    public ResponseEntity<List<ReviewDTO>> GetReviews(@PathVariable("sseq") int sseq){
         try{
             List<ReviewDTO> reviews = reviewService.getReviewList(sseq);
             return ResponseEntity.ok(reviews);
-        } catch (Exception e){
+        }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }

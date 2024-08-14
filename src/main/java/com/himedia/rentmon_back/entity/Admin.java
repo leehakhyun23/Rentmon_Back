@@ -10,14 +10,13 @@ import lombok.Setter;
 @Setter
 public class Admin {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "adminid", length = 50)
     private String adminid;
 
     @Column(name = "pwd", nullable = false, length = 1000)
     private String pwd;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "mseq")
-    private Member mseq;
+    private Member member;
 }
