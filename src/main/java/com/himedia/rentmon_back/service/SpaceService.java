@@ -100,20 +100,6 @@ public class SpaceService {
         space.setCategory(category); // Category 설정
         space.setStarttime(Integer.parseInt(paramSpace.get("starttime")));
         space.setEndtime(Integer.parseInt(paramSpace.get("endtime")));
-
-//        space.setHostid(paramSpace.get("hostid"));
-        try {
-            // Convert starttime and endtime from String to Timestamp
-
-//            space.setStarttime(convertStringToTimestamp(paramSpace.get("starttime")));
-//            space.setEndtime(convertStringToTimestamp(paramSpace.get("endtime")));
-
-        } catch (Exception e) {
-            e.printStackTrace(); // Print the stack trace for debugging
-        }
-
-
-        // Save the Space entity
         Space savedSpace = spaceRepository.save(space);
         return savedSpace.getSseq();
     }

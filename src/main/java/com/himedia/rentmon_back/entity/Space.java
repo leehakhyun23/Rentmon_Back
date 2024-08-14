@@ -79,6 +79,7 @@ public class Space {
         this.created_at = new Timestamp(Calendar.getInstance().getTimeInMillis());
     }
 
+
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<SpaceImage> spaceimage;
