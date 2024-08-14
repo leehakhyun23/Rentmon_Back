@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "Reservation")
@@ -43,6 +44,5 @@ public class Reservation {
     @JoinColumn(name = "sseq", insertable = false, updatable = false)
     private Space space;
 
-//    @OneToMany(mappedBy = "sseq", cascade = CascadeType.ALL)
-//    private List<SpaceImage> spaceimage;
+
 }
