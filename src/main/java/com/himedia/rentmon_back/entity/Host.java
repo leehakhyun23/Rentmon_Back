@@ -1,8 +1,8 @@
 package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "host")
 @Getter
 @Setter
+@ToString
 public class Host {
     @Id
     @Column(name = "hostid")
@@ -21,11 +22,11 @@ public class Host {
 //    @Column(name = "name", updatable = false, length = 20)
 //    private String name;
 //
-//    @Column(name = "phone", nullable = false, length = 20)
-//    private String phone;
-//
-//    @Column(name = "email", nullable = false, length = 50)
-//    private String email;
+    @Column(name = "phone", nullable = false, length = 20)
+    private String phone;
+
+    @Column(name = "email", nullable = false, length = 50)
+    private String email;
 
     @Column(name = "phone", nullable = false, length = 20)
     private String phone;
@@ -46,8 +47,9 @@ public class Host {
     @Column(name = "nickname")
     private String nickname;
 
-
-    public void setMseq(int mseq) {
-        this.member.setMseq(mseq);
+    public Host() {
+        this.member = new Member();
     }
+
+    public void setMseq(int mseq) {this.member.setMseq(mseq);}
 }

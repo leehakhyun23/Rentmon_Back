@@ -85,13 +85,14 @@ public class SpaceService {
         space.setVillage(paramSpace.get("village"));
         space.setAddressdetail(paramSpace.get("address_detail"));
 //        space.setHostid(paramSpace.get("hostid"));
-//        try {
-//            // Convert starttime and endtime from String to Timestamp
-//            space.setStarttime((paramSpace.get("starttime")));
-//            space.setEndtime(convertStringToTimestamp(paramSpace.get("endtime")));
-//        } catch (Exception e) {
-//            e.printStackTrace(); // Print the stack trace for debugging
-//        }
+        try {
+            // Convert starttime and endtime from String to Timestamp
+            space.setStarttime(convertStringToTimestamp(paramSpace.get("starttime")));
+            space.setEndtime(convertStringToTimestamp(paramSpace.get("endtime")));
+        } catch (Exception e) {
+            e.printStackTrace(); // Print the stack trace for debugging
+        }
+
 
         // Save the Space entity
         Space savedSpace = spaceRepository.save(space);

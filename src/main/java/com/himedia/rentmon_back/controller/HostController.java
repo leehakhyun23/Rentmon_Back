@@ -41,13 +41,30 @@ public class HostController {
         return ResponseEntity.ok(host);
     }
 
+//    @PostMapping("/join")
+//    public Map<String, Object> join( @RequestBody Host host){
+//        Map<String, Object> result = new HashMap<String, Object>();
+//        PasswordEncoder pe = cc.passwordEncoder();
+//        host.setPwd( pe.encode(host.getPwd()) );
+//        hs.insertMember(host);
+//        result.put("msg", "ok");
+//        return result;
+//    }
+
     @PostMapping("/join")
-    public Map<String, Object> join( @RequestBody Host host){
-        Map<String, Object> result = new HashMap<String, Object>();
-        PasswordEncoder pe = cc.passwordEncoder();
-        host.setPwd( pe.encode(host.getPwd()) );
-        hs.insertMember(host);
-        result.put("msg", "ok");
+    public Map<String, Object> join(@RequestBody Host host) {
+        System.out.println(host.toString());
+        Map<String, Object> result = new HashMap<>();
+        try {
+            PasswordEncoder pe = cc.passwordEncoder();
+            host.setPwd(pe.encode(host.getPwd())); // 비밀번호 암호화
+            hs.insertMember(host); // 회원가입 처리
+
+            result.put("msg", "ok"); // 회원가입 성공 메시지
+        } catch (Exception e) {
+            result.put("error", "회원가입 중 오류가 발생했습니다."); // 오류 발생 시 메시지
+            e.printStackTrace(); // 디버깅을 위한 예외 로그
+        }
         return result;
     }
 
@@ -84,7 +101,6 @@ public class HostController {
         OAuthToken oAuthToken = usersls.getKakaoToken(code,kakaoclinet_id,redirect_uri);
         KakaoProfile kakaoProfile = usersls.getKakaoProfile(oAuthToken);
         try {
-
             Optional<Member> member = usersls.getKakaoHost(kakaoProfile);
             response.sendRedirect("http://localhost:3000/getsnshostinfo/"+member.get().getUserid());
         } catch (Exception e) {

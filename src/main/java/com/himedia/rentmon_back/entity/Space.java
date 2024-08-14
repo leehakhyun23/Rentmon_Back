@@ -21,6 +21,7 @@ public class Space {
     @Column(name = "sseq")
     private int sseq;               // 기본키
 
+
     @ManyToOne
     @JoinColumn(name = "hostid")
     private Host host;          // 호스트아이디
