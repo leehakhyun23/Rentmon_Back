@@ -41,7 +41,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             Timestamp createAt = (Timestamp) claims.get("create_at");
 
 
-            MemberDTO memberDTO = new MemberDTO( userid , pwd , createAt , role , mseq );
+            MemberDTO memberDTO = new MemberDTO(userid, pwd, createAt, role, mseq);
 
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities());
