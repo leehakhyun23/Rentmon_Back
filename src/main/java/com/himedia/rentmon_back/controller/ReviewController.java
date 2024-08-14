@@ -31,10 +31,10 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/InsertReview")
-    public ResponseEntity<Review> InsertReview(@RequestBody ReviewDTO reviewDTO){
-        reviewService.InsertReview(reviewDTO);
+    public ResponseEntity<Review> InsertReview(@RequestBody Review review){
+        Review savedReview = reviewService.InsertReview(review);
 
-       return ResponseEntity.ok(new Review());
+       return ResponseEntity.ok(savedReview);
     }
 
     @GetMapping("/GetReviews/{sseq}")

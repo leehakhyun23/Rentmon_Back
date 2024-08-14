@@ -1,6 +1,8 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -40,6 +42,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "sseq")
+    @JsonBackReference
     private Space space;
 
     @ManyToOne

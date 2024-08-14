@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -17,7 +18,7 @@ public class ReviewImage {
 
     @ManyToOne
     @JoinColumn(name = "rseq")
-    @JsonIgnore
+    @JsonBackReference
     private Review review;
 
     @Column(name = "originname")
