@@ -9,8 +9,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,14 +22,17 @@ public class ReviewService {
     private final ReviewImageRepository reviewImageRepository;
 
     public Review InsertReview(Review review) {
+        //Review Entity 내용 추출 후 review 저장
+        Review savedReview = reviewRepository.save(review);
 
-        // Review 엔티티와 ReviewImage 간의 연관 관계 설정
+        // 리뷰와 관련된 이미지를 저장
         if (review.getImages() != null) {
-            review.getImages().forEach(image -> image.setReview(review));
+            review.getImages().forEach(image -> {
+                image.setReview(savedReview);
+                reviewImageRepository.save(image);
+            });
         }
-
-        // Review 저장
-        return reviewRepository.save(review);
+        return savedReview;
     }
 
     public List<ReviewDTO> getReviewList(int sseq) {

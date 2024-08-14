@@ -32,9 +32,13 @@ public class ReviewController {
 
     @PostMapping("/InsertReview")
     public ResponseEntity<Review> InsertReview(@RequestBody Review review){
-        Review savedReview = reviewService.InsertReview(review);
-
-       return ResponseEntity.ok(savedReview);
+        try{
+            Review savedReview = reviewService.InsertReview(review);
+            return ResponseEntity.ok(savedReview);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/GetReviews/{sseq}")
