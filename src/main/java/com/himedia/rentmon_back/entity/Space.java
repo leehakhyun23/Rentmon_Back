@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 
 @Entity
 @Table(name = "space")
@@ -42,14 +43,10 @@ public class Space {
     private String content;         // 내용
 
     @Column(name = "starttime")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp starttime;    // 이용시작 시간
+    private int starttime;    // 이용시작 시간
 
     @Column(name = "endtime")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp endtime;      // 마감시간
+    private int endtime;      // 마감시간
 
     @Column(name = "caution")
     private String caution;         // 주의사항
@@ -69,12 +66,6 @@ public class Space {
     @Column(name = "addressdetail")
     private String addressdetail;  // 상세주소
 
-    @Column(name = "mintime")
-    private int mintime;           // 최소이용시간
-
-    @Column(name = "personnal")
-    private int personnal;          // 인원
-
     @Column(name = "maxpersonnal")
     private int maxpersonnal;      // 최대인원
 
@@ -82,4 +73,8 @@ public class Space {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;   // 등록일
+
+    public Space() {
+        this.created_at = new Timestamp(Calendar.getInstance().getTimeInMillis());
+    }
 }

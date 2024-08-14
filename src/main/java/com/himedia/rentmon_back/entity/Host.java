@@ -44,6 +44,7 @@ public class Host {
     @Column(name = "nickname")
     private String nickname;
 
+
     public void setMseq(int mseq) {
         this.member.setMseq(mseq);
     }
