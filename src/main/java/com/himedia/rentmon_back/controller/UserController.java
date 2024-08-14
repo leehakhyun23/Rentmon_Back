@@ -1,5 +1,7 @@
 package com.himedia.rentmon_back.controller;
 
+import com.himedia.rentmon_back.dto.UserDTO;
+import com.himedia.rentmon_back.dto.usersnsdto.GoogleApi;
 import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
@@ -8,15 +10,18 @@ import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.service.MemberService;
 import com.himedia.rentmon_back.service.UserService;
 import com.himedia.rentmon_back.service.UserSnsLoginService;
-import com.himedia.rentmon_back.util.KakaoEception;
+import com.himedia.rentmon_back.util.SnsException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -52,13 +57,12 @@ public class UserController {
         OAuthToken oAuthToken = usersls.getKakaoToken(code,kakaoclinet_id,redirect_uri);
         KakaoProfile kakaoProfile = usersls.getKakaoProfile(oAuthToken);
         try {
-            if(kakaoProfile == null) throw new KakaoEception("카카오 로그인 실패" , "oAutoToken도 같이 확인해주세요.");
-
+            if(kakaoProfile == null) throw new SnsException("카카오 로그인 실패");
             System.out.println(kakaoProfile);
             Optional<Member> member = usersls.getKakaoMember(kakaoProfile);
-            response.sendRedirect("http://localhost:3000/getsnsuserinfo/"+member.get().getUserid());
-        } catch (KakaoEception e) {
-            throw new RuntimeException(e);
+            response.sendRedirect("http://localhost:3000/getsnsuserinfo/"+member.get().getUserid()+"/kakao");
+        } catch (SnsException e) {
+            e.printStackTrace();
         }
     }
 
@@ -78,10 +82,88 @@ public class UserController {
     }
 
     @RequestMapping("/sns/naverlogin")
-    public void loginnaver(@RequestParam("code") String code,@RequestParam("state") String state ,HttpServletResponse response) throws IOException {
+    public void loginnaver(@RequestParam("code") String code,@RequestParam("state") String state ,HttpServletResponse response){
         OAuthToken oAuthToken = usersls.getNaverToken(code,state,naverClinet_id,naverRedirect_uri);
+        try {
+            NaverApi naverapi = usersls.getLoginAPI(oAuthToken.getAccess_token());
+            if(naverapi == null) throw new SnsException("네이버 로그인 실패");
+            Optional<Member> member = usersls.getNaverMember(naverapi);
+            response.sendRedirect("http://localhost:3000/getsnsuserinfo/"+member.get().getUserid()+"/naver");
+        } catch (SnsException | IOException e) {
+            throw new RuntimeException(e);
+        } 
+    }
 
-        NaverApi naverapi = usersls.getLoginAPI(oAuthToken.getAccess_token());
+
+    private String googleClinet_id="1006482080940-2h22le2b0elv4lv4hivccbeao91et93u.apps.googleusercontent.com";
+    private String gooleRedirect_uri ="http://localhost:8070/user/sns/googlelogin";
+    private String googleClientPw= "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";
+    @RequestMapping("/sns/googlestart")
+    public @ResponseBody String getgooleLogin(){
+        String a = "<script  type='text/javascript'>" +
+                "location.href='https://accounts.google.com/o/oauth2/v2/auth?"
+                +"client_id="+googleClinet_id+
+                "&redirect_uri="+gooleRedirect_uri+
+                "&response_type=code" +
+                "&scope=email profile"
+                +"';" +
+                "</script>";
+        return a;
+    }
+
+    @RequestMapping("/sns/googlelogin")
+    public void logingoole(@RequestParam("code") String code ,HttpServletResponse response) {
+        System.out.println(code);
+        OAuthToken oAuthToken = usersls.getGoogleToken(code,googleClinet_id, googleClientPw,gooleRedirect_uri);
+        GoogleApi googleapi = null;
+        try {
+            googleapi = usersls.getGoogleProfile(oAuthToken.getAccess_token());
+            if(googleapi == null) throw new SnsException("구글 로그인 실패");
+            Optional<Member> member = usersls.getGoogleMember(googleapi);
+            response.sendRedirect("http://localhost:3000/getsnsuserinfo/"+member.get().getUserid()+"/google");
+
+        } catch (SnsException | IOException e) {
+            e.printStackTrace();
+        }
 
     }
+
+    @PostMapping("/join/idcheck")
+    public ResponseEntity<Boolean> idCheck(@RequestParam("userid")String userid){
+        Boolean idCheck = usersls.isUesrTrue(userid);
+        return ResponseEntity.ok(idCheck);
+    }
+
+    @PostMapping("/join/mailsend")
+    public ResponseEntity<String> mailSend (@RequestParam("email") String email){
+        String code = usersls.mailSender(email);
+        return  ResponseEntity.ok(code);
+    }
+
+    @PostMapping("/join")
+    public ResponseEntity<String> join (@ModelAttribute UserDTO userDTO , @RequestParam(value = "profileimg" , required = false) MultipartFile profileimg){
+        usersls.joinUser(userDTO, profileimg);
+        return ResponseEntity.ok(userDTO.getUserid());
+    }
+
+
+    @PostMapping("/join/categoryset")
+    public ResponseEntity<String> joincategoryset(@RequestBody Map<String, Object> data ){
+        List<Integer> category = (List<Integer>) data.get("category");
+        String station = (String) data.get("station");
+        String userid = (String) data.get("userid");
+
+        usersls.insertInterest(category, station,userid);
+        return ResponseEntity.ok("ok");
+    }
+
+    @RequestMapping("/menucountarray")
+    public ResponseEntity<Map<String , Integer>> menucountarray(@RequestParam ("userid") String userid){
+
+        Map<String , Integer> list = us.getMenuCount(userid);
+
+        return ResponseEntity.ok(list);
+    }
+
+
 }

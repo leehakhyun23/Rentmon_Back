@@ -8,12 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
 
-    @Query("SELECT r FROM Reservation r WHERE r.userid = :userid AND r.reservestart BETWEEN :now AND :threeHoursLater ORDER BY r.reservestart ASC")
-    Page<Reservation> findReservationsWithinNext3Hours(@Param("userid") String userid, @Param("now") LocalDateTime now, @Param("threeHoursLater") LocalDateTime threeHoursLater, Pageable pageable);
+
+    @Query("SELECT r FROM Reservation r WHERE r.reservestart BETWEEN :now AND :threeHoursLater AND r.user.userid = :userid ORDER BY r.reservestart ASC")
+    Page<Reservation> findReservationsWithinNext3Hours( @Param("userid") String userid ,@Param("now") LocalDateTime now, @Param("threeHoursLater") LocalDateTime threeHoursLater, Pageable pageable);
+
+    @Query("SELECT COUNT(r) from Reservation r where r.user.userid = :userid AND r.reservestart > :now")
+    Integer findByUseridCount(String userid, LocalDateTime now);
+
+    @Query("select count(r) from Reservation r where r.user.userid = :userid AND r.reserveend < :now")
+    Integer findByUseridWithusedCount(String userid, LocalDateTime now);
 
 }

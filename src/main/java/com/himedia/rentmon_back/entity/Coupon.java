@@ -14,11 +14,12 @@ import java.sql.Timestamp;
 public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cnum")
-    private int cnum;
+    @Column(name = "cseq")
+    private int cseq;
 
-    @Column(name = "userid")
-    private String userid;
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
 
     @Column(name = "couponstr", nullable = false, length = 30)
     private String couponstr;
@@ -27,6 +28,7 @@ public class Coupon {
     private int discount;
 
     @Column(name = "limitdate", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp limitdate;
 

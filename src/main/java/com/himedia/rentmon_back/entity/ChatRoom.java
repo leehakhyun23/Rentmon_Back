@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @Entity
 @Table(name = "chatroom")
 @Getter
@@ -21,14 +23,16 @@ public class ChatRoom {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private String created_at;
+    private Timestamp created_at;
 
-    @Column(name = "userid")
-    private String userid;
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private User user;
 
-    @Column(name = "hostid")
-    private String hostid;
-
+    @ManyToOne
+    @JoinColumn(name = "hostid")
+    private Host host;
 }
