@@ -30,9 +30,6 @@ public class User {
     @JoinColumn(name = "gnum")
     private Grade gnum;
 
-    @Column(name = "pwd")
-    private String pwd;
-
     @Column(name = "name")
     private String name;
 
@@ -76,6 +73,7 @@ public class User {
     }
 
     public void setMseq(int mseq) {
+        this.member = new Member();
         this.member.setMseq(mseq);
     }
 }

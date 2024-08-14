@@ -31,34 +31,18 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/InsertReview")
-    public ResponseEntity<Review> InsertReview(@RequestBody Map<String ,Object> data){
-        String userid = (String) data.get("userid");
-        int rate = (Integer) data.get("rate");
-        String content = (String) data.get("content");
-        int sseq = (Integer) data.get("sseq");
-        List<String> images = (List<String>) data.get("images");
-
-
-
-        Review review = new Review();
-//        review.setUser(new User(user));
-//        review.setUserid(userid);
-//        review.setSseq(sseq);
-//        review.setCreated_at(created_at);
-        review.setRate(rate);
-        review.setContent(content);
-
-        reviewService.InsertReview(review, images);
+    public ResponseEntity<Review> InsertReview(@RequestBody ReviewDTO reviewDTO){
+        reviewService.InsertReview(reviewDTO);
 
        return ResponseEntity.ok(new Review());
     }
 
-    @GetMapping("/getReviews")
-    public ResponseEntity<List<Review>> getReview(){
+    @GetMapping("/GetReviews/{sseq}")
+    public ResponseEntity<List<ReviewDTO>> GetReviews(@PathVariable("sseq") int sseq){
         try{
-            List<Review> reviews = reviewService.getReviewList();
+            List<ReviewDTO> reviews = reviewService.getReviewList(sseq);
             return ResponseEntity.ok(reviews);
-        } catch (Exception e){
+        }catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }

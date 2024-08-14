@@ -2,6 +2,9 @@ package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.*;
+import com.himedia.rentmon_back.entity.Reservation;
+import com.himedia.rentmon_back.entity.Space;
+import com.himedia.rentmon_back.entity.SpaceImage;
 import com.himedia.rentmon_back.repository.*;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +27,15 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class SpaceService {
 
-    private final SpaceRepository sr;
-    private final SpaceimageRepository sir;
+    private final SpaceRepository spaceRepository;
+    private final SpaceimageRepository spaceimageRepository;
     private final ReservationRepository rr;
     private final HashSearchRepository hsr;
     private final ReviewRepository rvr;
@@ -41,53 +45,28 @@ public class SpaceService {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public List<SpaceDTO> getSpaceList(int page, int size) {
+        // 페이징 작업
         Pageable pageable = PageRequest.of(page, size);
-        Page<Space> pageResult = sr.findAll(pageable);
-        List<SpaceDTO> spaces = new ArrayList<>();
+        Page<Space> pageResult = spaceRepository.findAll(pageable);
 
-        for ( Space space : pageResult.getContent()){
-            SpaceDTO spaceDTO = new SpaceDTO();
+        return pageResult.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
 
-            // space에 담긴 정보 조회
-            int sseq = space.getSseq();
-            spaceDTO.setSseq(sseq);
-            spaceDTO.setTitle(space.getTitle());
-            spaceDTO.setContent(space.getContent());
-            spaceDTO.setPrice(space.getPrice());
-//            spaceDTO.setHostid(space.getHostid());
-//            spaceDTO.setCnum(space.getCnum());
-            spaceDTO.setProvince(space.getProvince());
-            spaceDTO.setTown(space.getTown());
-            spaceDTO.setVillage(space.getVillage());
-            spaceDTO.setCreated_at(space.getCreated_at());
+    private SpaceDTO convertToDTO(Space space) {
+        SpaceDTO dto = new SpaceDTO();
 
+        //Space DTO에 삽입
+        dto = dto.fromEntity(space);
 
-            // 찜수 조회, 리뷰 수 조회는 member가 완성되면 작성
+        //SpaceImage 조회해서 삽입
+        List<String> imageNames = spaceimageRepository.findBySpace(space)
+                .stream()
+                .map(SpaceImage::getRealName)
+                .collect(Collectors.toList());
+        dto.setImageNames(imageNames);
 
-            // spaceimages 조회
-//            ArrayList a = sir.findBySseq( sseq );
-//            spaceDTO.setImages(a);
-//
-//            // hashspace 조회
-//            ArrayList b = hsr.findBySseq( sseq );
-//            spaceDTO.setHashtags(b);
-//
-//            // reviews 조회
-//            ArrayList c= rvr.findBySseq( sseq );
-//            spaceDTO.setReviews(c);
+        return dto;
 
-            // hashspace 조회
-            ArrayList b = hsr.findBySseq( sseq );
-            spaceDTO.setHashtags(b);
-
-            // reviews 조회
-//            ArrayList c= rvr.findBySseq( sseq );
-//            spaceDTO.setReviews(c);
-
-            // List에 추가
-            spaces.add(spaceDTO);
-        }
-        return spaces;
     }
 
     public Reservation findByUserid(String userid) {
@@ -95,55 +74,10 @@ public class SpaceService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime threeHoursLater = now.plus(3, ChronoUnit.DAYS);
 
-//        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid, now, threeHoursLater, pageable);
-//        if(rs !=null && rs.hasContent())return rs.getContent().get(0);
-//        else return null;
-        return null;
-    }
-
-    public SpaceDTO getSpace(int sseq) {
-        SpaceDTO result = new SpaceDTO();
-
-        // Space에 담긴 정보 조회
-        Optional<Space> onlyspace = sr.findBySseq(sseq);
-        if (onlyspace.isPresent()) {
-            result.setSseq(sseq);
-            result.setTitle(onlyspace.get().getTitle());
-            result.setContent(onlyspace.get().getContent());
-            result.setPrice(onlyspace.get().getPrice());
-//            result.setHostid(onlyspace.get().getHostid());
-//            result.setCnum(onlyspace.get().getCnum());
-            result.setProvince(onlyspace.get().getProvince());
-            result.setTown(onlyspace.get().getTown());
-            result.setVillage(onlyspace.get().getVillage());
-            result.setCreated_at(onlyspace.get().getCreated_at());
-        }
-        else {
-            return null;
-        }
-
-        // spaceimages 조회
-//        ArrayList a = sir.findBySseq( sseq );
-//        result.setImages(a);
-//
-//        // hashspace 조회
-//        ArrayList b = hsr.findBySseq( sseq );
-//        result.setHashtags(b);
-//
-//        // reviews 조회
-//        ArrayList c= rvr.findBySseq( sseq );
-//        result.setReviews(c);
-
-        // hashspace 조회
-        ArrayList b = hsr.findBySseq( sseq );
-        result.setHashtags(b);
-
-//        // reviews 조회
-////        ArrayList c= rvr.findBySseq( sseq );
-//        result.setReviews(c);
-
-        return result;
-
+        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid,now, threeHoursLater, pageable);
+        System.out.println(rs.getContent());
+        if(rs !=null && rs.hasContent())return rs.getContent().get(0);
+        else return null;
     }
 
     public int insertSpace(Map<String, String> paramSpace) {
@@ -166,9 +100,54 @@ public class SpaceService {
         space.setCategory(category); // Category 설정
         space.setStarttime(Integer.parseInt(paramSpace.get("starttime")));
         space.setEndtime(Integer.parseInt(paramSpace.get("endtime")));
+
+//        space.setHostid(paramSpace.get("hostid"));
+        try {
+            // Convert starttime and endtime from String to Timestamp
+
+//            space.setStarttime(convertStringToTimestamp(paramSpace.get("starttime")));
+//            space.setEndtime(convertStringToTimestamp(paramSpace.get("endtime")));
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Print the stack trace for debugging
+        }
+
+
         // Save the Space entity
-        Space savedSpace = sr.save(space);
+        Space savedSpace = spaceRepository.save(space);
         return savedSpace.getSseq();
+    }
+
+    private Timestamp convertStringToTimestamp(String dateStr) throws Exception {
+        if (dateStr == null || dateStr.isEmpty()) {
+            throw new IllegalArgumentException("Date string is null or empty"); // Better error handling
+        }
+        try {
+            // Parse the date string to ZonedDateTime
+            ZonedDateTime zonedDateTime = ZonedDateTime.parse(dateStr, DateTimeFormatter.ISO_DATE_TIME);
+            // Convert ZonedDateTime to Instant
+            Instant instant = zonedDateTime.toInstant();
+            // Convert Instant to Timestamp
+            return Timestamp.from(instant);
+        } catch (Exception e) {
+            // Provide more information about what went wrong
+            throw new IllegalArgumentException("Failed to parse date string: " + dateStr, e);
+        }
+    }
+
+    public SpaceDTO getSpace(int sseq) {
+        Optional<Space> space = spaceRepository.findById(sseq);
+        //Space 엔티티 조회
+        SpaceDTO dto = convertToDTO(space.get());
+
+        //SpaceImage 엔티티 리스트 조회
+        List<String> imageNames = spaceimageRepository.findBySpace(space.get())
+                .stream()
+                .map(SpaceImage::getRealName)
+                .collect(Collectors.toList());
+        dto.setImageNames(imageNames);
+
+        return dto;
     }
 
 }

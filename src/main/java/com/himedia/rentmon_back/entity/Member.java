@@ -23,6 +23,7 @@ public class Member {
     @Column(name = "pwd", nullable = false, length = 1000)
     private String pwd;
 
+
     //    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private String role;
