@@ -29,7 +29,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -101,8 +100,6 @@ public class SpaceService {
         space.setCategory(category); // Category 설정
         space.setStarttime(Integer.parseInt(paramSpace.get("starttime")));
         space.setEndtime(Integer.parseInt(paramSpace.get("endtime")));
-        
-
         Space savedSpace = spaceRepository.save(space);
         return savedSpace.getSseq();
     }

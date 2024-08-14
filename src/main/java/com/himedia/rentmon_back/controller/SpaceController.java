@@ -18,10 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -69,6 +65,7 @@ public class SpaceController {
 
     @Autowired
     ServletContext context;
+
     @PostMapping("/imgup")
     public HashMap<String, Object> fileup(
             @RequestParam("image") MultipartFile file ){
