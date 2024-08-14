@@ -121,8 +121,8 @@ public class SpaceService {
 //        space.setHostid(paramSpace.get("hostid"));
         try {
             // Convert starttime and endtime from String to Timestamp
-            space.setStarttime(convertStringToTimestamp(paramSpace.get("starttime")));
-            space.setEndtime(convertStringToTimestamp(paramSpace.get("endtime")));
+//            space.setStarttime(convertStringToTimestamp(paramSpace.get("starttime")));
+//            space.setEndtime(convertStringToTimestamp(paramSpace.get("endtime")));
         } catch (Exception e) {
             e.printStackTrace(); // Print the stack trace for debugging
         }

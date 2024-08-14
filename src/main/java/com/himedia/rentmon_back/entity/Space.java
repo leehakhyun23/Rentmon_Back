@@ -31,7 +31,7 @@ public class Space {
     private Fee fee;              // 요금제 아이디
 
     @Column(name = "price")
-    private int price;              // 가격
+    private Integer price;              // 가격
 
     @Column(name = "title")
     private String title;           // 제목
@@ -43,14 +43,10 @@ public class Space {
     private String content;         // 내용
 
     @Column(name = "starttime")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp starttime;    // 이용시작 시간
+    private Integer starttime;    // 이용시작 시간
 
     @Column(name = "endtime")
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp endtime;      // 마감시간
+    private Integer endtime;      // 마감시간
 
     @Column(name = "caution")
     private String caution;         // 주의사항

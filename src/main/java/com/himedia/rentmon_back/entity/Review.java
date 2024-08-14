@@ -45,7 +45,6 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "userid")
-    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "review", fetch = FetchType.LAZY)
