@@ -19,11 +19,11 @@ public class HashSpace {
     @Column(name = "hsseq")
     private int hsseq;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "sseq")
     private Space sseq;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "hseq")
-    private List<Hashtag> hseq;
+    private Hashtag hseq;
 }
