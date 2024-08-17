@@ -5,6 +5,8 @@ import com.himedia.rentmon_back.repository.HostRepository;
 import com.himedia.rentmon_back.repository.InquiryRepository;
 import com.himedia.rentmon_back.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,12 +20,11 @@ public class AdminService {
     private final HostRepository hostRepository;
     private final InquiryRepository inquiryRepository;
 
-    public List<User> getUserList() {
-        return userRepository.findAll();
+    public Page<User> getUserList(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public int updateIsLoginStatus(List<String> userids) {
         return userRepository.updateIsLoginStatus(userids);
     }
-
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "coupon")
@@ -28,9 +29,9 @@ public class Coupon {
     private int discount;
 
     @Column(name = "limitdate", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp limitdate;
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="Asia/Seoul")
+    private LocalDate limitdate;
 
     @Column(name = "useyn", nullable = false, columnDefinition = "integer default 1")
     private boolean useyn;
