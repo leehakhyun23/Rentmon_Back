@@ -17,7 +17,7 @@ public class Coupon {
     @Column(name = "cseq")
     private int cseq;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
     private User user;
 

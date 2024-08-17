@@ -35,55 +35,9 @@ public class AdminController {
         return ResponseEntity.ok(updatedCount);
     }
 
-    @PostMapping("/createdcoupon")
-    public ResponseEntity<String> createdCoupon(/*@RequestBody List<String> userids*/) {
+    @PostMapping("/issuedcoupon")
+    public ResponseEntity<String> createdCoupon(@RequestBody List<String> userids) {
 
         return ResponseEntity.ok(CreatedCoupon.generateCoupon());
     }
-
-//    @GetMapping("/host")
-//    public ResponseEntity<List<AdminHostDTO>> getHostList() {
-//        List<AdminHostDTO> hostList = adminService.getHostList();
-//
-//        if (hostList.isEmpty()) {
-//            return ResponseEntity.noContent().build();
-//        }
-//
-//        return ResponseEntity.ok(hostList);
-//    }
-
-//    @GetMapping("/inquiry")
-//    public ResponseEntity<List<Inquiry>> getInquiryList() {
-//        List<Inquiry> inquiryList = adminService.getInquiryList();
-//
-//        if (inquiryList.isEmpty()) {
-//            return ResponseEntity.noContent().build();
-//        }
-//
-//        return ResponseEntity.ok(inquiryList);
-//    }
-
-//    @GetMapping("/declaration")
-//    public ResponseEntity<List<DeclarationDTO>> getDeclaration() {
-//        List<DeclarationDTO> declarationList = adminService.getDeclarationList();
-//
-//        if(declarationList.isEmpty()) {
-//            return ResponseEntity.noContent().build();
-//        }
-//
-//        return ResponseEntity.ok(declarationList);
-//    }
-
-//    @GetMapping("/declarationview/{dseq}")
-//    public ResponseEntity<Declaration> getDeclaration(@PathVariable("dseq") int dseq) {
-//        Optional<Declaration> optional = adminService.getDeclaration(dseq);
-//
-//        if (optional.isPresent()) {
-//            Declaration declaration = optional.get();
-//
-//            return ResponseEntity.ok(declaration);
-//        } else {
-//            return ResponseEntity.noContent().build();
-//        }
-//    }
 }
