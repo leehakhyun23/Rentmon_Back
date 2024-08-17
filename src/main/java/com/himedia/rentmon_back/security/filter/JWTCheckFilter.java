@@ -93,6 +93,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
 
 
 
+        if(path.startsWith("/admin")) return true;
+
         return false;
     }
 }

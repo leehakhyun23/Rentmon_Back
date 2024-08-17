@@ -17,7 +17,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int mseq;
 
-    @Column(name = "userid", nullable = false, length = 50)
+    @Column(name = "userid")
     private String userid;
 
     @Column(name = "pwd", nullable = false, length = 1000)

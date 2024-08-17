@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+
 @Entity
 @Table(name = "Inquiry")
 @Getter
@@ -36,10 +37,30 @@ public class Inquiry {
     private Timestamp replydate;
 
     @ManyToOne
-    @JoinColumn(name = "userid")
-    private User user;
+    @JoinColumn(name = "icnum", nullable = false)
+    private InquiryCategory inquirycategory;
 
     @ManyToOne
-    @JoinColumn(name = "icnum")
-    private InquiryCategory inquirycategory;
+    @JoinColumn(name = "reporter_id")
+    private Member reporterMember;
+
+    @ManyToOne
+    @JoinColumn(name = "reported_id")
+    private Member reportedMember;
+
+//    @ManyToOne
+//    @JoinColumn(name = "reporter_userid")
+//    private User reporterUser;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "reporter_hostid")
+//    private Host reporterHost;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "reported_userid")
+//    private User reportedUser;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "reported_hostid")
+//    private Host reportedHost;
 }

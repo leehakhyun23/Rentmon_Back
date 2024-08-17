@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
 
-    @Query("SELECT COUNT(i) from Inquiry i where i.user.userid = :userid")
-    Integer findByUseridCount(String userid);
+//    @Query("SELECT COUNT(i) from Inquiry i where i.user.userid = :userid")
+//    Integer findByUseridCount(String userid);
 
 }

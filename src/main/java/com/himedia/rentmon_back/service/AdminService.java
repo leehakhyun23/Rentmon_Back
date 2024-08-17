@@ -25,6 +25,10 @@ public class AdminService {
         return userRepository.findAll();
     }
 
+    public int updateIsLoginStatus(List<String> userids) {
+        return userRepository.updateIsLoginStatus(userids);
+    }
+
 //    public List<AdminHostDTO> getHostList() {
 //        return hostRepository.findHostBySpaceJpql();
 //    }
@@ -36,6 +40,8 @@ public class AdminService {
     public List<Inquiry> getInquiryList() {
         return inquiryRepository.findAll();
     }
+
+
 
 //    public Optional<Declaration> getDeclaration(int dseq) {
 //        return declarationRepository.findById(dseq);
