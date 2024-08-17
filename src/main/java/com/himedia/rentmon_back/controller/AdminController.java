@@ -1,9 +1,8 @@
 package com.himedia.rentmon_back.controller;
 
-import com.himedia.rentmon_back.dto.DeclarationDTO;
-import com.himedia.rentmon_back.entity.Inquiry;
 import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.service.AdminService;
+import com.himedia.rentmon_back.util.CreatedCoupon;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +33,12 @@ public class AdminController {
         int updatedCount = adminService.updateIsLoginStatus(userids);
 
         return ResponseEntity.ok(updatedCount);
+    }
+
+    @PostMapping("/createdcoupon")
+    public ResponseEntity<String> createdCoupon(/*@RequestBody List<String> userids*/) {
+
+        return ResponseEntity.ok(CreatedCoupon.generateCoupon());
     }
 
 //    @GetMapping("/host")
