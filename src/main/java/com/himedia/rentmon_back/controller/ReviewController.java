@@ -49,9 +49,9 @@ public class ReviewController {
     }
 
     @GetMapping("/GetReviews/{sseq}")
-    public ResponseEntity<List<ReviewDTO>> GetReviews(@PathVariable("sseq") int sseq){
+    public ResponseEntity<List<Review>> GetReviews(@PathVariable("sseq") int sseq){
         try{
-            List<ReviewDTO> reviews = reviewService.getReviewList(sseq);
+            List<Review> reviews = reviewService.getReviewList(sseq);
             return ResponseEntity.ok(reviews);
         }catch(Exception e){
             e.printStackTrace();
