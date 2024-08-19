@@ -89,6 +89,4 @@ public class Space {
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Zzim> zzims;
-
-
 }

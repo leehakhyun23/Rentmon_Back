@@ -44,7 +44,7 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "sseq")
-    @JsonIgnore
+    @JsonBackReference
     private Space space;
 
     @ManyToOne
