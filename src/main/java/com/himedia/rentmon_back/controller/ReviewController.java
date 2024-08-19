@@ -1,11 +1,7 @@
 package com.himedia.rentmon_back.controller;
 
-import com.himedia.rentmon_back.dto.ReviewDTO;
-import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.ReviewImage;
-import com.himedia.rentmon_back.entity.Space;
-import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.service.ReviewService;
 import com.himedia.rentmon_back.service.SpaceService;
 import jakarta.servlet.ServletContext;
@@ -17,10 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLOutput;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController

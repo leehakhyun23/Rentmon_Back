@@ -1,17 +1,13 @@
 package com.himedia.rentmon_back.service;
 
-import com.himedia.rentmon_back.dto.ReviewDTO;
 import com.himedia.rentmon_back.entity.Review;
-import com.himedia.rentmon_back.entity.ReviewImage;
 import com.himedia.rentmon_back.repository.ReviewImageRepository;
 import com.himedia.rentmon_back.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
