@@ -41,6 +41,7 @@ public class HostController {
         return ResponseEntity.ok(host);
     }
 
+
 //    @PostMapping("/join")
 //    public Map<String, Object> join( @RequestBody Host host){
 //        Map<String, Object> result = new HashMap<String, Object>();

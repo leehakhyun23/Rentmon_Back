@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 
@@ -12,6 +13,7 @@ import java.sql.Timestamp;
 @Table(name = "user")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class User {
     @Id
@@ -60,7 +62,7 @@ public class User {
     @Column(name = "snsid")
     private String snsid;
 
-    @Column(name = "islogin", columnDefinition = "TINYINT DEFAULT 1")
+    @Column(name = "islogin", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
     private boolean islogin;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

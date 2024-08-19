@@ -5,16 +5,21 @@ import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.Space;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.service.ReviewService;
 import com.himedia.rentmon_back.service.SpaceService;
+import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
+
+
 
 @RestController
 @RequestMapping("/space")
@@ -59,18 +64,30 @@ public class SpaceController {
         return ResponseEntity.ok(sseq);
     }
 
-//    @PostMapping("/insertClosed")
-//    public ResponseEntity<Void> insertClosed(@RequestBody Map<String, String> closed) {
-//        // Extract sseq from the closed map or some other source
-//        System.out.println(closed);
-//
-//        int sseq = Integer.parseInt(closed.get("sseq")); // or get sseq from another source
-//        System.out.println(sseq);
-//
-////        // Assuming you have a method to handle closed insertion
-////        ss.insertClosed(sseq, closed);
-//
-//        return ResponseEntity.ok().build();
-//    }
+    @Autowired
+    ServletContext context;
+
+    @PostMapping("/imgup")
+    public HashMap<String, Object> fileup(
+            @RequestParam("image") MultipartFile file ){
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        String path = context.getRealPath("/space_image");
+        Calendar today = Calendar.getInstance();
+        long dt = today.getTimeInMillis();
+        String filename = file.getOriginalFilename();
+        String fn1 = filename.substring(0, filename.indexOf(".") );
+        String fn2 = filename.substring(filename.indexOf(".") );
+        String uploadPath = path + "/" + fn1 + dt + fn2;
+        try {
+            file.transferTo( new File(uploadPath) );
+            result.put("savefilename", fn1 + dt + fn2);
+        } catch (IllegalStateException | IOException e) {e.printStackTrace();}
+        return result;
+    }
+
+
+
+
+
 
 }

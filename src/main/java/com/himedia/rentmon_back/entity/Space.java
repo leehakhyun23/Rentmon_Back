@@ -3,10 +3,12 @@ package com.himedia.rentmon_back.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 @Table(name = "space")
 @Getter
 @Setter
+@Data
 public class Space {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,6 +75,10 @@ public class Space {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;   // 등록일
+
+    public Space() {
+        this.created_at = new Timestamp(Calendar.getInstance().getTimeInMillis());
+    }
 
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
