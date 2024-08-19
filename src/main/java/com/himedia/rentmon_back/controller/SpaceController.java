@@ -129,8 +129,7 @@ public class SpaceController {
             // 파일 저장
             file.transferTo(new File(uploadPath));
 
-            // 원본 파일명과 저장된 파일명을 결과로 반환
-            System.out.println(filename+"----------------------------------------");
+            // 원본 파일명과 저장된 파일명을 결과로 반
             result.put("originalname", filename);
             result.put("realname", realname);
         } catch (IllegalStateException | IOException e) {
