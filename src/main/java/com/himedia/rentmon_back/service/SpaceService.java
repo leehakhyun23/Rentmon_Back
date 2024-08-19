@@ -1,18 +1,26 @@
 package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.SpaceDTO;
+import com.himedia.rentmon_back.entity.*;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.entity.SpaceImage;
 import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.*;
+import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +40,8 @@ public class SpaceService {
     private final ReservationRepository rr;
     private final HashSearchRepository hsr;
     private final ReviewRepository rvr;
+    private final HostRepository hr;
+    private final CategoryRepository cr;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -73,7 +83,9 @@ public class SpaceService {
 
     public int insertSpace(Map<String, String> paramSpace) {
         Space space = new Space();
-//        space.setCnum(Integer.parseInt(paramSpace.get("cnum")));
+        Host host = hr.findById(paramSpace.get("hostid"))
+                .orElseThrow(() -> new RuntimeException("Host not found"));
+        Category category = cr.findById(Integer.parseInt(paramSpace.get("cnum"))).orElse(null);
         space.setTitle(paramSpace.get("title"));
         space.setSubtitle(paramSpace.get("subtitle"));
         space.setPrice(Integer.parseInt(paramSpace.get("price")));
@@ -85,17 +97,10 @@ public class SpaceService {
         space.setTown(paramSpace.get("town"));
         space.setVillage(paramSpace.get("village"));
         space.setAddressdetail(paramSpace.get("address_detail"));
-//        space.setHostid(paramSpace.get("hostid"));
-        try {
-            // Convert starttime and endtime from String to Timestamp
-            space.setStarttime(Integer.valueOf(paramSpace.get("starttime")));
-            space.setEndtime(Integer.valueOf(paramSpace.get("endtime")));
-        } catch (Exception e) {
-            e.printStackTrace(); // Print the stack trace for debugging
-        }
-
-
-        // Save the Space entity
+        space.setHost(host); // Host 설정
+        space.setCategory(category); // Category 설정
+        space.setStarttime(Integer.parseInt(paramSpace.get("starttime")));
+        space.setEndtime(Integer.parseInt(paramSpace.get("endtime")));
         Space savedSpace = spaceRepository.save(space);
         return savedSpace.getSseq();
     }
@@ -131,6 +136,5 @@ public class SpaceService {
 
         return dto;
     }
-
 
 }
