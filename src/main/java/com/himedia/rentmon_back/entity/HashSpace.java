@@ -19,7 +19,7 @@ public class HashSpace {
     @Column(name = "hsseq")
     private int hsseq;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "sseq")
     private Space sseq;
 

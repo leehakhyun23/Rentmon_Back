@@ -8,6 +8,7 @@ import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.entity.SpaceImage;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.service.ReviewService;
 import com.himedia.rentmon_back.service.SpaceService;
 import jakarta.servlet.ServletContext;
@@ -33,10 +34,10 @@ public class SpaceController {
     private final SpaceService spaceService;
 
     @GetMapping("/getSpaceList/{page}")
-    public ResponseEntity<List<SpaceDTO>> getSpaceList(@PathVariable int page) {
+    public ResponseEntity<List<Space>> getSpaceList(@PathVariable int page) {
         try{
             int size = 6;
-            List<SpaceDTO> spaceList = spaceService.getSpaceList(page, size);
+            List<Space> spaceList = spaceService.getSpaceList(page, size);
             return ResponseEntity.ok(spaceList);
         } catch (Exception e){
             e.printStackTrace();
@@ -51,9 +52,9 @@ public class SpaceController {
     }
 
     @GetMapping("/getSpace/{sseq}")
-    public ResponseEntity<SpaceDTO> getSpace(@PathVariable("sseq") int sseq) {
+    public ResponseEntity<Space> getSpace(@PathVariable("sseq") int sseq) {
         try{
-            SpaceDTO space = spaceService.getSpace(sseq);
+            Space space = spaceService.getSpace(sseq);
             return ResponseEntity.ok(space);
         } catch(Exception e){
             e.printStackTrace();
@@ -138,6 +139,10 @@ public class SpaceController {
         }
         return ResponseEntity.ok(result);
     }
+
+
+
+
 
 
 }

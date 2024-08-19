@@ -41,7 +41,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             Timestamp createAt = (Timestamp) claims.get("create_at");
 
 
-            MemberDTO memberDTO = new MemberDTO( userid , pwd , createAt , role , mseq );
+            MemberDTO memberDTO = new MemberDTO(userid, pwd, createAt, role, mseq);
 
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities());
@@ -75,6 +75,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         //리프레쉬 요청
         if(path.startsWith("/member/refresh"))return true;
         if(path.startsWith("/member/join"))return true;
+        if(path.startsWith("/main"))return true;
 
         //유저 sns 로그인
         if(path.startsWith("/user/sns"))return true;
@@ -84,8 +85,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/favicon.ico")) return true;
         //유저 회원가입
         if(path.startsWith("/user/join")) return true;
-
         if(path.startsWith("/space/getSpaceList")) return true;
+        if(path.startsWith("/space")) return true;
+        if(path.startsWith("/user/getCategoryList")) return true;
         if(path.startsWith("/space_images")) return true;
         if(path.startsWith("/review")) return true;
         if(path.startsWith("/profile_images")) return true;
