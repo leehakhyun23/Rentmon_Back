@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.service;
 
+import com.himedia.rentmon_back.dto.FnumDTO;
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.*;
 import com.himedia.rentmon_back.entity.Reservation;
@@ -27,6 +28,8 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +44,11 @@ public class SpaceService {
     private final ReviewRepository rvr;
     private final HostRepository hr;
     private final CategoryRepository cr;
+    private final FacilityRepository fr;
+    private final SpaceFacilityRepository sfr;
+    private final HashtagRepository htr;
+    private final HashSpaceRepository hhsr;
+    private final SpaceimageRepository sir;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -101,6 +109,35 @@ public class SpaceService {
         space.setStarttime(Integer.parseInt(paramSpace.get("starttime")));
         space.setEndtime(Integer.parseInt(paramSpace.get("endtime")));
         Space savedSpace = spaceRepository.save(space);
+        int sseq = savedSpace.getSseq();
+        // 포스트의 content 추출
+        String subtitle = space.getSubtitle();
+        Matcher m = Pattern.compile("#([0-9a-zA-Z가-힣]*)").matcher(subtitle);
+        Set<String> tags = new HashSet<>();
+        while (m.find()) {
+            tags.add(m.group(1));
+        }
+
+        for (String word : tags) {
+            Optional<Hashtag> rec = htr.findByWord(word);
+            Hashtag hashtag;
+            if (!rec.isPresent()) {
+                Hashtag hdnew = new Hashtag();
+                hdnew.setWord(word);
+                hashtag = htr.save(hdnew); // 새 Hashtag 저장
+            } else {
+                hashtag = rec.get(); // 기존 Hashtag 가져오기
+            }
+
+            // 새로운 HashSpace 엔티티 생성 및 저장
+            HashSpace hs = new HashSpace();
+            hs.setSseq(savedSpace); // Space 객체 설정
+            hs.setHseq(hashtag); // Hashtag 객체 설정
+            hhsr.save(hs);
+        }
+        for (String word : tags) {
+
+        }
         return savedSpace.getSseq();
     }
 
@@ -134,6 +171,56 @@ public class SpaceService {
         dto.setImageNames(imageNames);
 
         return dto;
+    }
+
+    public void insertfnum(FnumDTO request) {
+        Integer sseq = request.getSseq();
+        String[] numbers = request.getNumbers();
+
+        if (sseq == null || numbers == null || numbers.length == 0) {
+            throw new IllegalArgumentException("Invalid data: sseq or numbers are missing or invalid");
+        }
+
+        // String[]를 Integer[]로 변환
+        Integer[] numberInts = new Integer[numbers.length];
+        for (int i = 0; i < numbers.length; i++) {
+            try {
+                numberInts[i] = Integer.parseInt(numbers[i]);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid number format: " + numbers[i]);
+            }
+        }
+
+        Space space = spaceRepository.findById(sseq)
+                .orElseThrow(() -> new IllegalArgumentException("Space with sseq " + sseq + " not found"));
+
+        for (Integer number : numberInts) {
+            Facility facility = fr.findById(number)
+                    .orElseThrow(() -> new IllegalArgumentException("Facility with fnum " + number + " not found"));
+
+            SpaceFacility spaceFacility = new SpaceFacility();
+            spaceFacility.setSpace(space);
+            spaceFacility.setFacility(facility);
+
+            // 올바른 레포지토리 사용
+            sfr.save(spaceFacility);
+        }
+    }
+
+
+    public void saveImageInfo(Integer sseq, List<String> originalnames, List<String> realnames) {
+        // Space 엔티티를 sseq로 조회
+        Space space = spaceRepository.findById(sseq).orElseThrow(() -> new RuntimeException("Space not found"));
+        // 새로운 이미지 정보 저장
+        for (int i = 0; i < originalnames.size(); i++) {
+            SpaceImage image = new SpaceImage();
+            image.setSpace(space);
+            image.setOrigiName(originalnames.get(i));
+            image.setRealName(realnames.get(i));
+            image.setCreated_at(new Timestamp(System.currentTimeMillis()));
+
+            spaceimageRepository.save(image);
+        }
     }
 
 }

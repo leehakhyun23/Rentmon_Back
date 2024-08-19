@@ -23,7 +23,7 @@ public class HashSpace {
     @JoinColumn(name = "sseq")
     private Space sseq;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "hseq")
-    private List<Hashtag> hseq;
+    private Hashtag hseq;
 }
