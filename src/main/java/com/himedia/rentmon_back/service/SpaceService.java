@@ -6,6 +6,7 @@ import com.himedia.rentmon_back.entity.*;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.entity.SpaceImage;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.*;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
@@ -52,38 +53,21 @@ public class SpaceService {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public List<SpaceDTO> getSpaceList(int page, int size) {
+    public List<Space> getSpaceList(int page, int size) {
         // 페이징 작업
         Pageable pageable = PageRequest.of(page, size);
         Page<Space> pageResult = spaceRepository.findAll(pageable);
 
-        return pageResult.stream().map(this::convertToDTO).collect(Collectors.toList());
-    }
-
-    private SpaceDTO convertToDTO(Space space) {
-        SpaceDTO dto = new SpaceDTO();
-
-        //Space DTO에 삽입
-        dto = dto.fromEntity(space);
-
-        //SpaceImage 조회해서 삽입
-        List<String> imageNames = spaceimageRepository.findBySpace(space)
-                .stream()
-                .map(SpaceImage::getRealName)
-                .collect(Collectors.toList());
-        dto.setImageNames(imageNames);
-
-        return dto;
-
+        return pageResult.getContent();
     }
 
     public Reservation findByUserid(String userid) {
         Pageable pageable = PageRequest.of(0, 1); // 첫 페이지, 1개 항목
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime threeHoursLater = now.plus(3, ChronoUnit.DAYS);
-
-        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid,now, threeHoursLater, pageable);
-        System.out.println(rs.getContent());
+        LocalDateTime threedaysLater = now.plus(3, ChronoUnit.DAYS);
+        System.out.println("userid----------------"+userid);
+        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid,now, threedaysLater, pageable);
+        System.out.println("userid----------------2" +rs.getContent());
         if(rs !=null && rs.hasContent())return rs.getContent().get(0);
         else return null;
     }
@@ -158,19 +142,14 @@ public class SpaceService {
         }
     }
 
-    public SpaceDTO getSpace(int sseq) {
+    public Space getSpace(int sseq) {
         Optional<Space> space = spaceRepository.findById(sseq);
-        //Space 엔티티 조회
-        SpaceDTO dto = convertToDTO(space.get());
-
-        //SpaceImage 엔티티 리스트 조회
-        List<String> imageNames = spaceimageRepository.findBySpace(space.get())
-                .stream()
-                .map(SpaceImage::getRealName)
-                .collect(Collectors.toList());
-        dto.setImageNames(imageNames);
-
-        return dto;
+        if (space.isPresent()) {
+            return space.get();
+        }
+        else{
+            return null;
+        }
     }
 
     public void insertfnum(FnumDTO request) {

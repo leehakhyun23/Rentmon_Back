@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,5 +21,6 @@ public class Zzim {
 
     @ManyToOne
     @JoinColumn(name = "sseq")
+    @JsonBackReference
     private Space space;
 }

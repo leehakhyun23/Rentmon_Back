@@ -3,6 +3,7 @@ package com.himedia.rentmon_back.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,12 +17,12 @@ import java.util.stream.Collectors;
 @Table(name = "space")
 @Getter
 @Setter
+@Data
 public class Space {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sseq")
     private int sseq;               // 기본키
-
 
     @ManyToOne
     @JoinColumn(name = "hostid")
@@ -70,7 +71,7 @@ public class Space {
     @Column(name = "maxpersonnal")
     private int maxpersonnal;      // 최대인원
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;   // 등록일
@@ -82,6 +83,17 @@ public class Space {
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<SpaceImage> spaceimage;
+    private List<SpaceImage> images;
 
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<SpaceFacility> facilities;
+
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Zzim> zzims;
 }

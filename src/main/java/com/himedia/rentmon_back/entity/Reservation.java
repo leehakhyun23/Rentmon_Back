@@ -2,6 +2,7 @@ package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name = "Reservation")
 @Getter
 @Setter
+@Data
 public class Reservation {
     @Id
     @Column(name = "rseq")
@@ -46,6 +48,4 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "sseq")
     private Space space;
-
-
 }
