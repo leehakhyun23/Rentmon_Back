@@ -85,7 +85,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/favicon.ico")) return true;
         //유저 회원가입
         if(path.startsWith("/user/join")) return true;
-        
+        if(path.startsWith("/space/getSpaceList")) return true;
         if(path.startsWith("/space")) return true;
         if(path.startsWith("/user/getCategoryList")) return true;
         if(path.startsWith("/space_images")) return true;
@@ -94,7 +94,11 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         //예약관련
         if(path.startsWith("/reservation")) return true;
 
-
+        //학현관련
+        if(path.startsWith("/space/imgup")) return true;
+        if(path.startsWith("/space/insertSpace")) return true;
+        if(path.startsWith("/space/insertfnum")) return true;
+        if(path.startsWith("/space/insertImgSrc")) return true;
 
         return false;
     }
