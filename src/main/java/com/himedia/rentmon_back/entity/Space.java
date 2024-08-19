@@ -3,6 +3,7 @@ package com.himedia.rentmon_back.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @Table(name = "space")
 @Getter
 @Setter
+@Data
 public class Space {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,4 +80,5 @@ public class Space {
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<SpaceImage> spaceimage;
+
 }

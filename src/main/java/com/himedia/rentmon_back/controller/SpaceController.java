@@ -5,6 +5,7 @@ import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.Space;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.service.ReviewService;
 import com.himedia.rentmon_back.service.SpaceService;
 import lombok.RequiredArgsConstructor;
@@ -72,5 +73,9 @@ public class SpaceController {
 //
 //        return ResponseEntity.ok().build();
 //    }
+
+
+
+
 
 }

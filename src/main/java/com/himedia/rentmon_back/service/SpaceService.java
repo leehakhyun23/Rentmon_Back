@@ -4,6 +4,7 @@ import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.entity.SpaceImage;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -62,10 +63,10 @@ public class SpaceService {
     public Reservation findByUserid(String userid) {
         Pageable pageable = PageRequest.of(0, 1); // 첫 페이지, 1개 항목
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime threeHoursLater = now.plus(3, ChronoUnit.DAYS);
-
-        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid,now, threeHoursLater, pageable);
-        System.out.println(rs.getContent());
+        LocalDateTime threedaysLater = now.plus(3, ChronoUnit.DAYS);
+        System.out.println("userid----------------"+userid);
+        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid,now, threedaysLater, pageable);
+        System.out.println("userid----------------2" +rs.getContent());
         if(rs !=null && rs.hasContent())return rs.getContent().get(0);
         else return null;
     }
@@ -130,4 +131,6 @@ public class SpaceService {
 
         return dto;
     }
+
+
 }
