@@ -19,7 +19,7 @@ public class ReservationController {
     }
 
     @PostMapping("/InsertReservation")
-    public void InsertReserve(@RequestBody Reservation reservation) {
+    public void InsertReservation(@RequestBody Reservation reservation) {
         reservationService.InsertReserve(reservation);
     }
 }
