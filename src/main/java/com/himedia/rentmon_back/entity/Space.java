@@ -24,7 +24,6 @@ public class Space {
     @Column(name = "sseq")
     private int sseq;               // 기본키
 
-
     @ManyToOne
     @JoinColumn(name = "hostid")
     private Host host;          // 호스트아이디
@@ -72,7 +71,7 @@ public class Space {
     @Column(name = "maxpersonnal")
     private int maxpersonnal;      // 최대인원
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp created_at;   // 등록일
@@ -84,6 +83,17 @@ public class Space {
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<SpaceImage> spaceimage;
+    private List<SpaceImage> images;
 
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<SpaceFacility> facilities;
+
+    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Zzim> zzims;
 }
