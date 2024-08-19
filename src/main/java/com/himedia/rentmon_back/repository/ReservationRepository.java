@@ -8,20 +8,35 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
 
 
-    @Query("SELECT r FROM Reservation r WHERE r.reservestart BETWEEN :now AND :threeHoursLater AND r.user.userid = :userid ORDER BY r.reservestart ASC")
-    Page<Reservation> findReservationsWithinNext3Hours( @Param("userid") String userid ,@Param("now") LocalDateTime now, @Param("threeHoursLater") LocalDateTime threeHoursLater, Pageable pageable);
+    @Query("SELECT r FROM Reservation r WHERE r.reservestart BETWEEN :now AND :threedaysLater AND r.user.userid = :userid OR (r.reserveend >= :now AND r.reservestart < :now ) AND r.user.userid = :userid ORDER BY r.reservestart ASC")
+    Page<Reservation> findReservationsWithinNext3Hours( @Param("userid") String userid ,@Param("now") LocalDateTime now, @Param("threedaysLater") LocalDateTime threedaysLater, Pageable pageable);
 
-    @Query("SELECT COUNT(r) from Reservation r where r.user.userid = :userid AND r.reservestart > :now")
-    Integer findByUseridCount(String userid, LocalDateTime now);
+    @Query("SELECT COUNT(r) from Reservation r where r.user.userid = :userid AND r.reserveend > :now")
+    Integer findByUseridCount(@Param("userid") String userid,@Param("now")  LocalDateTime now);
 
     @Query("select count(r) from Reservation r where r.user.userid = :userid AND r.reserveend < :now")
-    Integer findByUseridWithusedCount(String userid, LocalDateTime now);
+    Integer findByUseridWithusedCount(@Param("userid")  String userid,@Param("now")  LocalDateTime now);
 
+
+    @Query("SELECT r FROM Reservation r WHERE r.user.userid = :userid AND r.reservestart >= :startTime AND r.reservestart <= :endTime")
+    List<Reservation> getReservationAllList(@Param("startTime") LocalDateTime startTime, @Param("endTime") LocalDateTime endTime, @Param("userid") String userid);
+
+    @Query("select count(r) from Reservation r where r.user.userid = :userid  AND r.reserveend > :now")
+    int getCountAll(@Param("userid") String userid, @Param("now") LocalDateTime now);
+
+    @Query(value = "SELECT * FROM reservation r " +
+            "WHERE r.userid = :userid AND r.reserveend > CURRENT_DATE ORDER BY CASE WHEN r.reservestart BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '3' DAY THEN 0 " +
+            " ELSE 1  END  ASC , r.reservestart desc", nativeQuery = true)
+    Page<Reservation> getReservaionListAll( @Param("userid") String userid, Pageable pageable);
+
+    @Query("select count(r) from Reservation r where r.user.userid = :userid AND r.reserveend < :now")
+    int getUsedAllcount(@Param("userid") String userid , @Param("now") LocalDateTime now);
+
+    @Query("select r from Reservation r where r.user.userid = :userid AND r.reserveend < :now")
+    Page<Reservation> getUsedReservaion(String userid, Pageable pageable, LocalDateTime now);
 }

@@ -13,6 +13,7 @@ import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.HostRepository;
 import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.repository.UserRepository;
+import com.himedia.rentmon_back.util.ImageFileupload;
 import com.himedia.rentmon_back.util.MailSend;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class UserSnsLoginService {
     private final UserRepository ur;
     private final PasswordEncoder pe;
     private final MailSend ms;
-    private final ServletContext context;
+    private final ImageFileupload imgupload;
 
     public OAuthToken getKakaoToken(String code, String kakaoclinetId, String redirectUri) {
         OAuthToken token = new OAuthToken();
@@ -121,6 +122,7 @@ public class UserSnsLoginService {
             user.setUserid(String.valueOf(kakaoProfile.getId()));
             user.setMseq(mseq);
             user.setProvider("kakao");
+            user.setIslogin(true);
             user.setSnsid(joinkakaoMember.getUserid());
             user.setName(kakaoProfile.getProperties().getNickname());
             user.setGnum(new Grade(1, "bronze", 0));
@@ -203,6 +205,7 @@ public class UserSnsLoginService {
             user.setMseq(joinNaverMember.getMseq());
             user.setName(naverapi.getResponse().getName());
             user.setSnsid(joinNaverMember.getUserid());
+            user.setIslogin(true);
             user.setProvider("naver");
             user.setEmail(naverapi.getResponse().getEmail());
             user.setGnum(new Grade(1, "bronze", 0));
@@ -344,6 +347,7 @@ public class UserSnsLoginService {
             user.setMseq(joinGoogleMember.getMseq());
             user.setName(googleapi.getName());
             user.setSnsid(joinGoogleMember.getUserid());
+            user.setIslogin(true);
             user.setProvider("google");
             user.setEmail(googleapi.getEmail());
             user.setGnum(new Grade(1, "bronze", 0));
@@ -401,32 +405,19 @@ public class UserSnsLoginService {
         member.setPwd(pe.encode(userDTO.getPassword()));
         member = mr.save(member);
 
+        System.out.println("서비스 profileimg----------------------------------------------------------"+profileimg);
         User user = new User();
         user.setUserid(member.getUserid());
         user.setMseq(member.getMseq());
         user.setPhone(userDTO.getPhone());
+        user.setIslogin(true);
         user.setGnum(new Grade(1, "bronze", 0));
         user.setEmail(userDTO.getEmail());
         user.setName(userDTO.getName());
-        if(profileimg !=null) user.setProfileimg(saveFile(profileimg));
+        if(profileimg !=null) user.setProfileimg(imgupload.saveFile(profileimg , "/profile_images"));
         ur.save(user);
     }
 
-    private String saveFile(MultipartFile profileimg) {
-        String result = "";
-        String realpath = context.getRealPath("/profile_images");
-        Calendar today = Calendar.getInstance();
-        long dt = today.getTimeInMillis();
-        String filename = profileimg.getOriginalFilename();
-        String fn1 = filename.substring(0, filename.indexOf(".") );
-        String fn2 = filename.substring(filename.indexOf(".") );
-        String uploadPath = realpath + "/" + fn1 + dt + fn2;
-        try {
-            profileimg.transferTo( new File(uploadPath) );
-            result = fn1 + dt + fn2;
-        } catch (IllegalStateException | IOException e) {e.printStackTrace();}
-        return result;
-    }
 
     public void insertInterest(List<Integer> category, String station, String userid) {
         User user = ur.findByUserid(userid);

@@ -5,8 +5,11 @@ import com.himedia.rentmon_back.dto.usersnsdto.GoogleApi;
 import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
+import com.himedia.rentmon_back.entity.Bank;
+import com.himedia.rentmon_back.entity.Category;
 import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.entity.User;
+import com.himedia.rentmon_back.service.CategoryService;
 import com.himedia.rentmon_back.service.MemberService;
 import com.himedia.rentmon_back.service.UserService;
 import com.himedia.rentmon_back.service.UserSnsLoginService;
@@ -30,6 +33,7 @@ import java.util.Optional;
 public class UserController {
     private final MemberService ms;
     private final UserService us;
+    private final CategoryService cs;
     private final UserSnsLoginService usersls;
 
     @GetMapping("/getuseinfo")
@@ -142,6 +146,7 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<String> join (@ModelAttribute UserDTO userDTO , @RequestParam(value = "profileimg" , required = false) MultipartFile profileimg){
+
         usersls.joinUser(userDTO, profileimg);
         return ResponseEntity.ok(userDTO.getUserid());
     }
@@ -159,11 +164,37 @@ public class UserController {
 
     @RequestMapping("/menucountarray")
     public ResponseEntity<Map<String , Integer>> menucountarray(@RequestParam ("userid") String userid){
-
         Map<String , Integer> list = us.getMenuCount(userid);
-
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/getCategoryList")
+    public ResponseEntity<List<Category>> getCategoryList(){
+        List<Category> list = cs.getCategoryList();
+        return ResponseEntity.ok(list);
+    }
+
+    @PostMapping("/changeProfile")
+    public ResponseEntity<String> changeProfile(@RequestParam(value = "profileimg" , required = false) MultipartFile profileimg , @RequestParam("userid") String userid ){
+        System.out.println("profileimg profileimg -==="+profileimg);
+        us.setProfileimg(userid, profileimg);
+        return ResponseEntity.ok("ok");
+    }
+
+    @PostMapping("/updatename")
+    public ResponseEntity<String> updatename(@RequestParam("userid")String userid, @RequestParam("name") String name){
+        us.updatename(userid, name);
+        return ResponseEntity.ok(userid+" : " + name);
+    }
+    @PostMapping("/updatephone")
+    public ResponseEntity<String> updatephone(@RequestParam("userid")String userid, @RequestParam("phone") String phone){
+        us.updatephone(userid, phone);
+        return ResponseEntity.ok(userid+" : " + phone);
+    }
+    @PostMapping("/updatepwd")
+    public ResponseEntity<String> updatepwd(@RequestParam("userid")String userid, @RequestParam("password") String password){
+        ms.updatepassword(userid, password);
+        return ResponseEntity.ok(userid+" : " + password);
+    }
 
 }
