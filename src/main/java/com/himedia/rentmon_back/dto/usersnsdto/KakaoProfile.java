@@ -23,6 +23,8 @@ public class KakaoProfile {
 		private Boolean profile_nickname_needs_agreement;
 		private Boolean profile_image_needs_agreement;
 		private Profile profile;
+		private Boolean has_email;  // 이메일 제공 동의 여부
+		private String email;       // 실제 이메일
 
 		@Data
 		public static class Profile {

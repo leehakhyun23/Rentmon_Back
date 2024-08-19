@@ -18,5 +18,6 @@ public class RequestCoupon {
         private List<String> userids;
         private LocalDate limitDate;
         private Integer discount;
+        private String couponTitle;
     }
 }

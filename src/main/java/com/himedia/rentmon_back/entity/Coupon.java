@@ -25,6 +25,9 @@ public class Coupon {
     @Column(name = "couponstr", nullable = false, length = 30)
     private String couponstr;
 
+    @Column(name = "coupontitle", nullable = false, length = 50)
+    private String couponTitle;
+
     @Column(name = "discount", nullable = false)
     private int discount;
 

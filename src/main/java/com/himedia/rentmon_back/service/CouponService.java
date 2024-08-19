@@ -55,6 +55,7 @@ public class CouponService {
             Coupon coupon = new Coupon();
             coupon.setUser(user);
             coupon.setCouponstr(couponCode);
+            coupon.setCouponTitle(issuedCoupon.getCouponTitle());
             coupon.setDiscount(issuedCoupon.getDiscount());
             coupon.setLimitdate(issuedCoupon.getLimitDate());
             coupon.setUseyn(true);
