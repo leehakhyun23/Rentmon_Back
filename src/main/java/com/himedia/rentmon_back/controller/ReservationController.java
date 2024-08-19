@@ -18,7 +18,7 @@ public class ReservationController {
         return reservationService.getReservation(userid);
     }
 
-    @PostMapping("/InsertReserve")
+    @PostMapping("/InsertReservation")
     public HashMap<String, Object> InsertReserve(@RequestBody Reservation reservation) {
         reservationService.InsertReserve(reservation);
         return null;

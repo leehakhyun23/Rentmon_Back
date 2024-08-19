@@ -3,6 +3,7 @@ package com.himedia.rentmon_back.controller;
 import com.himedia.rentmon_back.dto.ReviewDTO;
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Review;
+import com.himedia.rentmon_back.entity.ReviewImage;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.service.ReviewService;
@@ -31,20 +32,26 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/InsertReview")
-    public ResponseEntity<Review> InsertReview(@RequestBody Review review){
-        try{
-            Review savedReview = reviewService.InsertReview(review);
-            return ResponseEntity.ok(savedReview);
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<Review> InsertReview(@RequestPart("review") Review review, @RequestPart(value = "images", required = false) List<MultipartFile> images){
+        if (images != null && !images.isEmpty()) {
+            List<ReviewImage> reviewImages = new ArrayList<>();
+            for (MultipartFile file : images) {
+                ReviewImage image = new ReviewImage();
+                image.setOriginname(file.getOriginalFilename());
+                image.setRealname(file.getOriginalFilename());
+                reviewImages.add(image);
+            }
+            review.setImages(reviewImages);
         }
+
+        Review savedReview = reviewService.InsertReview(review);
+        return ResponseEntity.ok(savedReview);
     }
 
     @GetMapping("/GetReviews/{sseq}")
-    public ResponseEntity<List<ReviewDTO>> GetReviews(@PathVariable("sseq") int sseq){
+    public ResponseEntity<List<Review>> GetReviews(@PathVariable("sseq") int sseq){
         try{
-            List<ReviewDTO> reviews = reviewService.getReviewList(sseq);
+            List<Review> reviews = reviewService.getReviewList(sseq);
             return ResponseEntity.ok(reviews);
         }catch(Exception e){
             e.printStackTrace();
