@@ -87,8 +87,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/user/join")) return true;
 
         if(path.startsWith("/space/getSpaceList")) return true;
-
-        
+        if(path.startsWith("/space")) return true;
+        if(path.startsWith("/user/getCategoryList")) return true;
+        if(path.startsWith("/space/getSpaceList")) return true;
         if(path.startsWith("/space")) return true;
         if(path.startsWith("/user/getCategoryList")) return true;
 
