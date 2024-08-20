@@ -74,6 +74,24 @@ public class HostService {
         return hr.findByHostid(hostid);
     }
 
+    public void update(Host host) {
+        hr.save(host);
+//        Optional<Host> h = hr.findByNickname(host.getNickname());
+//        if( h.isPresent() ){
+//            Host ho = h.get();
+//            ho.setEmail( host.getEmail() );
+//            ho.setNickname( host.getNickname() );
+//            ho.setPhone( host.getPhone() );
+//            ho.setPwd( host.getPwd() );
+//        }else{
+//            return;
+//        }
+    }
+
+    public Host getHost(String hostid) {
+        return hr.findById(hostid).orElseThrow();
+    }
+
 
 //    public Host getHost(String hostid) {return hr.getHost(hostid);}
 //

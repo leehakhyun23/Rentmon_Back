@@ -140,7 +140,9 @@ public class UserSnsLoginService {
             joinkakaoMember.setUserid(String.valueOf(kakaoProfile.getId()));
             joinkakaoMember.setRole("host");
             joinkakaoMember.setPwd(pe.encode("kakao"));
-            mr.save(joinkakaoMember);
+            joinkakaoMember.setNickname(kakaoProfile.getProperties().getNickname());
+            joinkakaoMember = mr.save(joinkakaoMember);
+
 
             Host host = new Host();
             host.setHostid(String.valueOf(kakaoProfile.getId()));
@@ -148,6 +150,7 @@ public class UserSnsLoginService {
             host.setPwd(joinkakaoMember.getPwd());
             host.setNickname(kakaoProfile.getProperties().getNickname());
             host.setProvider("kakao");
+
             hr.save(host);
             member = Optional.of(joinkakaoMember);
         }
@@ -228,7 +231,6 @@ public class UserSnsLoginService {
             Host host = new Host();
             host.setHostid(String.valueOf(joinNaverMember.getUserid()));
             host.setMseq(joinNaverMember.getMseq());
-
             host.setPwd(joinNaverMember.getPwd());
             host.setNickname(naverapi.getResponse().getNickname());
             host.setProvider("naver");
