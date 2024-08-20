@@ -32,7 +32,7 @@ public class Declaration {
     @Column(name = "reply")
     private String reply;
 
-    @Column(name = "created_at")
+    @Column(name = "replydate")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp replydate;

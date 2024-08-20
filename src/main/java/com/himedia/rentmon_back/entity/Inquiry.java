@@ -39,28 +39,4 @@ public class Inquiry {
     @ManyToOne
     @JoinColumn(name = "icnum", nullable = false)
     private InquiryCategory inquirycategory;
-
-    @ManyToOne
-    @JoinColumn(name = "reporter_id")
-    private Member reporterMember;
-
-    @ManyToOne
-    @JoinColumn(name = "reported_id")
-    private Member reportedMember;
-
-//    @ManyToOne
-//    @JoinColumn(name = "reporter_userid")
-//    private User reporterUser;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "reporter_hostid")
-//    private Host reporterHost;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "reported_userid")
-//    private User reportedUser;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "reported_hostid")
-//    private Host reportedHost;
 }
