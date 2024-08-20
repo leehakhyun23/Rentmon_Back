@@ -9,12 +9,17 @@ import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.security.CustomSecurityConfig;
 import com.himedia.rentmon_back.service.HostService;
+import com.himedia.rentmon_back.service.MemberService;
 import com.himedia.rentmon_back.service.UserService;
 import com.himedia.rentmon_back.service.UserSnsLoginService;
 import com.himedia.rentmon_back.util.MailSend;
 import com.himedia.rentmon_back.util.SnsException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -29,15 +34,17 @@ import java.util.Optional;
 @RequestMapping("/host")
 @RequiredArgsConstructor
 public class HostController {
+    private final MemberService ms;
     private final HostService hs;
     private final UserService us;
     private final UserSnsLoginService usersls;
     private final CustomSecurityConfig cc;
-    private final MailSend ms;
+    private final MailSend mailSend;
 
     @GetMapping("/gethostinfo")
     public ResponseEntity<Host> getHostInfo(@RequestParam("hostid") String hostid){
         Host host = hs.getHostInfo(hostid);
+        System.out.println(host.toString());
         return ResponseEntity.ok(host);
     }
 
@@ -55,9 +62,20 @@ public class HostController {
     @PostMapping("/join")
     public Map<String, Object> join(@RequestBody Host host) {
         System.out.println(host.toString());
+
+        Member member = new Member();
+
         Map<String, Object> result = new HashMap<>();
+        PasswordEncoder pe = cc.passwordEncoder();
+        member.setUserid(host.getHostid());
+        member.setPwd( pe.encode(host.getPwd()) );
+        member.setNickname(host.getNickname());
+        member.setRole("host");
+
+        int mseq = ms.insertMember(member);
+        host.setMseq(mseq);
+
         try {
-            PasswordEncoder pe = cc.passwordEncoder();
             host.setPwd(pe.encode(host.getPwd())); // 비밀번호 암호화
             hs.insertMember(host); // 회원가입 처리
 
@@ -79,6 +97,57 @@ public class HostController {
     public ResponseEntity<String> mailSend (@RequestParam("email") String email){
         String code = usersls.mailSender(email);
         return  ResponseEntity.ok(code);
+    }
+
+//    @PostMapping("/Update")
+//    public HashMap<String, Object> Update(@RequestBody Host host){
+//
+//        HashMap<String, Object> result = new HashMap<>();
+//
+//        PasswordEncoder pe = cc.passwordEncoder();
+//        host.setPwd( pe.encode(host.getPwd()) );
+//
+//        hs.update( host );
+////        HttpSession session = request.getSession();
+////        session.setAttribute("loginUser", host );
+//
+//        result.put("msg", "ok");
+//        result.put("loginUser", host);
+//
+//        return result;
+//    }
+
+
+    @PostMapping("/update")
+    public ResponseEntity<HashMap<String, Object>> Update(@RequestBody Host updateHost) {
+        HashMap<String, Object> result = new HashMap<>();
+
+        try {
+
+            Host host = hs.getHost(updateHost.getHostid());
+            host.setNickname(updateHost.getNickname());
+
+
+
+            if (host.getMember() != null && host.getMember().getUserid() == null) {
+                ms.insertMember(host.getMember());
+            }
+//            ms
+            hs.update(host);
+
+            result.put("msg", "ok");
+            result.put("loginUser", host);
+
+            return ResponseEntity.ok(result);
+        } catch (DataIntegrityViolationException e) {
+            result.put("msg", "error");
+            result.put("error", "데이터 무결성 위반: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+        } catch (Exception e) {
+            result.put("msg", "error");
+            result.put("error", "서버 오류: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
     }
 
 
@@ -103,7 +172,7 @@ public class HostController {
         KakaoProfile kakaoProfile = usersls.getKakaoProfile(oAuthToken);
         try {
             Optional<Member> member = usersls.getKakaoHost(kakaoProfile);
-            response.sendRedirect("http://localhost:3000/getsnshostinfo/"+member.get().getUserid());
+            response.sendRedirect("http://localhost:3000/getsnshostinfo/"+member.get().getUserid()+"/kakao");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -139,6 +208,8 @@ public class HostController {
 
 
     }
+
+
 
 
 }

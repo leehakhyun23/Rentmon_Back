@@ -18,6 +18,8 @@ public class ZzimController {
     @GetMapping("/getZzimList/{userid}")
     public ResponseEntity<List<Zzim>> getZzimList(@PathVariable("userid") String userid , @RequestParam("page") int page) {
         List<Zzim> list = zs.getZzimList(userid, page);
+        System.out.println("리스트 화인하겠습니다~~~~");
+        System.out.println(list.size());
         return  ResponseEntity.ok(list);
     }
 

@@ -43,7 +43,4 @@ public class Inquiry {
     @JoinColumn(name="sseq")
     private Space space;
 
-    @ManyToOne
-    @JoinColumn(name = "icnum")
-    private InquiryCategory inquirycategory;
 }

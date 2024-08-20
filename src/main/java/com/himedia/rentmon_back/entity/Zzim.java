@@ -22,4 +22,5 @@ public class Zzim {
     @ManyToOne
     @JoinColumn(name = "sseq")
     private Space space;
+
 }

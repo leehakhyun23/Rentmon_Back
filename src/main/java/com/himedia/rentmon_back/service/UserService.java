@@ -40,7 +40,7 @@ public class UserService {
         menus.put("reservCount",rr.findByUseridCount(userid ,now));
         menus.put("usesapceCount",rr.findByUseridWithusedCount(userid ,now));
         menus.put("zzimCount",zr.findByUseridCount(userid));
-        menus.put("inquiryCount", ir.findByUseridCount(userid));
+        menus.put("inquiryCount", ir.countByUserUserid(userid));
         return menus;
     }
 

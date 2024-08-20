@@ -22,10 +22,10 @@ public class Host {
 //    @Column(name = "name", updatable = false, length = 20)
 //    private String name;
 
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "phone", nullable = false, length = 20)
+    @Column(name = "phone")
     private String phone;
 
 
