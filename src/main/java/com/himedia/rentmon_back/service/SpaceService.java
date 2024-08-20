@@ -41,7 +41,6 @@ public class SpaceService {
     private final SpaceRepository spaceRepository;
     private final SpaceimageRepository spaceimageRepository;
     private final ReservationRepository rr;
-    private final HashSearchRepository hsr;
     private final ReviewRepository rvr;
     private final HostRepository hr;
     private final CategoryRepository cr;

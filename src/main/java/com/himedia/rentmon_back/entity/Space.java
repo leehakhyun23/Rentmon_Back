@@ -88,6 +88,10 @@ public class Space {
 //    @JsonManagedReference
 //    private List<Review> reviews;
 
+    @OneToMany(mappedBy = "sseq", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<HashSpace> hashtags;
+
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<SpaceFacility> facilities;
