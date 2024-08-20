@@ -52,8 +52,10 @@ public class SpaceService {
     private final HashtagRepository htr;
     private final HashSpaceRepository hhsr;
     private final ZzimRepositroy zzimRepositroy;
+    private final InquiryRepository inquiryRepository;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final ReviewRepository reviewRepository;
 
 //    public List<Space> getSpaceList(int page, int size) {
 //        // 페이징 작업
@@ -221,16 +223,26 @@ public class SpaceService {
         //Space space, List<Inquiry> inquiry, List<Review> review, List<Hashtag> hashtag, int reviewCount, int rating, int zzimCount
 
 
+        Space space = new Space();
+
         Optional<Space> getSpace = spaceRepository.findById(sseq);
         if (getSpace.isPresent()) {
-            Space space = getSpace.get();
+            space = getSpace.get();
         } else {
-            return null;
+            space = null;
         }
 
-        //Optional<Inquiry> getInquiry = InquiryRepository.findBySseq(sseq);
+        List<Inquiry> inquiryList = inquiryRepository.findBySpaceSseq(sseq);
 
+        List<Review> reviewList = reviewRepository.findBySpaceSseq(sseq);
 
+        List<Hashtag> tagList = getHashtags(space); // 해시태그 목록 가져오기
+
+        int reviewCount = rvr.getAllReivewCount(sseq); // 리뷰 개수 계산
+        int rating = rvr.getAllReivewRateCount(sseq); // 평점 계산
+        int zzimCount = zzimRepositroy.getAllZzimCount(sseq); // 찜 개수 계산
+
+        spaceDTO = new SpaceDTO(space, inquiryList, reviewList, tagList, reviewCount, rating, zzimCount);
 
         return spaceDTO;
     }
