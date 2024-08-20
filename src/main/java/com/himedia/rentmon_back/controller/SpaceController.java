@@ -26,6 +26,7 @@ public class SpaceController {
 
     private final SpaceService spaceService;
 
+
     @GetMapping("/getSpaceList/{page}")
     public ResponseEntity<List<Space>> getSpaceList(@PathVariable int page) {
         try{
@@ -133,7 +134,7 @@ public class SpaceController {
     }
 
 
-
+   
 
 
 

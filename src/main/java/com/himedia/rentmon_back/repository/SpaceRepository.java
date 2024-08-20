@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -22,4 +23,7 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
 
     @Query("select s from Space s where s.category.cnum = :cnum order by s.created_at desc ")
     Page<Space> getCategoryList(Pageable pageable, int cnum);
+
+    @Query("select  s from Space  s  where s.sseq in(:rctvw)")
+    List<Space> getspaceviewlist(@Param("rctvw") List<Integer> rctvw);
 }
