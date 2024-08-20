@@ -21,6 +21,5 @@ public class Zzim {
 
     @ManyToOne
     @JoinColumn(name = "sseq")
-    @JsonBackReference
     private Space space;
 }

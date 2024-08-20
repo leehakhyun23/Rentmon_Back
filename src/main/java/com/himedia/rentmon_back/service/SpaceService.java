@@ -8,12 +8,15 @@ import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.entity.SpaceImage;
 import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.*;
+import com.himedia.rentmon_back.specification.SpaceSpecifications;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,26 +51,100 @@ public class SpaceService {
     private final SpaceFacilityRepository sfr;
     private final HashtagRepository htr;
     private final HashSpaceRepository hhsr;
-    private final SpaceimageRepository sir;
+    private final ZzimRepositroy zzimRepositroy;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public List<Space> getSpaceList(int page, int size) {
-        // 페이징 작업
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Space> pageResult = spaceRepository.findAll(pageable);
+//    public List<Space> getSpaceList(int page, int size) {
+//        // 페이징 작업
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<Space> pageResult = spaceRepository.findAll(pageable);
+//
+//        return pageResult.getContent();
+//    }
 
-        return pageResult.getContent();
+    public List<SpaceDTO> getSpaceList(int page, int size, String searchword, String province, String reservestart, String reserveend, int sortOption) {
+        Specification<Space> spec = Specification.where(null);
+
+        if (searchword != null && !searchword.isEmpty()) {
+            spec = spec.and(SpaceSpecifications.hasSearchword(searchword));
+        }
+
+        if (province != null && !province.isEmpty()) {
+            spec = spec.and(SpaceSpecifications.hasProvince(province));
+        }
+
+        if (reservestart != null && !reservestart.isEmpty() && reserveend != null && !reserveend.isEmpty()) {
+            spec = spec.and(SpaceSpecifications.isAvailableDuring(reservestart, reserveend));
+        }
+
+        Sort sort = getSort(sortOption);
+
+        // Space 목록을 조회
+        List<Space> spaces = spaceRepository.findAll(spec, PageRequest.of(page, size, sort)).getContent();
+
+
+        // Space를 SpaceDTO로 변환
+        List<SpaceDTO> spaceDTOs = spaces.stream().map(space -> {
+            int reviewCount = rvr.getAllReivewCount(space.getSseq()); // 리뷰 개수 계산
+            int rating = rvr.getAllReivewRateCount(space.getSseq()); // 평점 계산
+            int zzimCount = zzimRepositroy.getAllZzimCount(space.getSseq()); // 찜 개수 계산
+            List<Hashtag> hashtags = getHashtags(space); // 해시태그 목록 가져오기
+
+            return new SpaceDTO(space, reviewCount, rating, zzimCount, hashtags);
+        }).collect(Collectors.toList());
+
+//        // DTO를 기준으로 추가 정렬
+//        switch (sortOption) {
+//            case 3: // 리뷰순
+//                spaceDTOs.sort(Comparator.comparingInt(SpaceDTO::getReviewCount).reversed());
+//                break;
+//            case 4: // 찜순
+//                spaceDTOs.sort(Comparator.comparingInt(SpaceDTO::getZzimCount).reversed());
+//                break;
+//            default:
+//                // 기본 정렬을 처리하거나, 필요한 경우 예외 처리
+//                break;
+//        }
+
+        return spaceDTOs;
+
     }
+
+    private Sort getSort(int sortOption) {
+        switch (sortOption) {
+            case 0:
+                return Sort.by(Sort.Order.desc("sseq"));
+            case 1:
+                return Sort.by(Sort.Order.asc("price"));
+            case 2:
+                return Sort.by(Sort.Order.desc("price"));
+            case 3:
+                return Sort.by(Sort.Order.desc("sseq"));
+            case 4:
+                return Sort.by(Sort.Order.desc("sseq"));
+            default:
+                return Sort.unsorted(); // Default no sorting
+        }
+    }
+
+
+    private List<Hashtag> getHashtags(Space space) {
+        // space에 대한 해시태그 목록을 반환하는 로직 작성
+        return space.getHashtags().stream()
+                .map(HashSpace::getHseq)
+                .collect(Collectors.toList());
+    }
+
 
     public Reservation findByUserid(String userid) {
         Pageable pageable = PageRequest.of(0, 1); // 첫 페이지, 1개 항목
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime threedaysLater = now.plus(3, ChronoUnit.DAYS);
-        System.out.println("userid----------------"+userid);
-        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid,now, threedaysLater, pageable);
-        System.out.println("userid----------------2" +rs.getContent());
-        if(rs !=null && rs.hasContent())return rs.getContent().get(0);
+        System.out.println("userid----------------" + userid);
+        Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid, now, threedaysLater, pageable);
+        System.out.println("userid----------------2" + rs.getContent());
+        if (rs != null && rs.hasContent()) return rs.getContent().get(0);
         else return null;
     }
 
@@ -141,14 +218,23 @@ public class SpaceService {
         }
     }
 
-    public Space getSpace(int sseq) {
-        Optional<Space> space = spaceRepository.findById(sseq);
-        if (space.isPresent()) {
-            return space.get();
-        }
-        else{
+    public SpaceDTO getSpace(int sseq) {
+        SpaceDTO spaceDTO = new SpaceDTO();
+        //Space space, List<Inquiry> inquiry, List<Review> review, List<Hashtag> hashtag, int reviewCount, int rating, int zzimCount
+
+
+        Optional<Space> getSpace = spaceRepository.findById(sseq);
+        if (getSpace.isPresent()) {
+            Space space = getSpace.get();
+        } else {
             return null;
         }
+
+        //Optional<Inquiry> getInquiry = InquiryRepository.findBySseq(sseq);
+
+
+
+        return spaceDTO;
     }
 
     public void insertfnum(FnumDTO request) {
@@ -200,5 +286,4 @@ public class SpaceService {
             spaceimageRepository.save(image);
         }
     }
-
 }
