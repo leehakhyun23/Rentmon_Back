@@ -19,6 +19,12 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     boolean getBooleanWrite(@Param("userid") String userid, @Param("sseq") int sseq);
 
 
+    @Query("select  coalesce(cast(avg(r.rate) as int), 0) from Review r where r.space.sseq = :sseq")
+    int getAllReivewRateCount(@Param("sseq") int sseq);
+
+    @Query("select count(r) from Review r where r.space.sseq = :sseq ")
+    int getAllReivewCount(@Param("sseq") int sseq);
+
 
 //    ArrayList findBySseq(int sseq);
 }

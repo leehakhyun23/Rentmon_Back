@@ -40,6 +40,10 @@ public class Inquiry {
     private User user;
 
     @ManyToOne
+    @JoinColumn(name="sseq")
+    private Space space;
+
+    @ManyToOne
     @JoinColumn(name = "icnum")
     private InquiryCategory inquirycategory;
 }
