@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.service;
 
+import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.repository.HostRepository;
 import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
