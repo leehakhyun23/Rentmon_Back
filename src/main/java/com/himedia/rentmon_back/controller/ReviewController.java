@@ -23,15 +23,44 @@ public class ReviewController {
     private final SpaceService spaceService;
     private final ReviewService reviewService;
 
+    @Autowired
+    ServletContext context;
+
+
     @PostMapping("/InsertReview")
     public ResponseEntity<Review> InsertReview(@RequestPart("review") Review review, @RequestPart(value = "images", required = false) List<MultipartFile> images){
         if (images != null && !images.isEmpty()) {
             List<ReviewImage> reviewImages = new ArrayList<>();
+            String path = context.getRealPath("/review_images");
+
+            File directory = new File(path);
+            if(!directory.exists()){
+                directory.mkdirs();
+            }
+
             for (MultipartFile file : images) {
-                ReviewImage image = new ReviewImage();
-                image.setOriginname(file.getOriginalFilename());
-                image.setRealname(file.getOriginalFilename());
-                reviewImages.add(image);
+                try {
+                    // Generate a unique filename
+                    Calendar today = Calendar.getInstance();
+                    long dt = today.getTimeInMillis();
+                    String filename = file.getOriginalFilename();
+                    String fn1 = filename.substring(0, filename.indexOf("."));
+                    String fn2 = filename.substring(filename.indexOf("."));
+                    String uploadPath = path + File.separator + fn1 + dt + fn2;
+
+                    // Save the file
+                    file.transferTo(new File(uploadPath));
+
+                    // Create ReviewImage object and set properties
+                    ReviewImage image = new ReviewImage();
+                    image.setOriginname(file.getOriginalFilename());
+                    image.setRealname(fn1 + dt + fn2);
+                    reviewImages.add(image);
+
+                } catch (IllegalStateException | IOException e) {
+                    e.printStackTrace();
+                    // Optionally handle the error and provide feedback
+                }
             }
             review.setImages(reviewImages);
         }
@@ -49,27 +78,6 @@ public class ReviewController {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
-    }
-
-    @Autowired
-    ServletContext context;
-
-    @PostMapping("/imgup")
-    public HashMap<String, Object> imgup(
-            @RequestParam("image") MultipartFile file ){
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        String path = context.getRealPath("/review_images");
-        Calendar today = Calendar.getInstance();
-        long dt = today.getTimeInMillis();
-        String filename = file.getOriginalFilename();
-        String fn1 = filename.substring(0, filename.indexOf(".") );
-        String fn2 = filename.substring(filename.indexOf(".") );
-        String uploadPath = path + "/" + fn1 + dt + fn2;
-        try {
-            file.transferTo( new File(uploadPath) );
-            result.put("reviewimage", fn1 + dt + fn2);
-        } catch (IllegalStateException | IOException e) {e.printStackTrace();}
-        return result;
     }
 
 }
