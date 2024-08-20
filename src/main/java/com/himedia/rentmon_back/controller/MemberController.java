@@ -11,6 +11,8 @@ import com.himedia.rentmon_back.service.HostService;
 import com.himedia.rentmon_back.service.MemberService;
 import com.himedia.rentmon_back.util.TokenRefreshUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,14 +34,16 @@ public class MemberController {
         return ms.refreshToken(authHeader , refreshToken);
     }
 
-    @PostMapping("/join")
-    public Map<String, Object> join(@RequestBody Member member){
-        Map<String, Object> result = new HashMap<>();
-        PasswordEncoder pe = cc.passwordEncoder();
-        member.setPwd( pe.encode(member.getPwd()) );
-        int mseq = ms.insertMember(member);
-        result.put("msg", "ok");
-        result.put("mseq", mseq);
-        return result;
-    }
+//    @PostMapping("/join")
+//    public Map<String, Object> join(@RequestBody Member member){
+//        Map<String, Object> result = new HashMap<>();
+//        PasswordEncoder pe = cc.passwordEncoder();
+//        member.setPwd( pe.encode(member.getPwd()) );
+//        int mseq = ms.insertMember(member);
+//        result.put("msg", "ok");
+//        result.put("mseq", mseq);
+//        return result;
+//    }
+
+    
 }

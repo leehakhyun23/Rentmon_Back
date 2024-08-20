@@ -28,4 +28,6 @@ public interface HostRepository extends JpaRepository<Host, String> {
 //    Optional<Host> findByname(String name);
 
     Host findByHostid(String hostid);
+
+    Optional<Host> findByNickname(String nickname);
 }
