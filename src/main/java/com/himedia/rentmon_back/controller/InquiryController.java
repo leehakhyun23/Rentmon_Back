@@ -30,4 +30,27 @@ public class InquiryController {
         return ResponseEntity.ok(map);
     }
 
+    @PostMapping("/insertInquiry")
+    public ResponseEntity<String> insertInquiry(@RequestBody Map<String, String> data){
+        is.insertInquiry(data);
+        return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping("/getInqueryListToHost/{sseq}")
+    public ResponseEntity<Map<String, Object>> getInqueryListToHost(@PathVariable Integer sseq , @RequestParam("page") int page) {
+        Map<String, Object> map = new HashMap<>();
+        PagingMj paging = new PagingMj();
+        paging.setCurrentPage(page);
+        paging.setRecordAllcount(is.getInqueryHostALlCount(sseq));
+        List<Inquiry> list = is.getInqueryHostList(sseq,paging);
+        map.put("list", list);
+        map.put("paging", paging);
+        return ResponseEntity.ok(map);
+    }
+
+    @GetMapping("/delete/{iseq}")
+    public ResponseEntity<String> delete(@PathVariable Integer iseq) {
+        is.deleteInquiry(iseq);
+        return ResponseEntity.ok("ok");
+    }
 }

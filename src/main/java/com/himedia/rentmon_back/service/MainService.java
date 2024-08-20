@@ -1,6 +1,5 @@
 package com.himedia.rentmon_back.service;
 
-import com.himedia.rentmon_back.dto.MypageUsedResevationDTO;
 import com.himedia.rentmon_back.dto.SpaceAndReviewRaterDTO;
 import com.himedia.rentmon_back.entity.HashSpace;
 import com.himedia.rentmon_back.entity.Hashtag;
@@ -9,7 +8,6 @@ import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -77,6 +76,11 @@ public class MainService {
         }
 
         return result;
+    }
+
+
+    public List<Space> getspaceviewlist(List<Integer> rctvw) {
+        return  sp.getspaceviewlist(rctvw);
     }
 
 

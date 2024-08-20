@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -29,6 +30,14 @@ public class MainController {
         List<SpaceAndReviewRaterDTO> list = ms.getCategorySpaceList(cnum);
         return ResponseEntity.ok(list);
     }
+
+    @RequestMapping("/getspaceviewlist")
+    public ResponseEntity<List<Space>> getspaceviewlist (@RequestBody List<Integer> rctvw){
+        List<Space> list = ms.getspaceviewlist(rctvw);
+        return ResponseEntity.ok(list);
+    }
+
+
 
 
 }

@@ -64,9 +64,7 @@ public class SpaceService {
         Pageable pageable = PageRequest.of(0, 1); // 첫 페이지, 1개 항목
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime threedaysLater = now.plus(3, ChronoUnit.DAYS);
-        System.out.println("userid----------------"+userid);
         Page<Reservation> rs = rr.findReservationsWithinNext3Hours(userid,now, threedaysLater, pageable);
-        System.out.println("userid----------------2" +rs.getContent());
         if(rs !=null && rs.hasContent())return rs.getContent().get(0);
         else return null;
     }
