@@ -37,6 +37,5 @@ public class APILgoinSuccessHandler implements org.springframework.security.web.
         PrintWriter printWriter = response.getWriter();
         printWriter.println(jsonStr);
         printWriter.flush();
-
     }
 }

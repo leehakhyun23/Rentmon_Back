@@ -1,8 +1,10 @@
 package com.himedia.rentmon_back.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+
 
 @Entity
 @Table(name = "Hashtag")

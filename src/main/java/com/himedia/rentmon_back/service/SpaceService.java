@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.service;
 
+import com.himedia.rentmon_back.dto.FnumDTO;
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.*;
 import com.himedia.rentmon_back.entity.Reservation;
@@ -28,6 +29,8 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,36 +41,23 @@ public class SpaceService {
     private final SpaceRepository spaceRepository;
     private final SpaceimageRepository spaceimageRepository;
     private final ReservationRepository rr;
-    private final HashSearchRepository hsr;
     private final ReviewRepository rvr;
     private final HostRepository hr;
     private final CategoryRepository cr;
+    private final FacilityRepository fr;
+    private final SpaceFacilityRepository sfr;
+    private final HashtagRepository htr;
+    private final HashSpaceRepository hhsr;
+    private final SpaceimageRepository sir;
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public List<SpaceDTO> getSpaceList(int page, int size) {
+    public List<Space> getSpaceList(int page, int size) {
         // 페이징 작업
         Pageable pageable = PageRequest.of(page, size);
         Page<Space> pageResult = spaceRepository.findAll(pageable);
 
-        return pageResult.stream().map(this::convertToDTO).collect(Collectors.toList());
-    }
-
-    private SpaceDTO convertToDTO(Space space) {
-        SpaceDTO dto = new SpaceDTO();
-
-        //Space DTO에 삽입
-        dto = dto.fromEntity(space);
-
-        //SpaceImage 조회해서 삽입
-        List<String> imageNames = spaceimageRepository.findBySpace(space)
-                .stream()
-                .map(SpaceImage::getRealName)
-                .collect(Collectors.toList());
-        dto.setImageNames(imageNames);
-
-        return dto;
-
+        return pageResult.getContent();
     }
 
     public Reservation findByUserid(String userid) {
@@ -102,6 +92,35 @@ public class SpaceService {
         space.setStarttime(Integer.parseInt(paramSpace.get("starttime")));
         space.setEndtime(Integer.parseInt(paramSpace.get("endtime")));
         Space savedSpace = spaceRepository.save(space);
+        int sseq = savedSpace.getSseq();
+        // 포스트의 content 추출
+        String subtitle = space.getSubtitle();
+        Matcher m = Pattern.compile("#([0-9a-zA-Z가-힣]*)").matcher(subtitle);
+        Set<String> tags = new HashSet<>();
+        while (m.find()) {
+            tags.add(m.group(1));
+        }
+
+        for (String word : tags) {
+            Optional<Hashtag> rec = htr.findByWord(word);
+            Hashtag hashtag;
+            if (!rec.isPresent()) {
+                Hashtag hdnew = new Hashtag();
+                hdnew.setWord(word);
+                hashtag = htr.save(hdnew); // 새 Hashtag 저장
+            } else {
+                hashtag = rec.get(); // 기존 Hashtag 가져오기
+            }
+
+            // 새로운 HashSpace 엔티티 생성 및 저장
+            HashSpace hs = new HashSpace();
+            hs.setSseq(savedSpace); // Space 객체 설정
+            hs.setHseq(hashtag); // Hashtag 객체 설정
+            hhsr.save(hs);
+        }
+        for (String word : tags) {
+
+        }
         return savedSpace.getSseq();
     }
 
@@ -122,19 +141,64 @@ public class SpaceService {
         }
     }
 
-    public SpaceDTO getSpace(int sseq) {
+    public Space getSpace(int sseq) {
         Optional<Space> space = spaceRepository.findById(sseq);
-        //Space 엔티티 조회
-        SpaceDTO dto = convertToDTO(space.get());
+        if (space.isPresent()) {
+            return space.get();
+        }
+        else{
+            return null;
+        }
+    }
 
-        //SpaceImage 엔티티 리스트 조회
-        List<String> imageNames = spaceimageRepository.findBySpace(space.get())
-                .stream()
-                .map(SpaceImage::getRealName)
-                .collect(Collectors.toList());
-        dto.setImageNames(imageNames);
+    public void insertfnum(FnumDTO request) {
+        Integer sseq = request.getSseq();
+        String[] numbers = request.getNumbers();
 
-        return dto;
+        if (sseq == null || numbers == null || numbers.length == 0) {
+            throw new IllegalArgumentException("Invalid data: sseq or numbers are missing or invalid");
+        }
+
+        // String[]를 Integer[]로 변환
+        Integer[] numberInts = new Integer[numbers.length];
+        for (int i = 0; i < numbers.length; i++) {
+            try {
+                numberInts[i] = Integer.parseInt(numbers[i]);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid number format: " + numbers[i]);
+            }
+        }
+
+        Space space = spaceRepository.findById(sseq)
+                .orElseThrow(() -> new IllegalArgumentException("Space with sseq " + sseq + " not found"));
+
+        for (Integer number : numberInts) {
+            Facility facility = fr.findById(number)
+                    .orElseThrow(() -> new IllegalArgumentException("Facility with fnum " + number + " not found"));
+
+            SpaceFacility spaceFacility = new SpaceFacility();
+            spaceFacility.setSpace(space);
+            spaceFacility.setFacility(facility);
+
+            // 올바른 레포지토리 사용
+            sfr.save(spaceFacility);
+        }
+    }
+
+
+    public void saveImageInfo(Integer sseq, List<String> originalnames, List<String> realnames) {
+        // Space 엔티티를 sseq로 조회
+        Space space = spaceRepository.findById(sseq).orElseThrow(() -> new RuntimeException("Space not found"));
+        // 새로운 이미지 정보 저장
+        for (int i = 0; i < originalnames.size(); i++) {
+            SpaceImage image = new SpaceImage();
+            image.setSpace(space);
+            image.setOrigiName(originalnames.get(i));
+            image.setRealName(realnames.get(i));
+            image.setCreated_at(new Timestamp(System.currentTimeMillis()));
+
+            spaceimageRepository.save(image);
+        }
     }
 
 }

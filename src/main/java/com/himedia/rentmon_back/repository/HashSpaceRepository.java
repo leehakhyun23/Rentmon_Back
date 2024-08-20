@@ -12,3 +12,4 @@ public interface HashSpaceRepository extends JpaRepository<HashSpace, Long> {
     @Query("select h from HashSpace h where h.sseq.sseq = :sseq")
     List<HashSpace> getHashSpaceTag(int sseq);
 }
+

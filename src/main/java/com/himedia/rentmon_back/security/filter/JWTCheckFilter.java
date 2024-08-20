@@ -41,7 +41,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             Timestamp createAt = (Timestamp) claims.get("create_at");
 
 
-            MemberDTO memberDTO = new MemberDTO( userid , pwd , createAt , role , mseq );
+            MemberDTO memberDTO = new MemberDTO(userid, pwd, createAt, role, mseq);
 
             log.info(memberDTO);
             log.info(memberDTO.getAuthorities());
@@ -85,16 +85,25 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/favicon.ico")) return true;
         //유저 회원가입
         if(path.startsWith("/user/join")) return true;
-        if(path.startsWith("/user/getCategoryList")) return true;
 
         if(path.startsWith("/space/getSpaceList")) return true;
+        if(path.startsWith("/space")) return true;
+        if(path.startsWith("/user/getCategoryList")) return true;
+        if(path.startsWith("/space/getSpaceList")) return true;
+        if(path.startsWith("/space")) return true;
+        if(path.startsWith("/user/getCategoryList")) return true;
+
         if(path.startsWith("/space_images")) return true;
         if(path.startsWith("/review")) return true;
         if(path.startsWith("/profile_images")) return true;
         //예약관련
         if(path.startsWith("/reservation")) return true;
 
-
+        //학현관련
+        if(path.startsWith("/space/imgup")) return true;
+        if(path.startsWith("/space/insertSpace")) return true;
+        if(path.startsWith("/space/insertfnum")) return true;
+        if(path.startsWith("/space/insertImgSrc")) return true;
 
         return false;
     }

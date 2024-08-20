@@ -1,10 +1,13 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.List;
 @Table(name = "Review")
 @Getter
 @Setter
+@ToString
 public class Review {
     @Id
     @Column(name = "rseq")
@@ -47,8 +51,5 @@ public class Review {
     private User user;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<ReviewImage> images;
-
-
 }
