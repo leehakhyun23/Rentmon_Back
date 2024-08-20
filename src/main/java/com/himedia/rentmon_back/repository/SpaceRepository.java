@@ -20,5 +20,6 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
     @Query("select s from Space s where s.province LIKE concat(:station, '%')  and s.category.cnum in(:category1 , :category2 , :category3) order by s.created_at desc ")
     Page<Space> getRecommandSpace(@Param("station") String station,@Param("category1") int category1,@Param("category2") int category2, @Param("category3") int category3, Pageable pageable);
 
-
+    @Query("select s from Space s where s.category.cnum = :cnum order by s.created_at desc ")
+    Page<Space> getCategoryList(Pageable pageable, int cnum);
 }

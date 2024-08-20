@@ -13,4 +13,6 @@ public class MypageUsedResevationDTO {
     private Reservation reservation;
     private boolean writereview;
     private int reveiwreater;
+
+
 }

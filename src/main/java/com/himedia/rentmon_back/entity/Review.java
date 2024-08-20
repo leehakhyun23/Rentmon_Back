@@ -44,7 +44,6 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "sseq")
-    @JsonBackReference
     private Space space;
 
     @ManyToOne

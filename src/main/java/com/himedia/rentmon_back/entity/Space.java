@@ -80,20 +80,23 @@ public class Space {
         this.created_at = new Timestamp(Calendar.getInstance().getTimeInMillis());
     }
 
-
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<SpaceImage> images;
+    private List<SpaceImage> spaceimage;
 
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+//    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "sseq", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Review> reviews;
+    private List<HashSpace> hashtags;
 
     @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<SpaceFacility> facilities;
 
-    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Zzim> zzims;
+//    @OneToMany(mappedBy = "space", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JsonManagedReference
+//    private List<Zzim> zzims;
 }
