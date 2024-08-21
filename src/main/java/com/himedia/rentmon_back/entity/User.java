@@ -24,11 +24,11 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "cseq")
-    private Card cseq;
+    private Card card;
 
     @ManyToOne
     @JoinColumn(name = "gnum")
-    private Grade gnum;
+    private Grade grade;
 
     @Column(name = "name")
     private String name;
@@ -61,7 +61,7 @@ public class User {
     private String snsid;
 
     @Column(name = "islogin", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
-    private boolean islogin;
+    private boolean isLogin;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)

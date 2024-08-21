@@ -38,10 +38,14 @@ public class Declaration {
     private Timestamp replydate;
 
     @ManyToOne
-    @JoinColumn(name = "writer")
-    private Member writer;
+    @JoinColumn(name = "userid")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "sseq")
     private Space space;
+
+    @ManyToOne
+    @JoinColumn(name = "hostid")
+    private Host host;
 }

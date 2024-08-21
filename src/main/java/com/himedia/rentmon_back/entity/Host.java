@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +36,10 @@ public class Host {
 
     @Column(name = "nickname")
     private String nickname;
+
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Space> spaces;
 
     public void setMseq(int mseq) {
         this.member.setMseq(mseq);

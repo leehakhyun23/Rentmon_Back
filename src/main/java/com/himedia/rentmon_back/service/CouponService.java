@@ -1,6 +1,6 @@
 package com.himedia.rentmon_back.service;
 
-import com.himedia.rentmon_back.dto.RequestCoupon;
+import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.entity.Coupon;
 import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.CouponRepository;
@@ -42,7 +42,7 @@ public class CouponService {
         return Optional.empty();
     }
 
-    public void createAndAssignCoupons(RequestCoupon.IssuedCoupon issuedCoupon) {
+    public void createAndAssignCoupons(AdminDTO.IssuedCoupon issuedCoupon) {
         for (String userid : issuedCoupon.getUserids()) {
             User user = userRepository.findById(userid)
                     .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다: " + userid));

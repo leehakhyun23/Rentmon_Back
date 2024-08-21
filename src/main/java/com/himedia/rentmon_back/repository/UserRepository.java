@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository<User, String>, JpaSpecific
 
     // admin
     @Modifying // isLogin Toggle
-    @Query("UPDATE User u SET u.islogin = CASE WHEN u.islogin = TRUE THEN FALSE ELSE TRUE END WHERE u.userid IN :userids")
+    @Query("UPDATE User u SET u.isLogin = CASE WHEN u.isLogin = TRUE THEN FALSE ELSE TRUE END WHERE u.userid IN :userids")
     int updateIsLoginStatus(List<String> userids);
 }

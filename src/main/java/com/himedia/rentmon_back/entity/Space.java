@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -23,6 +24,7 @@ public class Space {
 
     @ManyToOne
     @JoinColumn(name = "hostid")
+    @JsonBackReference
     private Host host;          // 호스트아이디
 
     @ManyToOne

@@ -123,7 +123,7 @@ public class UserSnsLoginService {
             user.setProvider("kakao");
             user.setSnsid(joinkakaoMember.getUserid());
             user.setName(kakaoProfile.getProperties().getNickname());
-            user.setGnum(new Grade(1, "bronze", 0));
+            user.setGrade(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinkakaoMember);
         }
@@ -205,7 +205,7 @@ public class UserSnsLoginService {
             user.setSnsid(joinNaverMember.getUserid());
             user.setProvider("naver");
             user.setEmail(naverapi.getResponse().getEmail());
-            user.setGnum(new Grade(1, "bronze", 0));
+            user.setGrade(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinNaverMember);
         }
@@ -345,7 +345,7 @@ public class UserSnsLoginService {
             user.setSnsid(joinGoogleMember.getUserid());
             user.setProvider("google");
             user.setEmail(googleapi.getEmail());
-            user.setGnum(new Grade(1, "bronze", 0));
+            user.setGrade(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinGoogleMember);
         }
@@ -403,7 +403,7 @@ public class UserSnsLoginService {
         user.setUserid(member.getUserid());
         user.setMseq(member.getMseq());
         user.setPhone(userDTO.getPhone());
-        user.setGnum(new Grade(1, "bronze", 0));
+        user.setGrade(new Grade(1, "bronze", 0));
         user.setEmail(userDTO.getEmail());
         user.setName(userDTO.getName());
         if(profileimg !=null) user.setProfileimg(saveFile(profileimg));

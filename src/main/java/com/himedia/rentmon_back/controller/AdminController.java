@@ -1,9 +1,8 @@
 package com.himedia.rentmon_back.controller;
 
-import com.himedia.rentmon_back.dto.RequestCoupon;
+import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.entity.Coupon;
 import com.himedia.rentmon_back.entity.Host;
-import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.service.AdminService;
 import com.himedia.rentmon_back.service.CouponService;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +23,10 @@ public class AdminController {
     private final CouponService couponService;
 
     @GetMapping("/user")
-    public ResponseEntity<Page<User>> getUserList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+    public ResponseEntity<Page<AdminDTO.ResponseUser>> getUserList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
             @RequestParam(value = "searchType", required = false) String searchType, @RequestParam(value = "keyword", required = false) String keyword) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<User> userList = adminService.getUserList(pageable, searchType, keyword);
+        Page<AdminDTO.ResponseUser> userList = adminService.getUserList(pageable, searchType, keyword);
 
         if(userList.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -44,7 +43,7 @@ public class AdminController {
     }
 
     @PostMapping("/issuedcoupon")
-    public ResponseEntity<String> createdCoupon(@RequestBody RequestCoupon.IssuedCoupon issuedCoupon) {
+    public ResponseEntity<String> createdCoupon(@RequestBody AdminDTO.IssuedCoupon issuedCoupon) {
         couponService.createAndAssignCoupons(issuedCoupon);
 
         return ResponseEntity.ok(null);
@@ -63,16 +62,16 @@ public class AdminController {
     }
 
     @GetMapping("/host")
-    public ResponseEntity<List<Host>> getHostList() {
-//        Pageable pageable = PageRequest.of(page, size);
-        List<Host> hostList = adminService.getHostList();
+    public ResponseEntity<Page<AdminDTO.ResponseHost>> getHostList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+            @RequestParam(value = "searchType", required = false) String searchType, @RequestParam(value = "keyword", required = false) String keyword) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("member.createdAt").descending());
+        Page<AdminDTO.ResponseHost> hostList = adminService.getHostList(pageable, searchType, keyword);
 
         if(hostList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
-        System.out.println(hostList);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(hostList);
     }
 
 //    @PutMapping("/host")

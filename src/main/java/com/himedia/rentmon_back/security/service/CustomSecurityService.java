@@ -36,7 +36,7 @@ public class CustomSecurityService implements UserDetailsService {
         Member member = (Member) mr.findByUseridAndRole(username, role)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        MemberDTO mDTO = new MemberDTO(member.getUserid(), member.getPwd(), member.getCreated_at(), member.getRole(), member.getMseq());
+        MemberDTO mDTO = new MemberDTO(member.getUserid(), member.getPwd(), member.getCreatedAt(), member.getRole(), member.getMseq());
 
         log.info("Member found: " + member);
         log.info("MemberDTO: " + mDTO);
