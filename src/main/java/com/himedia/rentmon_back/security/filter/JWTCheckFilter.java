@@ -100,6 +100,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/profile_images")) return true;
         //예약관련
         if(path.startsWith("/reservation")) return true;
+        if(path.startsWith("/zzim")) return true;
 
         //학현관련
         if(path.startsWith("/space/imgup")) return true;
