@@ -94,6 +94,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/space")) return true;
         if(path.startsWith("/user/getCategoryList")) return true;
 
+        if(path.startsWith("/icon_images")) return true;
         if(path.startsWith("/space_images")) return true;
         if(path.startsWith("/review")) return true;
         if(path.startsWith("/profile_images")) return true;
