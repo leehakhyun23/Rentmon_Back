@@ -234,7 +234,7 @@ public class SpaceService {
 
         List<Inquiry> inquiryList = inquiryRepository.findBySpaceSseq(sseq);
 
-        List<Review> reviewList = reviewRepository.findBySpaceSseq(sseq);
+        List<Review> reviewList = reviewRepository.findBySpaceSseqOrderByRseqDesc(sseq);
 
         List<Hashtag> tagList = getHashtags(space); // 해시태그 목록 가져오기
 

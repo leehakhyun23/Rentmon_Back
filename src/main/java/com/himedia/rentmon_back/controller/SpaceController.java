@@ -53,6 +53,7 @@ public class SpaceController {
 
     }
 
+
     @GetMapping("/getSpace/{sseq}")
     public ResponseEntity<SpaceDTO> getSpace(@PathVariable("sseq") int sseq) {
         try{

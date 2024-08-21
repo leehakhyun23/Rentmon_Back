@@ -1,9 +1,11 @@
 package com.himedia.rentmon_back.controller;
 
+import com.himedia.rentmon_back.entity.Inquiry;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.ReviewImage;
 import com.himedia.rentmon_back.service.ReviewService;
 import com.himedia.rentmon_back.service.SpaceService;
+import com.himedia.rentmon_back.util.PagingMj;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,4 +82,15 @@ public class ReviewController {
         }
     }
 
+    @GetMapping("/GetReviewList/{sseq}")
+    public ResponseEntity<Map<String, Object>> GetReviewList(@PathVariable("sseq") int sseq, @RequestParam("page") int page){
+        Map<String, Object> map = new HashMap<>();
+        PagingMj paging = new PagingMj();
+        paging.setCurrentPage(page);
+        paging.setRecordAllcount(reviewService.getReviewALlCount(sseq));
+        List<Review> list = reviewService.getReviewListwithPage(sseq,paging);
+        map.put("list", list);
+        map.put("paging", paging);
+        return ResponseEntity.ok(map);
+    }
 }
