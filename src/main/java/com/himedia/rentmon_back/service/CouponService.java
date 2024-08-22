@@ -42,7 +42,7 @@ public class CouponService {
         return Optional.empty();
     }
 
-    public void createAndAssignCoupons(AdminDTO.IssuedCoupon issuedCoupon) {
+    public void createAndAssignCoupons(AdminDTO.RequestCoupon issuedCoupon) {
         for (String userid : issuedCoupon.getUserids()) {
             User user = userRepository.findById(userid)
                     .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다: " + userid));

@@ -1,8 +1,6 @@
 package com.himedia.rentmon_back.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.himedia.rentmon_back.entity.Grade;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +23,7 @@ public class AdminDTO {
         private String email;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
         private Timestamp createdAt;
+        private int declaCount;
         private boolean isLogin;
         private String gname;
     }
@@ -36,25 +35,50 @@ public class AdminDTO {
     public static class ResponseHost {
         private String hostid;
         private String nickname;
+        private String phone;
+        private String email;
+        private List<SpaceDTO> spaces;
+        private boolean disable;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class SpaceDTO {
         private String category;
         private String title;
         private Integer price;
-        private String phone;
-        private String email;
         private String province;
         private String town;
         private String village;
         private String addressdetail;
+        private int declaCount;
     }
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class IssuedCoupon {
+    public static class RequestCoupon {
         private List<String> userids;
         private LocalDate limitDate;
         private Integer discount;
         private String couponTitle;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ResponseDeclaration {
+        private int dseq;
+        private String title;
+        private String content;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp createdAt;
+        private String reply;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp replyDate;
     }
 }

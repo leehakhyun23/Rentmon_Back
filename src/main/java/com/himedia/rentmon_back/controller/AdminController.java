@@ -2,7 +2,6 @@ package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.entity.Coupon;
-import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.service.AdminService;
 import com.himedia.rentmon_back.service.CouponService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +42,7 @@ public class AdminController {
     }
 
     @PostMapping("/issuedcoupon")
-    public ResponseEntity<String> createdCoupon(@RequestBody AdminDTO.IssuedCoupon issuedCoupon) {
+    public ResponseEntity<String> createdCoupon(@RequestBody AdminDTO.RequestCoupon issuedCoupon) {
         couponService.createAndAssignCoupons(issuedCoupon);
 
         return ResponseEntity.ok(null);
@@ -64,10 +63,10 @@ public class AdminController {
     @GetMapping("/host")
     public ResponseEntity<Page<AdminDTO.ResponseHost>> getHostList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
             @RequestParam(value = "searchType", required = false) String searchType, @RequestParam(value = "keyword", required = false) String keyword) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("member.createdAt").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("hostid").ascending());
         Page<AdminDTO.ResponseHost> hostList = adminService.getHostList(pageable, searchType, keyword);
 
-        if(hostList.isEmpty()) {
+        if (hostList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
@@ -80,4 +79,16 @@ public class AdminController {
 //
 //        return ResponseEntity.ok(updatedCount);
 //    }
+
+    @GetMapping("/declaration")
+    public ResponseEntity<Page<AdminDTO.ResponseDeclaration>> getDeclarationList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AdminDTO.ResponseDeclaration> declarationList = adminService.getDeclarationList(pageable);
+
+        if (declarationList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(declarationList);
+    }
 }
