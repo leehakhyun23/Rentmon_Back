@@ -65,8 +65,12 @@ public class SpaceService {
 //        return pageResult.getContent();
 //    }
 
-    public List<SpaceDTO> getSpaceList(int page, int size, String searchword, String province, String reservestart, String reserveend, int sortOption) {
+    public List<SpaceDTO> getSpaceList(int page, int size, int cnum, String searchword, String province, String reservestart, String reserveend, int sortOption) {
         Specification<Space> spec = Specification.where(null);
+
+        if (cnum > 0) {  // cnum이 0보다 클 때만 필터링 적용
+            spec = spec.and(SpaceSpecifications.hasCnum(cnum));
+        }
 
         if (searchword != null && !searchword.isEmpty()) {
             spec = spec.and(SpaceSpecifications.hasSearchword(searchword));

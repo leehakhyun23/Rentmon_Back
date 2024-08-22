@@ -10,6 +10,10 @@ import java.sql.Timestamp;
 
 public class SpaceSpecifications {
 
+    public static Specification<Space> hasCnum(int cnum) {
+        return (root, query, builder) -> builder.equal(root.get("category").get("cnum"), cnum);
+    }
+
     public static Specification<Space> hasSearchword(String searchword) {
         return (root, query, criteriaBuilder) -> {
             Join<Space, HashSpace> hashJoin = root.join("hashtags");
