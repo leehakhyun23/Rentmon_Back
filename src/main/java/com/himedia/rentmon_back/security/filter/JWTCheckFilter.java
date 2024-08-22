@@ -90,15 +90,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/space/getSpaceList")) return true;
         if(path.startsWith("/space")) return true;
         if(path.startsWith("/user/getCategoryList")) return true;
-        if(path.startsWith("/space/getSpaceList")) return true;
-        if(path.startsWith("/space")) return true;
-        if(path.startsWith("/user/getCategoryList")) return true;
 
         if(path.startsWith("/icon_images")) return true;
         if(path.startsWith("/space_images")) return true;
-        if(path.startsWith("/review")) return true;
         if(path.startsWith("/profile_images")) return true;
         //예약관련
+        if(path.startsWith("/review")) return true;
         if(path.startsWith("/reservation")) return true;
         if(path.startsWith("/zzim")) return true;
 

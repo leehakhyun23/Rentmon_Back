@@ -31,6 +31,7 @@ public class SpaceController {
     @GetMapping("/getSpaceList")
     public ResponseEntity<List<SpaceDTO>> getSpaceList(
             @RequestParam int page,
+            @RequestParam(required = false) int cnum,
             @RequestParam(required = false) String searchword,
             @RequestParam(required = false) String province,
             @RequestParam(required = false) String reservestart,
@@ -40,7 +41,7 @@ public class SpaceController {
 
         try {
             int size = 6;  // 페이지당 표시할 공간의 수
-            List<SpaceDTO> spaceList = spaceService.getSpaceList(page, size, searchword, province, reservestart, reserveend, sortOption);
+            List<SpaceDTO> spaceList = spaceService.getSpaceList(page, size, cnum, searchword, province, reservestart, reserveend, sortOption);
             return ResponseEntity.ok(spaceList);
         } catch (Exception e) {
             e.printStackTrace();
