@@ -27,5 +27,8 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
 
     int countBySpaceSseq(Integer sseq);
 
+    List<Inquiry> findBySpaceSseq(Integer sseq);
+
+
     Page<Inquiry> findBySpaceSseq(Integer sseq, Pageable pageable);
 }
