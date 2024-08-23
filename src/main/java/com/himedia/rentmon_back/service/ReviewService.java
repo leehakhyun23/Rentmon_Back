@@ -1,6 +1,7 @@
 package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.entity.Inquiry;
+import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.repository.ReviewImageRepository;
 import com.himedia.rentmon_back.repository.ReviewRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -53,5 +55,18 @@ public class ReviewService {
         Pageable pageable = PageRequest.of(paging.getCurrentPage()-1, paging.getRecordrow() , Sort.by("rseq").descending());
         Page<Review> list = reviewRepository.findBySpaceSseq(sseq, pageable);
         return list.getContent();
+    }
+
+    public List<Review> findReviewsBysseq(List<Integer> sseqs) {
+        return reviewRepository.findBySseqIn(sseqs);
+    }
+
+    @Transactional
+    public Review addReply(int rseq, String reply) {
+        Review review = reviewRepository.findById(rseq)
+                .orElseThrow(() -> new RuntimeException("리뷰를 찾을 수 없습니다. rseq: " + rseq));
+        review.setReply(reply);
+        review.setReplydate(new Timestamp(System.currentTimeMillis())); // 현재 시간 설정
+        return reviewRepository.save(review);
     }
 }

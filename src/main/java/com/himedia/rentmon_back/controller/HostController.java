@@ -249,7 +249,7 @@ public class HostController {
         try {
             googleapi = usersls.getGoogleProfile(oAuthToken.getAccess_token());
             if(googleapi == null) throw new SnsException("구글 로그인 실패");
-            Optional<Member> member = usersls.getGoogleMember(googleapi);
+            Optional<Member> member = usersls.getGoogleHost(googleapi);
             response.sendRedirect("http://localhost:3000/getsnshostinfo/"+member.get().getUserid()+"/google");
 
         } catch (SnsException | IOException e) {
