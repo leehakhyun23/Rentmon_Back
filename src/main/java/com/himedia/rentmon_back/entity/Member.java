@@ -2,6 +2,7 @@ package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.sql.Timestamp;
 @Table(name = "member")
 @Getter
 @Setter
+@AllArgsConstructor
 public class Member {
     @Id
     @Column(name = "mseq")
@@ -23,8 +25,6 @@ public class Member {
     @Column(name = "pwd", nullable = false, length = 1000)
     private String pwd;
 
-
-    //    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private String role;
 
@@ -35,4 +35,6 @@ public class Member {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp createdAt;
+
+    public Member() {}
 }
