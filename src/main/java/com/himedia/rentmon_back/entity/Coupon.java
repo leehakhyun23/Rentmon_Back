@@ -31,9 +31,9 @@ public class Coupon {
     private int discount;
 
     @Column(name = "limitdate", nullable = false)
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="Asia/Seoul")
-    private LocalDateTime limitdatetime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    private LocalDateTime limitdate;
 
     @Column(name = "useyn", nullable = false, columnDefinition = "integer default 1")
     private boolean useyn;

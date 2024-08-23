@@ -18,7 +18,7 @@ public class CouponScheduler {
     public void expireCoupons() {
         List<Coupon> expiredCoupons = couponRepository.findAll()
                 .stream()
-                .filter(coupon -> coupon.getLimitdatetime().isBefore(LocalDateTime.now()))
+                .filter(coupon -> coupon.getLimitdate().isBefore(LocalDateTime.now()))
                 .toList();
 
         for (Coupon coupon : expiredCoupons) {

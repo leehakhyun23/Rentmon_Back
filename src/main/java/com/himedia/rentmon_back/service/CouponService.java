@@ -45,7 +45,7 @@ public class CouponService {
         if (couponOpt.isPresent()) {
             Coupon coupon = couponOpt.get();
 
-            if (coupon.getLimitdatetime().isBefore(LocalDateTime.now())) {
+            if (coupon.getLimitdate().isBefore(LocalDateTime.now())) {
                 throw new IllegalArgumentException("쿠폰의 유효기간이 지났습니다.");
             }
 
@@ -76,7 +76,7 @@ public class CouponService {
             coupon.setCouponstr(couponCode);
             coupon.setCouponTitle(issuedCoupon.getCouponTitle());
             coupon.setDiscount(issuedCoupon.getDiscount());
-            coupon.setLimitdatetime(issuedCoupon.getLimitDateTime());
+            coupon.setLimitdate(issuedCoupon.getLimitDateTime());
             coupon.setUseyn(true);
 
             cr.save(coupon);
