@@ -11,7 +11,6 @@ import java.util.List;
 @Table(name = "host")
 @Getter
 @Setter
-@ToString
 public class Host {
     @Id
     @Column(name = "hostid")
