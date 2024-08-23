@@ -399,6 +399,18 @@ public class SpaceService {
         }
     }
 
+
+    public List<Integer> findSseqsByHostid(String hostid) {
+        // Host 객체를 hostid로 찾습니다.
+        Host host = hr.findById(hostid)
+                .orElseThrow(() -> new RuntimeException("Host not found"));
+
+        // Host 객체를 이용해 Space 리스트를 조회합니다.
+        List<Integer> sseqs = spaceRepository.findSseqsByHostId(host); // 메소드 이름을 findSseqsByHostId로 변경
+
+        return sseqs;
+    }
+
     // admin
     public List<AdminDTO.ResponseCategory> findAll() {
         return spaceRepository.findAll()
@@ -415,4 +427,5 @@ public class SpaceService {
                         .build())
                 .collect(Collectors.toList());
     }
+
 }

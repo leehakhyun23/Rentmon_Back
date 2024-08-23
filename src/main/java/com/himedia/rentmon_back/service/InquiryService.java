@@ -1,6 +1,7 @@
 package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.entity.Inquiry;
+import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.InquiryRepository;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -60,5 +62,9 @@ public class InquiryService {
 
     public void deleteInquiry(Integer iseq) {
         ir.deleteById(iseq);
+    }
+
+    public List<Inquiry> findInquirysBysseq(List<Integer> sseqs) {
+        return ir.findBySseqIn(sseqs);
     }
 }

@@ -31,4 +31,7 @@ public interface InquiryRepository extends JpaRepository<Inquiry, Integer> {
 
 
     Page<Inquiry> findBySpaceSseq(Integer sseq, Pageable pageable);
+
+    @Query("SELECT i FROM Inquiry i WHERE i.space.sseq IN :sseqs")
+    List<Inquiry> findBySseqIn(List<Integer> sseqs);
 }
