@@ -2,13 +2,37 @@ package com.himedia.rentmon_back.specification;
 
 import com.himedia.rentmon_back.entity.Declaration;
 import com.himedia.rentmon_back.entity.Host;
+import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.User;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 public class AdminSpecification {
+    public static class AdminReservationSpe {
+        public static Specification<Reservation> withinPeriod(String period) {
+            return (Root<Reservation> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime startDate = switch (period.toLowerCase()) {
+                    case "monthly" -> now.minusMonths(12);
+                    case "weekly" -> now.minusWeeks(15);
+                    case "daily" -> now.minusDays(30);
+                    default -> throw new IllegalArgumentException("Invalid period: " + period);
+                };
+
+                return criteriaBuilder.between(
+                        root.get("reservestart"),
+                        Timestamp.valueOf(startDate),
+                        Timestamp.valueOf(now)
+                );
+            };
+        }
+    }
+
     public static class UserSpe {
         public static Specification<User> searchByUserList(String searchType, String keyword) {
             return (Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {

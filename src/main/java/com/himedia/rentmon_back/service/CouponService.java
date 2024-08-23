@@ -34,7 +34,7 @@ public class CouponService {
                 throw new IllegalArgumentException("이 쿠폰은 이미 사용되었습니다.");
             }
 
-            coupon.setUseyn(true);
+            coupon.setUseyn(false);
             couponRepository.save(coupon);
             return Optional.of(coupon);
         }

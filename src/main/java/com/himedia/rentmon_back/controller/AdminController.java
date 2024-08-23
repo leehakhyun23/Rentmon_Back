@@ -2,8 +2,7 @@ package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.entity.Coupon;
-import com.himedia.rentmon_back.service.AdminService;
-import com.himedia.rentmon_back.service.CouponService;
+import com.himedia.rentmon_back.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +18,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminController {
     private final AdminService adminService;
+    private final MemberService memberService;
     private final CouponService couponService;
+    private final SpaceService spaceService;
+    private final ReservationService reservationService;
+
+    @GetMapping("/main")
+    public ResponseEntity<AdminDTO.ResponseDashBoard> getMainInfo(@RequestParam String period) {
+        List<AdminDTO.ResponseCategory> category = spaceService.findAll();
+        AdminDTO.ResponseMember memberStatistics = memberService.getMemberStatistics();
+        List<AdminDTO.ResponseReservation> reservations = reservationService.getReservationsByPeriod(period);
+
+        AdminDTO.ResponseDashBoard dashBoard = AdminDTO.ResponseDashBoard.builder()
+                .category(category)
+                .member(memberStatistics)
+                .reservation(reservations)
+                .build();
+
+        return ResponseEntity.ok(dashBoard);
+    }
 
     @GetMapping("/user")
     public ResponseEntity<Page<AdminDTO.ResponseUser>> getUserList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,

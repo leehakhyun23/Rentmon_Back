@@ -16,6 +16,61 @@ public class AdminDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    public static class ResponseDashBoard {
+        private List<ResponseCategory> category;
+        private ResponseMember member;
+        private List<ResponseReservation> reservation;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseReservation {
+        private int payment;
+        private int count;
+        private String date;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseCategory {
+        private String name;
+        private Long value;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseMember {
+        private int totalMember;
+        private int userCount;
+        private int hostCount;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseC {
+        private int num;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseD {
+        private int num;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
     public static class ResponseUser {
         private String userid;
         private String name;

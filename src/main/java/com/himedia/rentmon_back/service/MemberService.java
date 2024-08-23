@@ -1,8 +1,8 @@
 package com.himedia.rentmon_back.service;
 
+import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.repository.HostRepository;
-import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.security.util.CustomJWTException;
 import com.himedia.rentmon_back.security.util.JWTUtil;
@@ -47,4 +47,16 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    // admin
+    public AdminDTO.ResponseMember getMemberStatistics() {
+        int totalNonAdminCount = memberRepository.countByRoleNot("admin");
+        int userCount = memberRepository.countByRole("user");
+        int hostCount = memberRepository.countByRole("host");
+
+        return AdminDTO.ResponseMember.builder()
+                .totalMember(totalNonAdminCount)
+                .userCount(userCount)
+                .hostCount(hostCount)
+                .build();
+    }
 }

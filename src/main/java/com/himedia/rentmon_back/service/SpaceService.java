@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.service;
 
+import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
@@ -13,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -128,5 +131,22 @@ public class SpaceService {
         dto.setImageNames(imageNames);
 
         return dto;
+    }
+
+    // admin
+    public List<AdminDTO.ResponseCategory> findAll() {
+        return spaceRepository.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        space -> space.getCategory().getName(),
+                        Collectors.counting()
+                ))
+                .entrySet()
+                .stream()
+                .map(entry -> AdminDTO.ResponseCategory.builder()
+                        .name(entry.getKey())
+                        .value(entry.getValue())
+                        .build())
+                .collect(Collectors.toList());
     }
 }
