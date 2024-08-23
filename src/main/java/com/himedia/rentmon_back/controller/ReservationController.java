@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.himedia.rentmon_back.controller.SpaceController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -82,17 +81,6 @@ public class ReservationController {
         return ResponseEntity.ok(map);
     }
 
-    @GetMapping("/getReservationListbyDate")
-    public ResponseEntity<Map<String, Object>> getReservationListbyDate(@RequestParam("sseq") int sseq, @RequestParam("date") String date) {
-        Map<String, Object> map = new HashMap<>();
-
-        List<Reservation> reservationList = reservationService.getReservationListbyDate(sseq, date);
-
-        map.put("reservationList", reservationList);
-
-        return ResponseEntity.ok(map);
-    }
-  
     @GetMapping("/findSseqByTitle")
     public ResponseEntity<List<Reservation>> findSseqByTitle(@RequestParam("title") String title) {
         try {

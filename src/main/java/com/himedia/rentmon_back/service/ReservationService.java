@@ -93,7 +93,9 @@ public class ReservationService {
 
     public List<Reservation> getReservationListbyDate(int sseq, String date) {
         return reservationRepository.getReservationListbyDate(sseq, date);
+    }
 
+    
     public int findSseqByTitle(String title) {
         Space space = rr.findByTitle(title)
                 .orElseThrow(() -> new RuntimeException("Space not found for title: " + title));
