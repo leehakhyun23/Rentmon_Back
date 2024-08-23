@@ -3,6 +3,7 @@ package com.himedia.rentmon_back.service;
 import com.himedia.rentmon_back.dto.MypageUsedResevationDTO;
 import com.himedia.rentmon_back.entity.Coupon;
 import com.himedia.rentmon_back.entity.Reservation;
+import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.repository.CouponRepository;
 import com.himedia.rentmon_back.repository.ReservationRepository;
 import com.himedia.rentmon_back.repository.ReviewRepository;
@@ -31,6 +32,7 @@ public class ReservationService {
     private final CouponRepository cp;
     private final ReservationRepository reservationRepository;
     private LocalDateTime now = LocalDateTime.now();
+    private final SpaceService spaceService;
 
     public int getReservation(String userid) {
 //        List<Reservation> list= rr.findByUseridList(userid ,now);
@@ -90,8 +92,16 @@ public class ReservationService {
     }
 
     public List<Reservation> getReservationListbyDate(int sseq, String date) {
-
         return reservationRepository.getReservationListbyDate(sseq, date);
 
+    public int findSseqByTitle(String title) {
+        Space space = rr.findByTitle(title)
+                .orElseThrow(() -> new RuntimeException("Space not found for title: " + title));
+        return space.getSseq(); // int 타입 반환
+    }
+
+    public List<Reservation> findReservationsBySseq(int sseq) {
+        return rr.findBySpaceSseq(sseq);
     }
 }
+

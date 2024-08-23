@@ -57,4 +57,6 @@ public class MemberService {
         member.setPwd(ps.encode(password));
         memberRepository.save(member);
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.himedia.rentmon_back.repository;
 
 import com.himedia.rentmon_back.entity.Reservation;
+import com.himedia.rentmon_back.entity.Space;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
 
@@ -42,4 +44,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     @Query("SELECT r FROM Reservation r WHERE r.space.sseq = :sseq AND FUNCTION('DATE', r.reservestart) = :date")
     List<Reservation> getReservationListbyDate(int sseq, String date);
+  
+    @Query("SELECT s FROM Space s WHERE s.title = :title")
+    Optional<Space> findByTitle(@Param("title") String title);
+
+
+    List<Reservation> findBySpaceSseq(int sseq);
 }

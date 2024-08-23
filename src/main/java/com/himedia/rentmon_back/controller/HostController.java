@@ -123,15 +123,14 @@ public class HostController {
         HashMap<String, Object> result = new HashMap<>();
 
         try {
-
             Host host = hs.getHost(updateHost.getHostid());
             host.setNickname(updateHost.getNickname());
-
-
-
+            host.setEmail(updateHost.getEmail());
+            host.setPhone(updateHost.getPhone());
             if (host.getMember() != null && host.getMember().getUserid() == null) {
                 ms.insertMember(host.getMember());
             }
+
 //            ms
             hs.update(host);
 
@@ -195,21 +194,82 @@ public class HostController {
     }
 
     @RequestMapping("/sns/naverlogin")
-    public void loginnaver(@RequestParam("code") String code,@RequestParam("state") String state ,HttpServletResponse response){
-        OAuthToken oAuthToken = usersls.getNaverToken(code,state,naverClinet_id,naverRedirect_uri);
-
+    public void loginnaver(@RequestParam("code") String code, @RequestParam("state") String state, HttpServletResponse response) {
         try {
+            OAuthToken oAuthToken = usersls.getNaverToken(code, state, naverClinet_id, naverRedirect_uri , "XxT4MYfubz");
+            if (oAuthToken == null || oAuthToken.getAccess_token() == null) {
+                throw new RuntimeException("Failed to obtain access token from Naver.");
+            }
+
+            // Access Token을 사용하여 사용자 정보 요청
             NaverApi naverapi = usersls.getLoginAPI(oAuthToken.getAccess_token());
+            if (naverapi == null || naverapi.getResponse() == null) {
+                throw new RuntimeException("Failed to fetch user info from Naver.");
+            }
+
             Optional<Member> member = usersls.getNaverHost(naverapi);
-            response.sendRedirect("http://localhost:3000/getsnshostinfo/"+member.get().getUserid()+"/naver");
+            if (!member.isPresent()) {
+                throw new RuntimeException("Failed to get member information.");
+            }
+
+            response.sendRedirect("http://localhost:3000/getsnshostinfo/" + member.get().getUserid() + "/naver");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace(); // 로그에 오류 기록
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                response.getWriter().write("An error occurred: " + e.getMessage());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
-
-
     }
 
 
+    private String googleClinet_id="325806549360-rfnkgftjf45c468fs66jrf24k1o1ga8t.apps.googleusercontent.com";
+    private String gooleRedirect_uri ="http://localhost:8070/host/sns/googlelogin";
+    private String googleClientPw= "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";
+    @RequestMapping("/sns/googlestart")
+    public @ResponseBody String getgooleLogin(){
+        String a = "<script  type='text/javascript'>" +
+                "location.href='https://accounts.google.com/o/oauth2/v2/auth?"
+                +"client_id="+googleClinet_id+
+                "&redirect_uri="+gooleRedirect_uri+
+                "&response_type=code" +
+                "&scope=email profile"
+                +"';" +
+                "</script>";
+        return a;
+    }
 
+    @RequestMapping("/sns/googlelogin")
+    public void logingoole(@RequestParam("code") String code ,HttpServletResponse response) {
+        System.out.println(code);
+        OAuthToken oAuthToken = usersls.getGoogleToken(code,googleClinet_id, googleClientPw,gooleRedirect_uri);
+        GoogleApi googleapi = null;
+        try {
+            googleapi = usersls.getGoogleProfile(oAuthToken.getAccess_token());
+            if(googleapi == null) throw new SnsException("구글 로그인 실패");
+            Optional<Member> member = usersls.getGoogleMember(googleapi);
+            response.sendRedirect("http://localhost:3000/getsnshostinfo/"+member.get().getUserid()+"/google");
 
+        } catch (SnsException | IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Map<String, String>> deleteHost(@RequestParam String hostid) {
+        Map<String, String> result = new HashMap<>();
+
+        try {
+            hs.deleteHost(hostid); // 호스트와 관련된 멤버 삭제 및 호스트 삭제 수행
+            result.put("msg", "ok");
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            result.put("msg", "error");
+//            result.put("error", "회원 탈퇴 중 오류가 발생했습니다: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
 }

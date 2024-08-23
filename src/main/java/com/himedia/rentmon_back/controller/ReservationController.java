@@ -7,8 +7,10 @@ import com.himedia.rentmon_back.service.CouponService;
 import com.himedia.rentmon_back.service.ReservationService;
 import com.himedia.rentmon_back.util.PagingMj;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.himedia.rentmon_back.controller.SpaceController;
 
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +69,7 @@ public class ReservationController {
         Map<String, Object> map = reservationService.getMypageCouponList(userid);
         return ResponseEntity.ok(map);
     }
+
     @GetMapping("/getMypageUsedCouponList/{userid}")
     public ResponseEntity<Map<String, Object>> getMypageUsedCouponList(@PathVariable("userid") String userid, @RequestParam("page") int page) {
         Map<String, Object> map = new HashMap<>();
@@ -89,4 +92,21 @@ public class ReservationController {
 
         return ResponseEntity.ok(map);
     }
+  
+    @GetMapping("/findSseqByTitle")
+    public ResponseEntity<List<Reservation>> findSseqByTitle(@RequestParam("title") String title) {
+        try {
+            System.out.println("Received title: " + title);
+            int sseq = reservationService.findSseqByTitle(title);
+            System.out.println("Found sseq: " + sseq);
+            List<Reservation> reservations = reservationService.findReservationsBySseq(sseq);
+            System.out.println("Reservations: " + reservations);
+            return ResponseEntity.ok(reservations);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
 }

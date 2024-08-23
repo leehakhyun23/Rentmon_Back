@@ -87,7 +87,7 @@ public class UserController {
 
     @RequestMapping("/sns/naverlogin")
     public void loginnaver(@RequestParam("code") String code,@RequestParam("state") String state ,HttpServletResponse response){
-        OAuthToken oAuthToken = usersls.getNaverToken(code,state,naverClinet_id,naverRedirect_uri);
+        OAuthToken oAuthToken = usersls.getNaverToken(code,state,naverClinet_id,naverRedirect_uri,"wNH8RZ5hit");
         try {
             NaverApi naverapi = usersls.getLoginAPI(oAuthToken.getAccess_token());
             if(naverapi == null) throw new SnsException("네이버 로그인 실패");
