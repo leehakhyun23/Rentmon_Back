@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +45,7 @@ public class CouponService {
         if (couponOpt.isPresent()) {
             Coupon coupon = couponOpt.get();
 
-            if (coupon.getLimitdate().isBefore(LocalDate.now())) {
+            if (coupon.getLimitdatetime().isBefore(LocalDateTime.now())) {
                 throw new IllegalArgumentException("쿠폰의 유효기간이 지났습니다.");
             }
 
@@ -77,10 +76,10 @@ public class CouponService {
             coupon.setCouponstr(couponCode);
             coupon.setCouponTitle(issuedCoupon.getCouponTitle());
             coupon.setDiscount(issuedCoupon.getDiscount());
-            coupon.setLimitdate(issuedCoupon.getLimitDate());
+            coupon.setLimitdatetime(issuedCoupon.getLimitDateTime());
             coupon.setUseyn(true);
 
-            cr.save(coupon); // 쿠폰 저장
+            cr.save(coupon);
         }
     }
 }

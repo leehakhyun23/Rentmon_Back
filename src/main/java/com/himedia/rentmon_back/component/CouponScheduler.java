@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -18,7 +18,7 @@ public class CouponScheduler {
     public void expireCoupons() {
         List<Coupon> expiredCoupons = couponRepository.findAll()
                 .stream()
-                .filter(coupon -> coupon.getLimitdate().isBefore(LocalDate.now()))
+                .filter(coupon -> coupon.getLimitdatetime().isBefore(LocalDateTime.now()))
                 .toList();
 
         for (Coupon coupon : expiredCoupons) {
