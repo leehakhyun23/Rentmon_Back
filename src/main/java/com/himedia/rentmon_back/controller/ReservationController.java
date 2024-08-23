@@ -81,6 +81,14 @@ public class ReservationController {
         return ResponseEntity.ok(map);
     }
 
+    @GetMapping("/getReservationListbyDate")
+    public ResponseEntity<Map<String, Object>> getReservationListbyDate(@RequestParam("sseq") int sseq, @RequestParam("date") String date) {
+        Map<String, Object> map = new HashMap<>();
+        List<Reservation> list = reservationService.getReservationListbyDate(sseq, date);
+        map.put("reservationList", list);
+        return ResponseEntity.ok(map);
+    }
+
     @GetMapping("/findSseqByTitle")
     public ResponseEntity<List<Reservation>> findSseqByTitle(@RequestParam("title") String title) {
         try {
