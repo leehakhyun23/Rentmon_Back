@@ -16,7 +16,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
@@ -90,15 +89,14 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/space/getSpaceList")) return true;
         if(path.startsWith("/space")) return true;
         if(path.startsWith("/user/getCategoryList")) return true;
-        if(path.startsWith("/space/getSpaceList")) return true;
-        if(path.startsWith("/space")) return true;
-        if(path.startsWith("/user/getCategoryList")) return true;
 
+        if(path.startsWith("/icon_images")) return true;
         if(path.startsWith("/space_images")) return true;
-        if(path.startsWith("/review")) return true;
         if(path.startsWith("/profile_images")) return true;
         //예약관련
+        if(path.startsWith("/review")) return true;
         if(path.startsWith("/reservation")) return true;
+        if(path.startsWith("/zzim")) return true;
 
         //학현관련
         if(path.startsWith("/space/imgup")) return true;

@@ -32,16 +32,20 @@ public class Declaration {
     @Column(name = "reply")
     private String reply;
 
-    @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "replydate")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp replydate;
 
     @ManyToOne
-    @JoinColumn(name = "writer")
-    private Member writer;
+    @JoinColumn(name = "userid")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "sseq")
     private Space space;
+
+    @ManyToOne
+    @JoinColumn(name = "hostid")
+    private Host host;
 }

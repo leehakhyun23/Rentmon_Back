@@ -11,57 +11,32 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class SpaceDTO {
-    //Space 테이블 조회
+    private Space space;
+    private List<Inquiry> inquiry;
+    private List<Review> review;
+    private List<Hashtag> hashtag;
+    private int reviewCount;
+    private int rating;
+    private int zzimCount;
 
-    private int sseq;
-    private int price;
-    private String title;
-    private String subtitle;
-    private String content;
-    private int starttime;
-    private int endtime;
-    private String caution;
-    private String zipcode;
-    private String province;
-    private String town;
-    private String village;
-    private String addressdetail;
-    private int mintime;
-    private int personnal;
-    private int maxpersonnal;
-    private Timestamp created_at;
-
-    //ManyToOne으로 참조되는 데이터
-    private String hostid;
-    private int cnum;
-
-    // spaceimage 테이블
-    private List<String> imageNames;    //SpaceImage의 realName 목록
-
-    public static SpaceDTO fromEntity(Space space) {
-        SpaceDTO dto = new SpaceDTO();
-        dto.setSseq(space.getSseq());
-        dto.setAddressdetail(space.getAddressdetail());
-        dto.setCaution(space.getCaution());
-        dto.setContent(space.getContent());
-        dto.setCreated_at(space.getCreated_at());
-        dto.setEndtime(space.getEndtime());
-        dto.setMaxpersonnal(space.getMaxpersonnal());
-        dto.setPrice(space.getPrice());
-        dto.setProvince(space.getProvince());
-        dto.setStarttime(space.getStarttime());
-        dto.setSubtitle(space.getSubtitle());
-        dto.setTitle(space.getTitle());
-        dto.setTown(space.getTown());
-        dto.setVillage(space.getVillage());
-        dto.setZipcode(space.getZipcode());
-
-
-        dto.setCnum(space.getCategory() != null ? space.getCategory().getCnum() : 0);
-        dto.setHostid(space.getHost() != null ? space.getHost().getHostid() : null);
-
-        return dto;
+    public SpaceDTO(Space space, int allReivewCount, int allReivewRateCount , int zzimCount , List<Hashtag> hashtag) {
+        this.space = space;
+        this.reviewCount = allReivewCount;
+        this.rating = allReivewRateCount;
+        this.zzimCount = zzimCount;
+        this.hashtag = hashtag;
     }
+
+    public SpaceDTO(Space space, List<Inquiry> inquiry, List<Review> review, List<Hashtag> hashtag, int reviewCount, int rating, int zzimCount) {
+        this.space = space;
+        this.inquiry = inquiry;
+        this.review = review;
+        this.hashtag = hashtag;
+        this.reviewCount = reviewCount;
+        this.rating = rating;
+        this.zzimCount = zzimCount;
+
+    }
+
 }

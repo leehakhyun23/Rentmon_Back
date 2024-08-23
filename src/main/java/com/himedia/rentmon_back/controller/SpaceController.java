@@ -1,6 +1,8 @@
 package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.dto.FnumDTO;
+import com.himedia.rentmon_back.dto.SpaceAndReviewRaterDTO;
+import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.dto.SpaceImageDTO;
 import com.himedia.rentmon_back.dto.SpaceUpdateRequest;
 import com.himedia.rentmon_back.entity.Host;
@@ -28,29 +30,38 @@ public class SpaceController {
 
     private final SpaceService spaceService;
 
-    @GetMapping("/getSpaceList/{page}")
-    public ResponseEntity<List<Space>> getSpaceList(@PathVariable int page) {
-        try{
-            int size = 6;
-            List<Space> spaceList = spaceService.getSpaceList(page, size);
+    @GetMapping("/getSpaceList")
+    public ResponseEntity<List<SpaceDTO>> getSpaceList(
+            @RequestParam int page,
+            @RequestParam(required = false) int cnum,
+            @RequestParam(required = false) String searchword,
+            @RequestParam(required = false) String province,
+            @RequestParam(required = false) String reservestart,
+            @RequestParam(required = false) String reserveend,
+            @RequestParam(required = false) int sortOption
+            ) {
+
+        try {
+            int size = 6;  // 페이지당 표시할 공간의 수
+            List<SpaceDTO> spaceList = spaceService.getSpaceList(page, size, cnum, searchword, province, reservestart, reserveend, sortOption);
             return ResponseEntity.ok(spaceList);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
-
     @GetMapping("/getreserve")
     public Reservation getreserve(@RequestParam("userid") String userid) {
         return spaceService.findByUserid(userid);
 
     }
 
+
     @GetMapping("/getSpace/{sseq}")
-    public ResponseEntity<Space> getSpace(@PathVariable("sseq") int sseq) {
+    public ResponseEntity<SpaceDTO> getSpace(@PathVariable("sseq") int sseq) {
         try{
-            Space space = spaceService.getSpace(sseq);
-            return ResponseEntity.ok(space);
+            SpaceDTO spaceDTO = spaceService.getSpace(sseq);
+            return ResponseEntity.ok(spaceDTO);
         } catch(Exception e){
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

@@ -11,9 +11,10 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    List<Member> findByUserid(String username);
+    Member findByUserid(String userid);
     Optional<Member> findByUseridAndRole(String username, String role);
 
     @Query("SELECT m.mseq FROM Member m WHERE m.userid = :userid")
     int findByUseridOne(@Param("userid") String userid);
+
 }

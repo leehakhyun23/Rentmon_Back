@@ -94,6 +94,7 @@ public class UserSnsLoginService {
             StringBuilder sb = new StringBuilder();
             while ((line = br.readLine()) != null) {
                 sb.append(line);
+                System.out.println(line);
             }
             ObjectMapper mapper = new ObjectMapper();
             kakaoProfile = mapper.readValue(sb.toString(), KakaoProfile.class);
@@ -158,9 +159,14 @@ public class UserSnsLoginService {
         return member;
     }
 
-    public OAuthToken getNaverToken(String code, String state, String naverClinetId, String naverRedirectUri) {
+    public OAuthToken getNaverToken(String code, String state, String naverClinetId, String naverRedirectUri , String secreatkey) {
+        System.out.println("Received code: " + code);
+        System.out.println("Received state: " + state);
+        System.out.println("Received naverClinetId: " + naverClinetId);
+        System.out.println("Received naverRedirectUri: " + naverRedirectUri);
         OAuthToken oAuthToken = null;
         try {
+            System.out.println("kljsflkjdslkfjdlks");
             URL url= new URL("https://nid.naver.com/oauth2.0/token");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -168,7 +174,7 @@ public class UserSnsLoginService {
 
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code").append("&client_id=")
-                    .append(naverClinetId).append("&client_secret=wNH8RZ5hit")
+                    .append(naverClinetId).append("&client_secret=").append(secreatkey)
                     .append("&redirect_uri=").append(naverRedirectUri).append("&code=").append(code)
                     .append("&state=").append(state);
 
