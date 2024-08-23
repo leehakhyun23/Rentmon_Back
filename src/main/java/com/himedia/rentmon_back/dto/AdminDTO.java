@@ -1,9 +1,14 @@
 package com.himedia.rentmon_back.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class AdminDTO {
@@ -11,32 +16,124 @@ public class AdminDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class ResponseHost {
-        private String hostid;
-        private String name;
-        private String category;
-        private String fee;
-        private int price;
-        private String phone;
-        private String province;
-        private String town;
-        private String village;
-        private String addressDetail;
-        private int declaCount;
-//        private boolean isShow;
+    public static class ResponseDashBoard {
+        private List<ResponseCategory> category;
+        private ResponseMember member;
+        private List<ResponseReservation> reservation;
     }
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
+    public static class ResponseReservation {
+        private int payment;
+        private int count;
+        private String date;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseCategory {
+        private String name;
+        private Long value;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseMember {
+        private int totalMember;
+        private int userCount;
+        private int hostCount;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseC {
+        private int num;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseD {
+        private int num;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseUser {
+        private String userid;
+        private String name;
+        private String phone;
+        private String email;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp createdAt;
+        private int declaCount;
+        private boolean isLogin;
+        private String gname;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseHost {
+        private String hostid;
+        private String nickname;
+        private String phone;
+        private String email;
+        private List<SpaceDTO> spaces;
+        private boolean disable;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class SpaceDTO {
+        private String category;
+        private String title;
+        private Integer price;
+        private String province;
+        private String town;
+        private String village;
+        private String addressdetail;
+        private int declaCount;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class RequestCoupon {
+        private List<String> userids;
+        private LocalDateTime limitDateTime;
+        private Integer discount;
+        private String couponTitle;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class ResponseDeclaration {
         private int dseq;
-        private String reply;
-        private String reporter;
         private String title;
-//        private String reported;
+        private String content;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-        private Timestamp created_at;
+        private Timestamp createdAt;
+        private String reply;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp replyDate;
     }
 }

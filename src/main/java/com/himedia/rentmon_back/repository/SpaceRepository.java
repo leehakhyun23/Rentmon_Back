@@ -5,6 +5,7 @@ import com.himedia.rentmon_back.entity.Space;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -35,7 +36,6 @@ public interface SpaceRepository extends JpaRepository<Space, Integer>, JpaSpeci
 
 
     Optional<Space> findBySseq(Integer sseq);
-
     @Query("SELECT s.sseq FROM Space s WHERE s.host = :host")
     List<Integer> findSseqsByHostId(@Param("host") Host host);
 

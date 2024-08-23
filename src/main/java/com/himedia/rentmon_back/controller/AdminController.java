@@ -1,81 +1,111 @@
-//package com.himedia.rentmon_back.controller;
+package com.himedia.rentmon_back.controller;
+
+import com.himedia.rentmon_back.dto.AdminDTO;
+import com.himedia.rentmon_back.entity.Coupon;
+import com.himedia.rentmon_back.service.*;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/admin")
+@RequiredArgsConstructor
+public class AdminController {
+    private final AdminService adminService;
+    private final MemberService memberService;
+    private final CouponService couponService;
+    private final SpaceService spaceService;
+    private final ReservationService reservationService;
+
+    @GetMapping("/main")
+    public ResponseEntity<AdminDTO.ResponseDashBoard> getMainInfo(@RequestParam String period) {
+        List<AdminDTO.ResponseCategory> category = spaceService.findAll();
+        AdminDTO.ResponseMember memberStatistics = memberService.getMemberStatistics();
+        List<AdminDTO.ResponseReservation> reservations = reservationService.getReservationsByPeriod(period);
+
+        AdminDTO.ResponseDashBoard dashBoard = AdminDTO.ResponseDashBoard.builder()
+                .category(category)
+                .member(memberStatistics)
+                .reservation(reservations)
+                .build();
+
+        return ResponseEntity.ok(dashBoard);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<Page<AdminDTO.ResponseUser>> getUserList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+            @RequestParam(value = "searchType", required = false) String searchType, @RequestParam(value = "keyword", required = false) String keyword) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<AdminDTO.ResponseUser> userList = adminService.getUserList(pageable, searchType, keyword);
+
+        if(userList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(userList);
+    }
+
+    @PutMapping("/islogin")
+    public ResponseEntity<Integer> userIsLogin(@RequestBody List<String> userids) {
+        int updatedCount = adminService.updateUserIsLoginStatus(userids);
+
+        return ResponseEntity.ok(updatedCount);
+    }
+
+    @PostMapping("/issuedcoupon")
+    public ResponseEntity<String> createdCoupon(@RequestBody AdminDTO.RequestCoupon issuedCoupon) {
+        couponService.createAndAssignCoupons(issuedCoupon);
+
+        return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/coupon")
+    public ResponseEntity<Page<Coupon>> getCouponList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Coupon> couponList = adminService.getCouponList(pageable);
+
+        if(couponList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(couponList);
+    }
+
+    @GetMapping("/host")
+    public ResponseEntity<Page<AdminDTO.ResponseHost>> getHostList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+            @RequestParam(value = "searchType", required = false) String searchType, @RequestParam(value = "keyword", required = false) String keyword) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("hostid").ascending());
+        Page<AdminDTO.ResponseHost> hostList = adminService.getHostList(pageable, searchType, keyword);
+
+        if (hostList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(hostList);
+    }
+
+//    @PutMapping("/host")
+//    public ResponseEntity<Integer> hostIsLogin(@RequestBody List<String> hostids) {
+//        int updatedCount = adminService.updateHostIsLoginStatus(hostids);
 //
-//import com.himedia.rentmon_back.dto.AdminHostDTO;
-//import com.himedia.rentmon_back.dto.DeclarationDTO;
-//import com.himedia.rentmon_back.entity.Inquiry;
-//import com.himedia.rentmon_back.entity.User;
-//import com.himedia.rentmon_back.service.AdminService;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//import java.util.List;
-//
-//@RestController
-//@RequestMapping("/admin")
-//@RequiredArgsConstructor
-//public class AdminController {
-//    @Autowired
-//    private final AdminService adminService;
-//
-//    @GetMapping("/user")
-//    public ResponseEntity<List<User>> getUserList() {
-//        List<User> userList = adminService.getUserList();
-//
-//        if(userList.isEmpty()) {
-//            return ResponseEntity.noContent().build();
-//        }
-//
-//        return ResponseEntity.ok(userList);
+//        return ResponseEntity.ok(updatedCount);
 //    }
-//
-////    @GetMapping("/host")
-////    public ResponseEntity<List<AdminHostDTO>> getHostList() {
-////        List<AdminHostDTO> hostList = adminService.getHostList();
-////
-////        if (hostList.isEmpty()) {
-////            return ResponseEntity.noContent().build();
-////        }
-////
-////        return ResponseEntity.ok(hostList);
-////    }
-//
-//    @GetMapping("/inquiry")
-//    public ResponseEntity<List<Inquiry>> getInquiryList() {
-//        List<Inquiry> inquiryList = adminService.getInquiryList();
-//
-//        if (inquiryList.isEmpty()) {
-//            return ResponseEntity.noContent().build();
-//        }
-//
-//        return ResponseEntity.ok(inquiryList);
-//    }
-//
-//    @GetMapping("/declaration")
-//    public ResponseEntity<List<DeclarationDTO>> getDeclaration() {
-////        List<DeclarationDTO> declarationList = adminService.getDeclarationList();
-////
-////        if(declarationList.isEmpty()) {
-////            return ResponseEntity.noContent().build();
-////        }
-////
-////        return ResponseEntity.ok(declarationList);
-//        return ResponseEntity.ok(null);
-//    }
-//
-////    @GetMapping("/declarationview/{dseq}")
-////    public ResponseEntity<Declaration> getDeclaration(@PathVariable("dseq") int dseq) {
-////        Optional<Declaration> optional = adminService.getDeclaration(dseq);
-////
-////        if (optional.isPresent()) {
-////            Declaration declaration = optional.get();
-////
-////            return ResponseEntity.ok(declaration);
-////        } else {
-////            return ResponseEntity.noContent().build();
-////        }
-////    }
-//}
+
+    @GetMapping("/declaration")
+    public ResponseEntity<Page<AdminDTO.ResponseDeclaration>> getDeclarationList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AdminDTO.ResponseDeclaration> declarationList = adminService.getDeclarationList(pageable);
+
+        if (declarationList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(declarationList);
+    }
+}

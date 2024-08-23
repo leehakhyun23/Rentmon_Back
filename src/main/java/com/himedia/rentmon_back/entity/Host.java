@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,12 +37,12 @@ public class Host {
     @Column(name = "provider")
     private String provider;
 
-//    @Column(name = "snsid")
-//    private String snsid;
-
     @Column(name = "nickname")
     private String nickname;
 
+    @OneToMany(mappedBy = "host", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Space> spaces;
 
     public Host() {
         this.member = new Member();

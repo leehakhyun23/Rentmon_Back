@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "coupon")
@@ -17,16 +17,15 @@ public class Coupon {
     @Column(name = "cseq")
     private int cseq;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userid")
     private User user;
 
     @Column(name = "couponstr", nullable = false, length = 30)
     private String couponstr;
 
-
     @Column(name = "coupontitle", nullable = false, length = 50)
-    private String coupontitle;
+    private String couponTitle;
 
     @Column(name = "discount", nullable = false)
     private int discount;
@@ -34,7 +33,7 @@ public class Coupon {
     @Column(name = "limitdate", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp limitdate;
+    private LocalDateTime limitdate;
 
     @Column(name = "useyn", nullable = false, columnDefinition = "integer default 1")
     private boolean useyn;
