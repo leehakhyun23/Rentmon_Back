@@ -1,9 +1,12 @@
 package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.entity.Inquiry;
+import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.service.InquiryService;
+import com.himedia.rentmon_back.service.SpaceService;
 import com.himedia.rentmon_back.util.PagingMj;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class InquiryController {
     private final InquiryService is;
+    private final SpaceService ss;
 
     @GetMapping("/getInqueryList/{userid}")
     public ResponseEntity<Map<String, Object>> getInqueryList(@PathVariable String userid , @RequestParam("page") int page) {
@@ -53,4 +57,21 @@ public class InquiryController {
         is.deleteInquiry(iseq);
         return ResponseEntity.ok("ok");
     }
+
+    @GetMapping("/igetsseq")
+    public ResponseEntity<List<Inquiry>> getSseqsByHostid(@RequestParam("hostid") String hostid) {
+        try {
+            System.out.println("여기까진 되눈중~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            List<Integer> sseqs = ss.findSseqsByHostid(hostid);
+            System.out.println(sseqs + "--------------------------인쿼리 관련이세요 ------------------------------------------------");
+            List<Inquiry> inquirys = is.findInquirysBysseq(sseqs);
+            // 여기부분에 sseqs 과 관련된 모든 예약정보를 찾는 코드
+            System.out.println("아아아아아아아아아아아아아ㅏㅏㅣㅓㅙㅣㅑㅙㅔㅑ"+inquirys);
+            return ResponseEntity.ok(inquirys);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 }

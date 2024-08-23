@@ -99,5 +99,7 @@ public class ReservationService {
     public List<Reservation> findReservationsBySseq(int sseq) {
         return rr.findBySpaceSseq(sseq);
     }
+
+
 }
 

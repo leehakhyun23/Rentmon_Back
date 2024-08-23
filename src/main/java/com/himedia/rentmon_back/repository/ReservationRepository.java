@@ -47,4 +47,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
 
     List<Reservation> findBySpaceSseq(int sseq);
+
 }

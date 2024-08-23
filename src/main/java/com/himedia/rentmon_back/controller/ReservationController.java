@@ -5,6 +5,7 @@ import com.himedia.rentmon_back.entity.Coupon;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.service.CouponService;
 import com.himedia.rentmon_back.service.ReservationService;
+import com.himedia.rentmon_back.service.SpaceService;
 import com.himedia.rentmon_back.util.PagingMj;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,8 @@ import java.util.Map;
 public class ReservationController {
     private final ReservationService reservationService;
     private final CouponService cs;
+    private final SpaceService ss;
+
     @GetMapping("/listcount")
     public int listcount(@RequestParam("userid") String userid) {
         return reservationService.getReservation(userid);
@@ -98,6 +101,7 @@ public class ReservationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SpaceRepository extends JpaRepository<Space, Integer> {
+public interface SpaceRepository extends JpaRepository<Space, Integer>, JpaSpecificationExecutor<Space> {
     Optional<Space> findBysseq(int sseq);
 
 
@@ -34,6 +34,10 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
     List<Space> findByHost(Host host);
 
 
-    Space findBySseq(Integer sseq);
+    Optional<Space> findBySseq(Integer sseq);
+
+    @Query("SELECT s.sseq FROM Space s WHERE s.host = :host")
+    List<Integer> findSseqsByHostId(@Param("host") Host host);
+
 }
 
