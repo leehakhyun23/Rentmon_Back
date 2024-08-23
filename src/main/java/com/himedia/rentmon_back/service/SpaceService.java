@@ -27,9 +27,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.time.*;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import java.util.*;
@@ -407,5 +408,22 @@ public class SpaceService {
         } else {
             throw new RuntimeException("Space not found");
         }
+    }
+
+    // admin
+    public List<AdminDTO.ResponseCategory> findAll() {
+        return spaceRepository.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(
+                        space -> space.getCategory().getName(),
+                        Collectors.counting()
+                ))
+                .entrySet()
+                .stream()
+                .map(entry -> AdminDTO.ResponseCategory.builder()
+                        .name(entry.getKey())
+                        .value(entry.getValue())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

@@ -126,7 +126,7 @@ public class UserSnsLoginService {
             user.setIslogin(true);
             user.setSnsid(joinkakaoMember.getUserid());
             user.setName(kakaoProfile.getProperties().getNickname());
-            user.setGnum(new Grade(1, "bronze", 0));
+            user.setGrade(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinkakaoMember);
         }
@@ -217,7 +217,7 @@ public class UserSnsLoginService {
             user.setIslogin(true);
             user.setProvider("naver");
             user.setEmail(naverapi.getResponse().getEmail());
-            user.setGnum(new Grade(1, "bronze", 0));
+            user.setGrade(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinNaverMember);
         }
@@ -358,7 +358,7 @@ public class UserSnsLoginService {
             user.setIslogin(true);
             user.setProvider("google");
             user.setEmail(googleapi.getEmail());
-            user.setGnum(new Grade(1, "bronze", 0));
+            user.setGrade(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinGoogleMember);
         }

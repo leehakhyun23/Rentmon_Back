@@ -17,4 +17,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m.mseq FROM Member m WHERE m.userid = :userid")
     int findByUseridOne(@Param("userid") String userid);
 
+    // admin
+    int countByRoleNot(String role);
+    int countByRole(String role);
 }

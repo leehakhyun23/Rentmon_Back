@@ -59,7 +59,6 @@ public class MailSend {
         }
     }
 
-
     //임의의 6자리 양수를 반환
     public void makeRandomNumber(){
         Random r = new Random();
@@ -69,6 +68,4 @@ public class MailSend {
         }
         authNumber = Integer.parseInt(randomNumber);
     }
-
-
 }
