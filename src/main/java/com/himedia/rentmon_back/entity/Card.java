@@ -7,9 +7,6 @@ import lombok.*;
 @Table(name = "card")
 @Getter
 @Setter
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -117,7 +117,7 @@ public class ReservationService {
     // admin
     public List<AdminDTO.ResponseReservation> getReservationsByPeriod(String period) {
         Specification<Reservation> periodSpec = AdminSpecification.AdminReservationSpe.withinPeriod(period);
-        List<Reservation> reservations = rr.findAll(periodSpec);
+        List<Reservation> reservations = reservationRepository.findAll(periodSpec);
 
         return reservations.stream()
                 .collect(Collectors.groupingBy(
@@ -134,16 +134,12 @@ public class ReservationService {
 
     private String getGroupingKey(String period, Timestamp timestamp) {
         LocalDateTime dateTime = timestamp.toLocalDateTime();
-        switch (period.toLowerCase()) {
-            case "monthly":
-                return dateTime.getYear() + "-" + dateTime.getMonthValue();
-            case "weekly":
-                return dateTime.getYear() + "-W" + dateTime.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-            case "daily":
-                return dateTime.toLocalDate().toString();
-            default:
-                throw new IllegalArgumentException("Invalid period: " + period);
-        }
+        return switch (period.toLowerCase()) {
+            case "monthly" -> dateTime.getYear() + "-" + dateTime.getMonthValue();
+            case "weekly" -> dateTime.getYear() + "-W" + dateTime.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
+            case "daily" -> dateTime.toLocalDate().toString();
+            default -> throw new IllegalArgumentException("Invalid period: " + period);
+        };
     }
 }
 
