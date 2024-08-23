@@ -1,8 +1,11 @@
 package com.himedia.rentmon_back.service;
 
-import com.himedia.rentmon_back.dto.MypageUsedResevationDTO;
+import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.entity.Coupon;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.CouponRepository;
+import com.himedia.rentmon_back.repository.UserRepository;
+import com.himedia.rentmon_back.util.CreatedCoupon;
 import com.himedia.rentmon_back.util.PagingMj;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -12,8 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,6 +26,7 @@ import java.util.List;
 @Log4j2
 public class CouponService {
     private final CouponRepository cr;
+    private final UserRepository userRepository;
     private LocalDateTime now = LocalDateTime.now();
 
     public int getUsedAllcount(String userid) {
@@ -28,18 +34,14 @@ public class CouponService {
     }
 
     public List<Coupon> getUsedList(String userid, PagingMj paging) {
-        Pageable pageable = PageRequest.of(paging.getCurrentPage()-1 , paging.getRecordrow());
+        Pageable pageable = PageRequest.of(paging.getCurrentPage() - 1, paging.getRecordrow());
 
-        Page<Coupon> list = cr.getUsedList(userid, now ,pageable);
+        Page<Coupon> list = cr.getUsedList(userid, now, pageable);
         return list.getContent();
     }
-}
-
-
-    private final UserRepository userRepository;
 
     public Optional<Coupon> useCoupon(String couponstr) {
-        Optional<Coupon> couponOpt = couponRepository.findByCouponstr(couponstr);
+        Optional<Coupon> couponOpt = cr.findByCouponstr(couponstr);
 
         if (couponOpt.isPresent()) {
             Coupon coupon = couponOpt.get();
@@ -53,7 +55,7 @@ public class CouponService {
             }
 
             coupon.setUseyn(false);
-            couponRepository.save(coupon);
+            cr.save(coupon);
             return Optional.of(coupon);
         }
 
@@ -68,7 +70,7 @@ public class CouponService {
             String couponCode;
             do {
                 couponCode = CreatedCoupon.generateCoupon();
-            } while (couponRepository.existsByCouponstr(couponCode));
+            } while (cr.existsByCouponstr(couponCode));
 
             Coupon coupon = new Coupon();
             coupon.setUser(user);
@@ -78,7 +80,7 @@ public class CouponService {
             coupon.setLimitdate(issuedCoupon.getLimitDate());
             coupon.setUseyn(true);
 
-            couponRepository.save(coupon); // 쿠폰 저장
+            cr.save(coupon); // 쿠폰 저장
         }
     }
 }

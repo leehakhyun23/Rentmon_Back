@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.service;
 
+import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.dto.MypageUsedResevationDTO;
 import com.himedia.rentmon_back.entity.Coupon;
 import com.himedia.rentmon_back.entity.Reservation;
@@ -7,20 +8,27 @@ import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.repository.CouponRepository;
 import com.himedia.rentmon_back.repository.ReservationRepository;
 import com.himedia.rentmon_back.repository.ReviewRepository;
+import com.himedia.rentmon_back.specification.AdminSpecification;
 import com.himedia.rentmon_back.util.PagingMj;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.*;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.YearMonth;
+import java.time.temporal.IsoFields;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional

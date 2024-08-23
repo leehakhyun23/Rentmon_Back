@@ -26,11 +26,11 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "cseq")
-    private Card card;
+    private Card cseq;
 
     @ManyToOne
     @JoinColumn(name = "gnum")
-    private Grade grade;
+    private Grade gnum;
 
     @Column(name = "name")
     private String name;

@@ -42,8 +42,8 @@ public class AdminService {
                     .phone(user.getPhone())
                     .email(user.getEmail())
                     .createdAt(user.getCreatedAt())
-                    .isLogin(user.isLogin())
-                    .gname(user.getGrade() != null ? user.getGrade().getGname() : null)
+                    .isLogin(user.isIslogin())
+                    .gname(user.getGnum() != null ? user.getGnum().getGname() : null)
                     .declaCount(declaCount)
                     .build();
         });

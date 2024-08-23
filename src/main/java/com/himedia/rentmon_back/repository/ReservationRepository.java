@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer>, JpaSpecificationExecutor<Reservation> {
     @Query("SELECT r FROM Reservation r WHERE r.reservestart BETWEEN :now AND :threeHoursLater AND r.user.userid = :userid ORDER BY r.reservestart ASC")
@@ -46,7 +47,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
   
     @Query("SELECT s FROM Space s WHERE s.title = :title")
     Optional<Space> findByTitle(@Param("title") String title);
-
 
     List<Reservation> findBySpaceSseq(int sseq);
     // admin

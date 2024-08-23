@@ -15,7 +15,6 @@ import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.repository.UserRepository;
 import com.himedia.rentmon_back.util.ImageFileupload;
 import com.himedia.rentmon_back.util.MailSend;
-import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +27,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -126,7 +124,7 @@ public class UserSnsLoginService {
             user.setIslogin(true);
             user.setSnsid(joinkakaoMember.getUserid());
             user.setName(kakaoProfile.getProperties().getNickname());
-            user.setGrade(new Grade(1, "bronze", 0));
+            user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinkakaoMember);
         }
@@ -217,7 +215,7 @@ public class UserSnsLoginService {
             user.setIslogin(true);
             user.setProvider("naver");
             user.setEmail(naverapi.getResponse().getEmail());
-            user.setGrade(new Grade(1, "bronze", 0));
+            user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinNaverMember);
         }
@@ -358,7 +356,7 @@ public class UserSnsLoginService {
             user.setIslogin(true);
             user.setProvider("google");
             user.setEmail(googleapi.getEmail());
-            user.setGrade(new Grade(1, "bronze", 0));
+            user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinGoogleMember);
         }

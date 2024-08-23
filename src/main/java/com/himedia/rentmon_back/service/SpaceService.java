@@ -1,18 +1,13 @@
 package com.himedia.rentmon_back.service;
 
+import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.dto.FnumDTO;
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.dto.SpaceUpdateRequest;
 import com.himedia.rentmon_back.entity.*;
-import com.himedia.rentmon_back.entity.Reservation;
-import com.himedia.rentmon_back.entity.Space;
-import com.himedia.rentmon_back.entity.SpaceImage;
-import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.*;
 import com.himedia.rentmon_back.specification.SpaceSpecifications;
-import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,19 +15,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
