@@ -37,6 +37,11 @@ public class Inquiry {
     private Timestamp replydate;
 
     @ManyToOne
-    @JoinColumn(name = "icnum", nullable = false)
-    private InquiryCategory inquirycategory;
+    @JoinColumn(name = "userid")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name="sseq")
+    private Space space;
+
 }

@@ -13,8 +13,8 @@ import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.HostRepository;
 import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.repository.UserRepository;
+import com.himedia.rentmon_back.util.ImageFileupload;
 import com.himedia.rentmon_back.util.MailSend;
-import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +27,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,7 +40,7 @@ public class UserSnsLoginService {
     private final UserRepository ur;
     private final PasswordEncoder pe;
     private final MailSend ms;
-    private final ServletContext context;
+    private final ImageFileupload imgupload;
 
     public OAuthToken getKakaoToken(String code, String kakaoclinetId, String redirectUri) {
         OAuthToken token = new OAuthToken();
@@ -93,6 +92,7 @@ public class UserSnsLoginService {
             StringBuilder sb = new StringBuilder();
             while ((line = br.readLine()) != null) {
                 sb.append(line);
+                System.out.println(line);
             }
             ObjectMapper mapper = new ObjectMapper();
             kakaoProfile = mapper.readValue(sb.toString(), KakaoProfile.class);
@@ -121,9 +121,10 @@ public class UserSnsLoginService {
             user.setUserid(String.valueOf(kakaoProfile.getId()));
             user.setMseq(mseq);
             user.setProvider("kakao");
+            user.setIslogin(true);
             user.setSnsid(joinkakaoMember.getUserid());
             user.setName(kakaoProfile.getProperties().getNickname());
-            user.setGrade(new Grade(1, "bronze", 0));
+            user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinkakaoMember);
         }
@@ -138,7 +139,9 @@ public class UserSnsLoginService {
             joinkakaoMember.setUserid(String.valueOf(kakaoProfile.getId()));
             joinkakaoMember.setRole("host");
             joinkakaoMember.setPwd(pe.encode("kakao"));
-            mr.save(joinkakaoMember);
+            joinkakaoMember.setNickname(kakaoProfile.getProperties().getNickname());
+            joinkakaoMember = mr.save(joinkakaoMember);
+
 
             Host host = new Host();
             host.setHostid(String.valueOf(kakaoProfile.getId()));
@@ -146,6 +149,7 @@ public class UserSnsLoginService {
             host.setPwd(joinkakaoMember.getPwd());
             host.setNickname(kakaoProfile.getProperties().getNickname());
             host.setProvider("kakao");
+
             hr.save(host);
             member = Optional.of(joinkakaoMember);
         }
@@ -153,9 +157,14 @@ public class UserSnsLoginService {
         return member;
     }
 
-    public OAuthToken getNaverToken(String code, String state, String naverClinetId, String naverRedirectUri) {
+    public OAuthToken getNaverToken(String code, String state, String naverClinetId, String naverRedirectUri , String secreatkey) {
+        System.out.println("Received code: " + code);
+        System.out.println("Received state: " + state);
+        System.out.println("Received naverClinetId: " + naverClinetId);
+        System.out.println("Received naverRedirectUri: " + naverRedirectUri);
         OAuthToken oAuthToken = null;
         try {
+            System.out.println("kljsflkjdslkfjdlks");
             URL url= new URL("https://nid.naver.com/oauth2.0/token");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
@@ -163,7 +172,7 @@ public class UserSnsLoginService {
 
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code").append("&client_id=")
-                    .append(naverClinetId).append("&client_secret=wNH8RZ5hit")
+                    .append(naverClinetId).append("&client_secret=").append(secreatkey)
                     .append("&redirect_uri=").append(naverRedirectUri).append("&code=").append(code)
                     .append("&state=").append(state);
 
@@ -203,9 +212,10 @@ public class UserSnsLoginService {
             user.setMseq(joinNaverMember.getMseq());
             user.setName(naverapi.getResponse().getName());
             user.setSnsid(joinNaverMember.getUserid());
+            user.setIslogin(true);
             user.setProvider("naver");
             user.setEmail(naverapi.getResponse().getEmail());
-            user.setGrade(new Grade(1, "bronze", 0));
+            user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinNaverMember);
         }
@@ -224,7 +234,7 @@ public class UserSnsLoginService {
 
             Host host = new Host();
             host.setHostid(String.valueOf(joinNaverMember.getUserid()));
-//            host.setMseq(new Member(joinNaverMember.getMseq(), "", "", "", null));
+            host.setMseq(joinNaverMember.getMseq());
             host.setPwd(joinNaverMember.getPwd());
             host.setNickname(naverapi.getResponse().getNickname());
             host.setProvider("naver");
@@ -343,9 +353,10 @@ public class UserSnsLoginService {
             user.setMseq(joinGoogleMember.getMseq());
             user.setName(googleapi.getName());
             user.setSnsid(joinGoogleMember.getUserid());
+            user.setIslogin(true);
             user.setProvider("google");
             user.setEmail(googleapi.getEmail());
-            user.setGrade(new Grade(1, "bronze", 0));
+            user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinGoogleMember);
         }
@@ -364,7 +375,8 @@ public class UserSnsLoginService {
 
             Host host = new Host();
             host.setHostid(joinGoogleMember.getUserid());
-//            host.setMseq(new Member(joinGoogleMember.getMseq(), "", "", "", null));
+            host.setMseq(joinGoogleMember.getMseq());
+
             host.setPwd(joinGoogleMember.getPwd());
             host.setNickname(googleapi.getName());
             host.setProvider("google");
@@ -399,32 +411,19 @@ public class UserSnsLoginService {
         member.setPwd(pe.encode(userDTO.getPassword()));
         member = mr.save(member);
 
+        System.out.println("서비스 profileimg----------------------------------------------------------"+profileimg);
         User user = new User();
         user.setUserid(member.getUserid());
         user.setMseq(member.getMseq());
         user.setPhone(userDTO.getPhone());
-        user.setGrade(new Grade(1, "bronze", 0));
+        user.setIslogin(true);
+        user.setGnum(new Grade(1, "bronze", 0));
         user.setEmail(userDTO.getEmail());
         user.setName(userDTO.getName());
-        if(profileimg !=null) user.setProfileimg(saveFile(profileimg));
+        if(profileimg !=null) user.setProfileimg(imgupload.saveFile(profileimg , "/profile_images"));
         ur.save(user);
     }
 
-    private String saveFile(MultipartFile profileimg) {
-        String result = "";
-        String realpath = context.getRealPath("/profile_images");
-        Calendar today = Calendar.getInstance();
-        long dt = today.getTimeInMillis();
-        String filename = profileimg.getOriginalFilename();
-        String fn1 = filename.substring(0, filename.indexOf(".") );
-        String fn2 = filename.substring(filename.indexOf(".") );
-        String uploadPath = realpath + "/" + fn1 + dt + fn2;
-        try {
-            profileimg.transferTo( new File(uploadPath) );
-            result = fn1 + dt + fn2;
-        } catch (IllegalStateException | IOException e) {e.printStackTrace();}
-        return result;
-    }
 
     public void insertInterest(List<Integer> category, String station, String userid) {
         User user = ur.findByUserid(userid);

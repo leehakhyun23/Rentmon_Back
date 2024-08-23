@@ -8,6 +8,8 @@ import com.himedia.rentmon_back.security.util.CustomJWTException;
 import com.himedia.rentmon_back.security.util.JWTUtil;
 import com.himedia.rentmon_back.util.TokenRefreshUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,7 +45,14 @@ public class MemberService {
        return Map.of("accessToken", newAccessToken, "refreshToken", newRefreshToken);
     }
 
-    public void insertMember(Member member){
+    public int insertMember(Member member){
+        return memberRepository.save(member).getMseq();
+    }
+
+    public void updatepassword(String userid, String password) {
+        Member member = memberRepository.findByUseridAndRole(userid, "user").get();
+        PasswordEncoder ps = new BCryptPasswordEncoder();
+        member.setPwd(ps.encode(password));
         memberRepository.save(member);
     }
 

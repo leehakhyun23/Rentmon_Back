@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 
@@ -12,6 +13,7 @@ import java.sql.Timestamp;
 @Table(name = "user")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class User {
     @Id
@@ -24,11 +26,11 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "cseq")
-    private Card card;
+    private Card cseq;
 
     @ManyToOne
     @JoinColumn(name = "gnum")
-    private Grade grade;
+    private Grade gnum;
 
     @Column(name = "name")
     private String name;
@@ -61,7 +63,7 @@ public class User {
     private String snsid;
 
     @Column(name = "islogin", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
-    private boolean isLogin;
+    private boolean islogin;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)

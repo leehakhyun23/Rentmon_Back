@@ -1,13 +1,11 @@
 package com.himedia.rentmon_back.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "coupon")
@@ -33,9 +31,9 @@ public class Coupon {
     private int discount;
 
     @Column(name = "limitdate", nullable = false)
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="Asia/Seoul")
-    private LocalDate limitdate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    private LocalDateTime limitdate;
 
     @Column(name = "useyn", nullable = false, columnDefinition = "integer default 1")
     private boolean useyn;

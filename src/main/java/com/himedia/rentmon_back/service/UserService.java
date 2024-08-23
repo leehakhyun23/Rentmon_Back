@@ -1,11 +1,14 @@
 package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
+import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.*;
+import com.himedia.rentmon_back.util.ImageFileupload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +26,9 @@ public class UserService {
     private final ZzimRepositroy zr;
     private final InquiryRepository ir;
 
+    private final ImageFileupload imgf;
+
+
     public User getUserInfo(String userid) {
         return ur.findByUserid(userid);
     }
@@ -34,9 +40,32 @@ public class UserService {
         menus.put("reservCount",rr.findByUseridCount(userid ,now));
         menus.put("usesapceCount",rr.findByUseridWithusedCount(userid ,now));
         menus.put("zzimCount",zr.findByUseridCount(userid));
-//        menus.put("inquiryCount", ir.findByUseridCount(userid));
-
-
+        menus.put("inquiryCount", ir.countByUserUserid(userid));
         return menus;
     }
+
+    public void setProfileimg(String userid, MultipartFile profileimg) {
+        User user = ur.findByUserid(userid);
+        if(user.getProfileimg() != null) imgf.removeFile(user.getProfileimg(), "/profile_images");
+        user.setProfileimg(null);
+        if (profileimg != null ) {
+            user.setProfileimg(imgf.saveFile(profileimg , "/profile_images"));
+        }
+        ur.save(user);
+
+    }
+
+    public void updatename(String userid, String name) {
+        User user = ur.findByUserid(userid);
+        user.setName(name);
+        ur.save(user);
+    }
+
+    public void updatephone(String userid, String phone) {
+        User user = ur.findByUserid(userid);
+        user.setPhone(phone);
+        ur.save(user);
+    }
+
+
 }

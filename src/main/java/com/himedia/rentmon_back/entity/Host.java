@@ -2,9 +2,8 @@ package com.himedia.rentmon_back.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 
 import java.util.List;
 
@@ -21,11 +20,15 @@ public class Host {
     @Column(name = "pwd", nullable = false, length = 1000)
     private String pwd;
 
-    @Column(name = "phone", nullable = false, length = 20)
+//    @Column(name = "name", updatable = false, length = 20)
+//    private String name;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "phone")
     private String phone;
 
-    @Column(name = "email", nullable = false, length = 50)
-    private String email;
 
     @ManyToOne
     @JoinColumn(name = "mseq")
@@ -41,7 +44,11 @@ public class Host {
     @JsonManagedReference
     private List<Space> spaces;
 
-    public void setMseq(int mseq) {
-        this.member.setMseq(mseq);
+    public Host() {
+        this.member = new Member();
     }
+
+    public void setMseq(int mseq) {this.member.setMseq(mseq);}
+
+
 }

@@ -10,10 +10,12 @@ public class KakaoProfile {
 	private String connected_at;
 	private Properties properties;
 	private KakaoAccount kakao_account;
+	private String email;
 
 	@Data
 	public static class Properties {
 		private String nickname;
+		private String email;
 		private String profile_image;
 		private String thumbnail_image;
 	}
@@ -22,9 +24,14 @@ public class KakaoProfile {
 	public static class KakaoAccount {
 		private Boolean profile_nickname_needs_agreement;
 		private Boolean profile_image_needs_agreement;
+		private Boolean email_needs_agreement;
+		private Boolean is_email_valid;
+		private Boolean is_email_verified;
 		private Profile profile;
-		private Boolean has_email;  // 이메일 제공 동의 여부
-		private String email;       // 실제 이메일
+		private Boolean has_email;
+		private String email;
+
+
 
 		@Data
 		public static class Profile {

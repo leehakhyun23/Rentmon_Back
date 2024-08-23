@@ -11,6 +11,8 @@ import com.himedia.rentmon_back.service.HostService;
 import com.himedia.rentmon_back.service.MemberService;
 import com.himedia.rentmon_back.util.TokenRefreshUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,20 +27,23 @@ public class MemberController {
     private final CustomSecurityService customSecurityService;
     private final MemberService ms;
     private final HostService hs;
-    CustomSecurityConfig cc;
+    private final CustomSecurityConfig cc;
 
     @GetMapping("/refresh/{refreshToken}")
     public Map<String, Object> refresh( @RequestHeader("Authorization") String authHeader, @PathVariable("refreshToken") String refreshToken) throws CustomJWTException {
         return ms.refreshToken(authHeader , refreshToken);
     }
 
-    @PostMapping("/join")
-    public HashMap<String, Object> join( @RequestBody Member member){
-        HashMap<String, Object> result = new HashMap<String, Object>();
-        PasswordEncoder pe = cc.passwordEncoder();
-        member.setPwd( pe.encode(member.getPwd()) );
-        ms.insertMember(member);
-        result.put("msg", "ok");
-        return result;
-    }
+//    @PostMapping("/join")
+//    public Map<String, Object> join(@RequestBody Member member){
+//        Map<String, Object> result = new HashMap<>();
+//        PasswordEncoder pe = cc.passwordEncoder();
+//        member.setPwd( pe.encode(member.getPwd()) );
+//        int mseq = ms.insertMember(member);
+//        result.put("msg", "ok");
+//        result.put("mseq", mseq);
+//        return result;
+//    }
+
+    
 }

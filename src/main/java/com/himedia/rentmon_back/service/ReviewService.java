@@ -1,17 +1,19 @@
 package com.himedia.rentmon_back.service;
 
-import com.himedia.rentmon_back.dto.ReviewDTO;
+import com.himedia.rentmon_back.entity.Inquiry;
 import com.himedia.rentmon_back.entity.Review;
-import com.himedia.rentmon_back.entity.ReviewImage;
 import com.himedia.rentmon_back.repository.ReviewImageRepository;
 import com.himedia.rentmon_back.repository.ReviewRepository;
+import com.himedia.rentmon_back.util.PagingMj;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,27 +23,35 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewImageRepository reviewImageRepository;
 
-    public void InsertReview(ReviewDTO reviewDTO) {
+    public Review InsertReview(Review review) {
         //Review Entity 내용 추출 후 review 저장
-        Review review = ReviewDTO.toEntity(reviewDTO);
         Review savedReview = reviewRepository.save(review);
-        int rseq = savedReview.getRseq();
 
-        // Images를 추출해서 reviewImage에 save
-        for (ReviewImage reviewImage : reviewDTO.getImages()) {
-            reviewImageRepository.save(reviewImage);
+        // 리뷰와 관련된 이미지를 저장
+        if (review.getImages() != null) {
+            review.getImages().forEach(image -> {
+                image.setReview(savedReview);
+                reviewImageRepository.save(image);
+            });
         }
+        return savedReview;
     }
 
-    public List<ReviewDTO> getReviewList(int sseq) {
+    public List<Review> getReviewList(int sseq) {
         // 특정 sseq 값으로 리뷰 리스트를 조회
-        List<Review> reviews = reviewRepository.findBySpaceSseq(sseq);
+        List<Review> reviews = reviewRepository.findBySpaceSseqOrderByRseqDesc(sseq);
 
-        // 각 Review를 ReviewDTO로 변환
-        return reviews.stream().map(review -> {
-            ReviewDTO dto = ReviewDTO.fromEntity(review);
-            dto.setImages(review.getImages()); // Review에 연결된 ReviewImage 리스트를 설정
-            return dto;
-        }).collect(Collectors.toList());
+        return reviews;
+    }
+
+    public int getReviewALlCount(int sseq) {
+        return reviewRepository.countBySpaceSseq(sseq);
+
+    }
+
+    public List<Review> getReviewListwithPage(int sseq, PagingMj paging) {
+        Pageable pageable = PageRequest.of(paging.getCurrentPage()-1, paging.getRecordrow() , Sort.by("rseq").descending());
+        Page<Review> list = reviewRepository.findBySpaceSseq(sseq, pageable);
+        return list.getContent();
     }
 }

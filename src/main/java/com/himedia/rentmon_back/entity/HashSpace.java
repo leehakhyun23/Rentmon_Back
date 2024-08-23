@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,11 +20,12 @@ public class HashSpace {
     @Column(name = "hsseq")
     private int hsseq;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "sseq")
+    @JsonBackReference
     private Space sseq;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "hseq")
-    private List<Hashtag> hseq;
+    private Hashtag hseq;
 }

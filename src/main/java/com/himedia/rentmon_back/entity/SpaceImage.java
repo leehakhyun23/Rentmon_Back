@@ -21,7 +21,7 @@ public class SpaceImage {
 
     @ManyToOne
     @JoinColumn(name = "sseq")
-    @JsonIgnore
+    @JsonBackReference
     private Space space;
 
     @Column(name = "originame")
