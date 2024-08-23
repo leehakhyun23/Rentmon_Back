@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @Table(name = "space")
 @Getter
 @Setter
-@Data
 public class Space {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
