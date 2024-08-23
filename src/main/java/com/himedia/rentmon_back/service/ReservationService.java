@@ -29,6 +29,7 @@ public class ReservationService {
     private final ReservationRepository rr;
     private final ReviewRepository reviewr;
     private final CouponRepository cp;
+    private final ReservationRepository reservationRepository;
     private LocalDateTime now = LocalDateTime.now();
 
     public int getReservation(String userid) {
@@ -42,38 +43,38 @@ public class ReservationService {
 
     public List<Reservation> getReservationAllList(String userid, String year, String month) {
         int parsedYear = Integer.parseInt(year);
-        Month parsedMonth =  Month.of(Integer.parseInt(month));
+        Month parsedMonth = Month.of(Integer.parseInt(month));
 
-        YearMonth yearMonth = YearMonth.of(parsedYear,parsedMonth);
+        YearMonth yearMonth = YearMonth.of(parsedYear, parsedMonth);
         LocalDateTime startTime = yearMonth.atDay(1).atStartOfDay();
-        LocalDateTime endTime = yearMonth.atEndOfMonth().atTime(23,59,59);
+        LocalDateTime endTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
 
 
-        return rr.getReservationAllList(startTime , endTime , userid);
+        return rr.getReservationAllList(startTime, endTime, userid);
     }
 
     public Page<Reservation> getReservationList(String userid, PagingMj page) {
-        Pageable pageable = PageRequest.of(page.getCurrentPage()-1 , page.getRecordrow());
+        Pageable pageable = PageRequest.of(page.getCurrentPage() - 1, page.getRecordrow());
         return rr.getReservaionListAll(userid, pageable);
     }
 
     public int getCountAll(String userid) {
-        return rr.getCountAll(userid , now);
+        return rr.getCountAll(userid, now);
     }
 
     public int getUsedAllcount(String userid) {
-        return rr.getUsedAllcount(userid ,now);
+        return rr.getUsedAllcount(userid, now);
     }
 
     public List<MypageUsedResevationDTO> getUsedList(String userid, PagingMj page) {
         List<MypageUsedResevationDTO> res = new ArrayList<>();
-        Pageable pageable = PageRequest.of(page.getCurrentPage()-1, page.getRecordrow());
-        List<Reservation> reservations = rr.getUsedReservaion(userid , pageable ,now).getContent();
+        Pageable pageable = PageRequest.of(page.getCurrentPage() - 1, page.getRecordrow());
+        List<Reservation> reservations = rr.getUsedReservaion(userid, pageable, now).getContent();
 
-        for( Reservation reserve : reservations){
+        for (Reservation reserve : reservations) {
             MypageUsedResevationDTO mdto = new MypageUsedResevationDTO(reserve,
-                    reviewr.getBooleanWrite(userid,reserve.getSpace().getSseq()),
-                    reviewr.getRevewRate(userid,reserve.getSpace().getSseq()));
+                    reviewr.getBooleanWrite(userid, reserve.getSpace().getSseq()),
+                    reviewr.getRevewRate(userid, reserve.getSpace().getSseq()));
             res.add(mdto);
         }
         return res;
@@ -83,8 +84,14 @@ public class ReservationService {
         Map<String, Object> map = new HashMap<>();
         int usewillcoupon = cp.findByUseridCount(userid, now);
         List<Coupon> coupons = cp.findByUseridWilluse(userid, now);
-        map.put("list",coupons);
+        map.put("list", coupons);
         map.put("count", usewillcoupon);
         return map;
+    }
+
+    public List<Reservation> getReservationListbyDate(int sseq, String date) {
+
+        return reservationRepository.getReservationListbyDate(sseq, date);
+
     }
 }

@@ -39,4 +39,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     @Query("select r from Reservation r where r.user.userid = :userid AND r.reserveend < :now")
     Page<Reservation> getUsedReservaion(String userid, Pageable pageable, LocalDateTime now);
+
+    @Query("SELECT r FROM Reservation r WHERE r.space.sseq = :sseq AND FUNCTION('DATE', r.reservestart) = :date")
+    List<Reservation> getReservationListbyDate(int sseq, String date);
 }

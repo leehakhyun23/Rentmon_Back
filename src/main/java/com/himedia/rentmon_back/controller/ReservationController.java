@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +76,17 @@ public class ReservationController {
         List<Coupon> list = cs.getUsedList(userid, paging);
         map.put("list", list);
         map.put("paging",paging);
+        return ResponseEntity.ok(map);
+    }
+
+    @GetMapping("/getReservationListbyDate")
+    public ResponseEntity<Map<String, Object>> getReservationListbyDate(@RequestParam("sseq") int sseq, @RequestParam("date") String date) {
+        Map<String, Object> map = new HashMap<>();
+
+        List<Reservation> reservationList = reservationService.getReservationListbyDate(sseq, date);
+
+        map.put("reservationList", reservationList);
+
         return ResponseEntity.ok(map);
     }
 }
