@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.repository;
 
+import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Space;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,11 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface SpaceRepository extends JpaRepository<Space, Integer> {
-    Optional<Space> findBySseq(int sseq);
+    Optional<Space> findBysseq(int sseq);
 
     @Query("select s from Space s order by s.created_at desc ")
     Page<Space> getSpaceRecent(Pageable pageable);
@@ -22,4 +24,13 @@ public interface SpaceRepository extends JpaRepository<Space, Integer> {
 
     @Query("select s from Space s where s.category.cnum = :cnum order by s.created_at desc ")
     Page<Space> getCategoryList(Pageable pageable, int cnum);
+
+    @Query("SELECT DISTINCT s.title FROM Space s WHERE s.host = :host")
+    List<String> findDistinctTitlesByHost(@Param("host") Host host);
+
+    List<Space> findByHost(Host host);
+
+
+    Space findBySseq(Integer sseq);
 }
+
