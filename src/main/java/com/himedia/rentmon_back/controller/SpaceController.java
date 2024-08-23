@@ -4,6 +4,8 @@ import com.himedia.rentmon_back.dto.FnumDTO;
 import com.himedia.rentmon_back.dto.SpaceAndReviewRaterDTO;
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.dto.SpaceImageDTO;
+import com.himedia.rentmon_back.dto.SpaceUpdateRequest;
+import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.service.SpaceService;
@@ -18,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -84,8 +86,6 @@ public class SpaceController {
     }
     try {
         // sseq와 numbers 출력
-        System.out.println("Received sseq: " + sseq);
-        System.out.println("Received numbers: " + String.join(", ", numbers));
         spaceService.insertfnum(request);
         return null;
     } catch (Exception e) {
@@ -143,9 +143,80 @@ public class SpaceController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/spacename")
+    public ResponseEntity<List<String>> getTitlesByHostid(@RequestParam("hostid") String hostid) {
+        try {
+            List<String> titles = spaceService.findTitlesByHostid(hostid);
+            return ResponseEntity.ok(titles);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
-   
+    @GetMapping("/spaces")
+    public ResponseEntity<List<Space>> getSpacesByHostid(@RequestParam("hostid") String hostid) {
+        try {
+            List<Space> spaces = spaceService.spaceList(hostid);
 
+            if (spaces.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            System.out.println(spaces);
+            return ResponseEntity.ok(spaces);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).build();
+        }
+    }
 
+    @GetMapping("/colspace")
+    public ResponseEntity<Space> hakgetSpace(@RequestParam("sseq") int sseq) {
+        try {
+            Space space = spaceService.hakgetSpace(sseq);
+            return ResponseEntity.ok(space);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/collectspace/{sseq}")
+    public ResponseEntity<?> updateSpace(@PathVariable int sseq, @RequestBody SpaceUpdateRequest request) {
+        try {
+            Space updatedSpace = spaceService.updateSpace(sseq, request);
+            return ResponseEntity.ok(updatedSpace);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/updateFacilities")
+    public ResponseEntity<String> updateFacilities(@RequestBody FnumDTO dto) {
+        spaceService.updateFacilities(dto);
+        return ResponseEntity.ok("Facilities updated successfully");
+    }
+
+    @DeleteMapping("/delete/{sseq}")
+    public ResponseEntity<Void> deleteSpace(@PathVariable int sseq) {
+        boolean isDeleted = spaceService.deleteSpace(sseq);
+        if (isDeleted) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/spacetime/{sseq}")
+    public ResponseEntity<String> updateSpace(
+            @PathVariable Integer sseq,
+            @RequestBody SpaceUpdateRequest updateRequest) {
+        try {
+            spaceService.updateTime(sseq, updateRequest.getStarttime(), updateRequest.getEndtime());
+            return new ResponseEntity<>("Space updated successfully", HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

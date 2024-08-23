@@ -2,6 +2,7 @@ package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.FnumDTO;
 import com.himedia.rentmon_back.dto.SpaceDTO;
+import com.himedia.rentmon_back.dto.SpaceUpdateRequest;
 import com.himedia.rentmon_back.entity.*;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
@@ -172,6 +173,7 @@ public class SpaceService {
         space.setCategory(category); // Category 설정
         space.setStarttime(Integer.parseInt(paramSpace.get("starttime")));
         space.setEndtime(Integer.parseInt(paramSpace.get("endtime")));
+        space.setAddress(paramSpace.get("address"));
         Space savedSpace = spaceRepository.save(space);
         int sseq = savedSpace.getSseq();
         // 포스트의 content 추출
@@ -298,6 +300,112 @@ public class SpaceService {
             image.setCreated_at(new Timestamp(System.currentTimeMillis()));
 
             spaceimageRepository.save(image);
+        }
+    }
+
+    public List<String> findTitlesByHostid(String hostid) {
+        Host host = hr.findById(hostid)
+                .orElseThrow(() -> new RuntimeException("Host not found"));
+
+        return spaceRepository.findDistinctTitlesByHost(host);
+    }
+
+    public List<Space> spaceList(String hostid) {
+        Host host = hr.findById(hostid)
+                .orElseThrow(() -> new RuntimeException("Host not found"));
+
+        return spaceRepository.findByHost(host);
+    }
+
+    public Space hakgetSpace(int sseq) {
+        return (Space) spaceRepository.findBysseq(sseq)
+                .orElseThrow(() -> new RuntimeException("Space not found with sseq: " + sseq));
+    }
+
+    public Space updateSpace(int sseq, SpaceUpdateRequest request) {
+        Space space = spaceRepository.findById(sseq)
+                .orElseThrow(() -> new RuntimeException("Space not found"));
+
+        space.setTitle(request.getTitle());
+        space.setSubtitle(request.getSubtitle());
+        space.setPrice(request.getPrice());
+        space.setMaxpersonnal(request.getMaxpersonnal());
+        space.setContent(request.getContent());
+        space.setCaution(request.getCaution());
+        space.setZipcode(request.getZipcode());
+        space.setProvince(request.getProvince());
+        space.setTown(request.getTown());
+        space.setVillage(request.getVillage());
+        space.setAddressdetail(request.getAddressdetail());
+        space.setAddress(request.getAddress());
+
+        return spaceRepository.save(space);
+    }
+
+    public List<SpaceFacility> getFacilitiesBySpace(int sseq) {
+        return sfr.findBySpace_Sseq(sseq);
+    }
+
+    public void updateFacilities(FnumDTO dto) {
+        Integer sseq = dto.getSseq();
+        String[] numbers = dto.getNumbers();
+        System.out.println(sseq+"-------------------------------------------------------------");
+        if (numbers == null) {
+            throw new IllegalArgumentException("Facility numbers cannot be null");
+        }
+
+        // Clear existing facilities for the space
+        sfr.deleteBySpace_Sseq(sseq);
+        System.out.println(sseq);
+        if (sseq == null || numbers == null || numbers.length == 0) {
+            throw new IllegalArgumentException("Invalid data: sseq or numbers are missing or invalid");
+        }
+
+        // String[]를 Integer[]로 변환
+        Integer[] numberInts = new Integer[numbers.length];
+        for (int i = 0; i < numbers.length; i++) {
+            try {
+                numberInts[i] = Integer.parseInt(numbers[i]);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid number format: " + numbers[i]);
+            }
+        }
+
+        Space space = spaceRepository.findById(sseq)
+                .orElseThrow(() -> new IllegalArgumentException("Space with sseq " + sseq + " not found"));
+
+        for (Integer number : numberInts) {
+            Facility facility = fr.findById(number)
+                    .orElseThrow(() -> new IllegalArgumentException("Facility with fnum " + number + " not found"));
+
+            SpaceFacility spaceFacility = new SpaceFacility();
+            spaceFacility.setSpace(space);
+            spaceFacility.setFacility(facility);
+
+            // 올바른 레포지토리 사용
+            sfr.save(spaceFacility);
+        }
+
+    }
+
+    public boolean deleteSpace(int sseq) {
+
+        if (spaceRepository.existsById(sseq)) {
+            spaceRepository.deleteById(sseq);
+            return true;
+        }
+        return false;
+    }
+
+    public void updateTime(int sseq, int starttime, int endtime) {
+        Optional<Space> spaceOptional = spaceRepository.findById(sseq);
+        if (spaceOptional.isPresent()) {
+            Space space = spaceOptional.get();
+            space.setStarttime(starttime);
+            space.setEndtime(endtime);
+            spaceRepository.save(space);
+        } else {
+            throw new RuntimeException("Space not found");
         }
     }
 }
