@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.repository;
 
+import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,8 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     Page<Review> findBySpaceSseq(int sseq, Pageable pageable);
 
+    @Query("SELECT r FROM Review r WHERE r.space.sseq IN :sseqs")
+    List<Review> findBySseqIn(@Param("sseqs") List<Integer> sseqs);
 
-//    ArrayList findBySseq(int sseq);
+
 }

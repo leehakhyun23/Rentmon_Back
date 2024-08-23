@@ -49,6 +49,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     List<Reservation> findBySpaceSseq(int sseq);
 
+    List<Reservation> findByReservestartBetween(Timestamp startDate, Timestamp endDate);
+
+
     // admin
 //    List<Reservation> findByReservestartBetween(Timestamp startDate, Timestamp endDate);
 }
