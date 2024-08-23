@@ -1,6 +1,5 @@
 package com.himedia.rentmon_back.controller;
 
-import com.himedia.rentmon_back.dto.UserDTO;
 import com.himedia.rentmon_back.dto.usersnsdto.GoogleApi;
 import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
@@ -15,15 +14,12 @@ import com.himedia.rentmon_back.service.UserSnsLoginService;
 import com.himedia.rentmon_back.util.MailSend;
 import com.himedia.rentmon_back.util.SnsException;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -171,7 +167,7 @@ public class HostController {
         KakaoProfile kakaoProfile = usersls.getKakaoProfile(oAuthToken);
         try {
             Optional<Member> member = usersls.getKakaoHost(kakaoProfile);
-            response.sendRedirect("http://localhost:3000/getsnshostinfo/"+member.get().getUserid()+"/kakao");
+            response.sendRedirect("http://localhost:3001/getsnshostinfo/"+member.get().getUserid()+"/kakao");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -212,7 +208,7 @@ public class HostController {
                 throw new RuntimeException("Failed to get member information.");
             }
 
-            response.sendRedirect("http://localhost:3000/getsnshostinfo/" + member.get().getUserid() + "/naver");
+            response.sendRedirect("http://localhost:3001/getsnshostinfo/" + member.get().getUserid() + "/naver");
         } catch (Exception e) {
             e.printStackTrace(); // 로그에 오류 기록
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -250,7 +246,7 @@ public class HostController {
             googleapi = usersls.getGoogleProfile(oAuthToken.getAccess_token());
             if(googleapi == null) throw new SnsException("구글 로그인 실패");
             Optional<Member> member = usersls.getGoogleHost(googleapi);
-            response.sendRedirect("http://localhost:3000/getsnshostinfo/"+member.get().getUserid()+"/google");
+            response.sendRedirect("http://localhost:3001/getsnshostinfo/"+member.get().getUserid()+"/google");
 
         } catch (SnsException | IOException e) {
             e.printStackTrace();
