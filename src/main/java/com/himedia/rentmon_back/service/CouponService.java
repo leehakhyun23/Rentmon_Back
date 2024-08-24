@@ -39,7 +39,7 @@ public class CouponService {
         return list.getContent();
     }
 
-    public Optional<Coupon> useCoupon(String couponstr) {
+    public Optional<Coupon> useCoupon(String couponstr, String userid) {
         Optional<Coupon> couponOpt = cr.findByCouponstr(couponstr);
 
         if (couponOpt.isPresent()) {
