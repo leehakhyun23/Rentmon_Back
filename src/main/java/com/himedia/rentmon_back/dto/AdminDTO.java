@@ -1,6 +1,9 @@
 package com.himedia.rentmon_back.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.himedia.rentmon_back.entity.Host;
+import com.himedia.rentmon_back.entity.Space;
+import com.himedia.rentmon_back.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -55,22 +58,6 @@ public class AdminDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class ResponseC {
-        private int num;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class ResponseD {
-        private int num;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
     public static class ResponseUser {
         private String userid;
         private String name;
@@ -93,7 +80,6 @@ public class AdminDTO {
         private String phone;
         private String email;
         private List<SpaceDTO> spaces;
-        private boolean disable;
     }
 
     @Data
@@ -109,6 +95,7 @@ public class AdminDTO {
         private String village;
         private String addressdetail;
         private int declaCount;
+        private boolean disable;
     }
 
     @Data
@@ -127,6 +114,15 @@ public class AdminDTO {
     @AllArgsConstructor
     @Builder
     public static class ResponseDeclaration {
+        List<DeclaUserSpace> userSpaceList;
+        List<DeclaHostUser> hostUserList;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class DeclaUserSpace {
         private int dseq;
         private String title;
         private String content;
@@ -135,5 +131,24 @@ public class AdminDTO {
         private String reply;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
         private Timestamp replyDate;
+        private User user;
+        private Space space;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class DeclaHostUser {
+        private int dseq;
+        private String title;
+        private String content;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp createdAt;
+        private String reply;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp replyDate;
+        private Host host;
+        private User user;
     }
 }

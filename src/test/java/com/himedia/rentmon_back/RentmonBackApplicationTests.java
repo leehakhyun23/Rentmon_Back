@@ -1,24 +1,34 @@
 package com.himedia.rentmon_back;
 
-import com.himedia.rentmon_back.entity.Host;
-import com.himedia.rentmon_back.entity.Member;
-import com.himedia.rentmon_back.repository.HostRepository;
-import com.himedia.rentmon_back.repository.MemberRepository;
+import com.himedia.rentmon_back.entity.*;
+import com.himedia.rentmon_back.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @SpringBootTest
 class RentmonBackApplicationTests {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private HostRepository hostRepository;
+    @Autowired
+    private BankRepository bankRepository;
+    @Autowired
+    private CardRepository cardRepository;
+    @Autowired
+    private SpaceRepository spaceRepository;
+    @Autowired
+    private DeclarationRepository declarationRepository;
 
     @Test
     void contextLoads() {
@@ -77,6 +87,54 @@ class RentmonBackApplicationTests {
     }
 
     @Test
+    void insertUser() {
+        Random random = new Random();
+        List<User> users = new ArrayList<>();
+
+        for (int i = 0; i < 20; i++) {
+            String username = "user" + (i + 1);
+            Member member = memberRepository.findById(98L + i).orElse(null);
+
+            // Generate random bankId between 1 and 18
+            int bankId = random.nextInt(18) + 1;
+
+            // Retrieve the bank if it exists, otherwise create a new one
+//            Bank bank = bankRepository.findById(bankId).orElse(new Bank(bankId, "BankName"));
+
+            // Generate random 16-digit card number
+            String cardNumber = String.format("%04d-%04d-%04d-%04d",
+                    random.nextInt(10000),
+                    random.nextInt(10000),
+                    random.nextInt(10000),
+                    random.nextInt(10000));
+
+            // Generate random expiration date in MMYY format
+            String expirationDate = String.format("%02d%02d",
+                    random.nextInt(12) + 1,  // Month between 01 and 12
+                    random.nextInt(10) + 25); // Year between 25 and 34
+
+            // Generate random 3-digit CVC code
+            int cvc = random.nextInt(900) + 100;
+
+            // Create Card object
+//            Card card = new Card(0, bank, cardNumber, expirationDate, cvc);
+
+            // Save the Card object to get a persistent reference
+//            card = cardRepository.save(card);
+
+            // Create Grade object (assuming Grade needs to be persisted)
+            Grade grade = new Grade(1, "bronze", 1000);
+
+            // Create User and add to the list
+//            User user = new User(username, member, card, grade, null, "", "", null, null, null, null, null, null, null);
+//            users.add(user);
+        }
+
+        // Save all users to the repository
+        userRepository.saveAll(users);
+    }
+
+    @Test
     void insertHost() {
         List<Host> hosts = Arrays.asList(
                 new Host("host1", "$2a$10$lSgMzG5z13BjWuxe8/est./Ucmef2gGQiDR8ALYiBFDp.MtVBDh4e", "host1@example.com", "010-1234-5678", memberRepository.findById(118L).orElse(null), null, "달빛수호자"),
@@ -102,5 +160,83 @@ class RentmonBackApplicationTests {
         );
 
         hostRepository.saveAll(hosts);
+    }
+
+    @Test
+    void insertDeclation() {
+        Random random = new Random();
+        List<Declaration> declarations = new ArrayList<>();
+
+        // 예시로 사용할 신고 제목 및 내용
+        String[] userToSpaceTitles = {
+                "공간 청결 상태 불만",
+                "예약이 제대로 되지 않았습니다",
+                "시설 고장이 있었습니다",
+                "냉난방이 제대로 되지 않았습니다",
+                "사진과 다른 공간"
+        };
+
+        String[] userToSpaceContents = {
+                "공간이 너무 더러워서 사용하기 힘들었습니다.",
+                "예약 확인이 되지 않아 불편을 겪었습니다.",
+                "이용 중 시설 고장이 있어 불편했습니다.",
+                "냉방이 전혀 되지 않아 더웠습니다.",
+                "사진과 실물이 너무 달라 실망했습니다."
+        };
+
+        String[] hostToUserTitles = {
+                "사용 후 뒷정리 불량",
+                "약속된 시간을 지키지 않음",
+                "공간을 손상시켰습니다",
+                "규칙을 지키지 않았습니다",
+                "무단으로 공간을 사용했습니다"
+        };
+
+        String[] hostToUserContents = {
+                "사용 후 공간이 매우 지저분했습니다.",
+                "예약한 시간에 오지 않아 다른 손님이 불편했습니다.",
+                "공간의 일부가 손상되어 수리가 필요합니다.",
+                "정해진 규칙을 무시하고 공간을 사용했습니다.",
+                "예약된 시간 외에도 공간을 사용했습니다."
+        };
+
+        // Generate 30 declarations for user -> space
+        for (int i = 0; i < 30; i++) {
+            String title = userToSpaceTitles[random.nextInt(userToSpaceTitles.length)];
+            String content = userToSpaceContents[random.nextInt(userToSpaceContents.length)];
+
+            User user = userRepository.findById("user" + (random.nextInt(20) + 1)).orElse(null);
+            Space space = spaceRepository.findById((int) (67L + random.nextInt(71))).orElse(null); // Random space between 67 and 137
+
+            if (user != null && space != null) {
+                Declaration declaration = new Declaration();
+                declaration.setTitle(title);
+                declaration.setContent(content);
+                declaration.setUser(user);
+                declaration.setSpace(space);
+                declarations.add(declaration);
+            }
+        }
+
+        // Generate 30 declarations for host -> user
+        for (int i = 0; i < 30; i++) {
+            String title = hostToUserTitles[random.nextInt(hostToUserTitles.length)];
+            String content = hostToUserContents[random.nextInt(hostToUserContents.length)];
+
+            Host host = hostRepository.findById("host" + (random.nextInt(20) + 1)).orElse(null);
+            User user = userRepository.findById("user" + (random.nextInt(20) + 1)).orElse(null); // Random user between user1 and user20
+
+            if (host != null && user != null) {
+                Declaration declaration = new Declaration();
+                declaration.setTitle(title);
+                declaration.setContent(content);
+                declaration.setHost(host);
+                declaration.setUser(user);
+                declarations.add(declaration);
+            }
+        }
+
+        // Save all declarations to the repository
+        declarationRepository.saveAll(declarations);
     }
 }

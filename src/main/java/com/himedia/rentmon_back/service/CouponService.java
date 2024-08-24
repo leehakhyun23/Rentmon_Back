@@ -49,7 +49,7 @@ public class CouponService {
                 throw new IllegalArgumentException("쿠폰의 유효기간이 지났습니다.");
             }
 
-            if (coupon.isUseyn()) {
+            if (!coupon.isUseyn()) {
                 throw new IllegalArgumentException("이 쿠폰은 이미 사용되었습니다.");
             }
 
