@@ -11,6 +11,8 @@ import java.util.List;
 @Table(name = "host")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 public class Host {
     @Id
     @Column(name = "hostid")
@@ -45,6 +47,16 @@ public class Host {
 
     public Host() {
         this.member = new Member();
+    }
+
+    public Host(String hostid, String pwd, String email, String phone, Member member, String provider, String nickname) {
+        this.hostid = hostid;
+        this.pwd = pwd;
+        this.email = email;
+        this.phone = phone;
+        this.member = member;
+        this.provider = provider;
+        this.nickname = nickname;
     }
 
     public void setMseq(int mseq) {this.member.setMseq(mseq);}
