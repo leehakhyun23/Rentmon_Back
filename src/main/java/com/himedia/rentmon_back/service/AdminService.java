@@ -18,9 +18,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,25 +31,47 @@ public class AdminService {
     private final CouponRepository couponRepository;
     private final DeclarationRepository declarationRepository;
 
-    public Page<AdminDTO.ResponseUser> getUserList(Pageable pageable, String searchType, String keyword) {
+    public Page<AdminDTO.ResponseUser> getUserList(Pageable pageable, String searchType, String keyword, Boolean isLogin, Boolean sortByDeclasCount) {
         Specification<User> spec = AdminSpecification.UserSpe.searchByUserList(searchType, keyword);
-        Page<User> userList = userRepository.findAll(spec, pageable);
 
-        return userList.map(user -> {
-            int declaCount = declarationRepository.countByUserAndSpaceIsNull(user);
+        // 로그인 상태에 따른 필터 추가
+        if (isLogin != null) {
+            spec = spec.and(AdminSpecification.UserSpe.filterByLoginStatus(isLogin));
+        }
 
-            return AdminDTO.ResponseUser.builder()
-                    .userid(user.getUserid())
-                    .name(user.getName())
-                    .phone(user.getPhone())
-                    .email(user.getEmail())
-                    .createdAt(user.getCreatedAt())
-                    .isLogin(user.isIslogin())
-                    .gname(user.getGnum() != null ? user.getGnum().getGname() : null)
-                    .declaCount(declaCount)
-                    .build();
-        });
+        List<User> users = userRepository.findAll(spec); // findAll로 모든 데이터를 가져옵니다.
+
+        // declaCount 기준으로 수동 정렬
+        if (Boolean.TRUE.equals(sortByDeclasCount)) {
+            users.sort((u1, u2) -> {
+                int declaCount1 = declarationRepository.countByUserAndSpaceIsNull(u1);
+                int declaCount2 = declarationRepository.countByUserAndSpaceIsNull(u2);
+                return Integer.compare(declaCount2, declaCount1); // 내림차순 정렬
+            });
+        }
+
+        // 필요한 페이지로 잘라서 리턴
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), users.size());
+        List<AdminDTO.ResponseUser> responseUsers = users.subList(start, end).stream()
+                .map(user -> {
+                    int declaCount = declarationRepository.countByUserAndSpaceIsNull(user);
+                    return AdminDTO.ResponseUser.builder()
+                            .userid(user.getUserid())
+                            .name(user.getName())
+                            .phone(user.getPhone())
+                            .email(user.getEmail())
+                            .createdAt(user.getCreatedAt())
+                            .isLogin(user.isIslogin())
+                            .gname(user.getGnum() != null ? user.getGnum().getGname() : null)
+                            .declaCount(declaCount)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(responseUsers, pageable, users.size());
     }
+
 
     public int updateUserIsLoginStatus(List<String> userids) {
         return userRepository.updateIsLoginStatus(userids);
@@ -95,48 +116,57 @@ public class AdminService {
 //        return hostRepository.updateIsLoginStatus(hostids);
 //    }
 
-    public Page<AdminDTO.ResponseDeclaration> getDeclarationList(Pageable pageable) {
-        Specification<Declaration> spec = AdminSpecification.DeclarationSpe.searchByDeclarationList("", "");
-        Page<Declaration> declarationList = declarationRepository.findAll(spec, pageable);
+    public Optional<Declaration> getDeclarationById(int dseq) {
+        return declarationRepository.findById(dseq);
+    }
 
-        List<AdminDTO.DeclaUserSpace> userSpaceList = new ArrayList<>();
-        List<AdminDTO.DeclaHostUser> hostUserList = new ArrayList<>();
+    public AdminDTO.ResponseDeclaration getUserSpaceDeclarations(Pageable pageable) {
+        Page<Declaration> declarationList = declarationRepository.findUserSpaceDeclarations(pageable);
 
-        declarationList.forEach(declaration -> {
-            if (declaration.getHost() == null && declaration.getSpace() != null) {
-                // host가 null이고 space가 null이 아닌 경우 -> user가 space를 신고한 경우
-                AdminDTO.DeclaUserSpace userSpace = AdminDTO.DeclaUserSpace.builder()
+        List<AdminDTO.DeclaUserSpace> userSpaceList = declarationList.stream()
+                .map(declaration -> AdminDTO.DeclaUserSpace.builder()
                         .dseq(declaration.getDseq())
                         .title(declaration.getTitle())
                         .content(declaration.getContent())
                         .createdAt(declaration.getCreated_at())
                         .reply(declaration.getReply())
                         .replyDate(declaration.getReplydate())
-                        .user(declaration.getUser())
-                        .space(declaration.getSpace())
-                        .build();
-                userSpaceList.add(userSpace);
-            } else if (declaration.getSpace() == null && declaration.getHost() != null) {
-                // space가 null이고 host가 null이 아닌 경우 -> host가 user를 신고한 경우
-                AdminDTO.DeclaHostUser hostUser = AdminDTO.DeclaHostUser.builder()
-                        .dseq(declaration.getDseq())
-                        .title(declaration.getTitle())
-                        .content(declaration.getContent())
-                        .createdAt(declaration.getCreated_at())
-                        .reply(declaration.getReply())
-                        .replyDate(declaration.getReplydate())
-                        .host(declaration.getHost())
-                        .user(declaration.getUser())
-                        .build();
-                hostUserList.add(hostUser);
-            }
-        });
+                        .userid(declaration.getUser().getUserid())
+                        .spaceTitle(declaration.getSpace().getTitle())
+                        .build())
+                .collect(Collectors.toList());
 
-        AdminDTO.ResponseDeclaration responseDeclaration = AdminDTO.ResponseDeclaration.builder()
+        return AdminDTO.ResponseDeclaration.builder()
                 .userSpaceList(userSpaceList)
-                .hostUserList(hostUserList)
+                .totalPages(declarationList.getTotalPages())
+                .currentPage(declarationList.getNumber())
+                .size(declarationList.getSize())
+                .totalElements(declarationList.getTotalElements())
                 .build();
+    }
 
-        return new PageImpl<>(Collections.singletonList(responseDeclaration), pageable, declarationList.getTotalElements());
+    public AdminDTO.ResponseDeclaration getHostUserDeclarations(Pageable pageable) {
+        Page<Declaration> declarationList = declarationRepository.findHostUserDeclarations(pageable);
+
+        List<AdminDTO.DeclaHostUser> hostUserList = declarationList.stream()
+                .map(declaration -> AdminDTO.DeclaHostUser.builder()
+                        .dseq(declaration.getDseq())
+                        .title(declaration.getTitle())
+                        .content(declaration.getContent())
+                        .createdAt(declaration.getCreated_at())
+                        .reply(declaration.getReply())
+                        .replyDate(declaration.getReplydate())
+                        .hostid(declaration.getHost().getHostid())
+                        .userid(declaration.getUser().getUserid())
+                        .build())
+                .collect(Collectors.toList());
+
+        return AdminDTO.ResponseDeclaration.builder()
+                .hostUserList(hostUserList)
+                .totalPages(declarationList.getTotalPages())
+                .currentPage(declarationList.getNumber())
+                .size(declarationList.getSize())
+                .totalElements(declarationList.getTotalElements())
+                .build();
     }
 }

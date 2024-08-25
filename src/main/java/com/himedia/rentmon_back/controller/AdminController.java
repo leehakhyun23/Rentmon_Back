@@ -2,6 +2,7 @@ package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.entity.Coupon;
+import com.himedia.rentmon_back.entity.Declaration;
 import com.himedia.rentmon_back.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,12 +40,16 @@ public class AdminController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<Page<AdminDTO.ResponseUser>> getUserList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
-            @RequestParam(value = "searchType", required = false) String searchType, @RequestParam(value = "keyword", required = false) String keyword) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<AdminDTO.ResponseUser> userList = adminService.getUserList(pageable, searchType, keyword);
+    public ResponseEntity<Page<AdminDTO.ResponseUser>> getUserList(@RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "10") int size,
+                                                                   @RequestParam(value = "searchType", required = false) String searchType,
+                                                                   @RequestParam(value = "keyword", required = false) String keyword,
+                                                                   @RequestParam(value = "isLogin", required = false) Boolean isLogin,
+                                                                   @RequestParam(value = "sortByDeclasCount", required = false) Boolean sortByDeclasCount) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AdminDTO.ResponseUser> userList = adminService.getUserList(pageable, searchType, keyword, isLogin, sortByDeclasCount);
 
-        if(userList.isEmpty()) {
+        if (userList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 
@@ -98,14 +103,29 @@ public class AdminController {
 //    }
 
     @GetMapping("/declaration")
-    public ResponseEntity<Page<AdminDTO.ResponseDeclaration>> getDeclarationList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<AdminDTO.ResponseDeclaration> declarationList = adminService.getDeclarationList(pageable);
+    public ResponseEntity<AdminDTO.ResponseDeclaration> getDeclarationList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam String tab) {
 
-        if (declarationList.isEmpty()) {
-            return ResponseEntity.noContent().build();
+        Pageable pageable = PageRequest.of(page, size);
+        AdminDTO.ResponseDeclaration declarationList;
+
+        if ("userSpace".equals(tab)) {
+            declarationList = adminService.getUserSpaceDeclarations(pageable);
+        } else if ("hostUser".equals(tab)) {
+            declarationList = adminService.getHostUserDeclarations(pageable);
+        } else {
+            return ResponseEntity.badRequest().build();
         }
 
         return ResponseEntity.ok(declarationList);
+    }
+
+    @GetMapping("/declarationview/{dseq}")
+    public ResponseEntity<Declaration> getDeclaration(@PathVariable int dseq) {
+        return adminService.getDeclarationById(dseq)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

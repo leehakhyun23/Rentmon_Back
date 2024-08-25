@@ -71,12 +71,19 @@ public class CouponService {
                 couponCode = CreatedCoupon.generateCoupon();
             } while (cr.existsByCouponstr(couponCode));
 
+            // RequestCoupon의 limitDateTime을 그대로 사용
+            LocalDateTime limitDateTime = issuedCoupon.getLimitDateTime();
+
+            if (limitDateTime == null) {
+                throw new IllegalArgumentException("쿠폰의 유효기간이 설정되지 않았습니다.");
+            }
+
             Coupon coupon = new Coupon();
             coupon.setUser(user);
             coupon.setCouponstr(couponCode);
             coupon.setCouponTitle(issuedCoupon.getCouponTitle());
             coupon.setDiscount(issuedCoupon.getDiscount());
-            coupon.setLimitdate(issuedCoupon.getLimitDateTime());
+            coupon.setLimitdate(limitDateTime);
             coupon.setUseyn(true);
 
             cr.save(coupon);

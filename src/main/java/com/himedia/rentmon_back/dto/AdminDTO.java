@@ -1,9 +1,6 @@
 package com.himedia.rentmon_back.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.himedia.rentmon_back.entity.Host;
-import com.himedia.rentmon_back.entity.Space;
-import com.himedia.rentmon_back.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -116,6 +113,10 @@ public class AdminDTO {
     public static class ResponseDeclaration {
         List<DeclaUserSpace> userSpaceList;
         List<DeclaHostUser> hostUserList;
+        private int totalPages;
+        private int currentPage;
+        private int size;
+        private long totalElements;
     }
 
     @Data
@@ -131,8 +132,8 @@ public class AdminDTO {
         private String reply;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
         private Timestamp replyDate;
-        private User user;
-        private Space space;
+        private String userid;
+        private String spaceTitle;
     }
 
     @Data
@@ -148,7 +149,7 @@ public class AdminDTO {
         private String reply;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
         private Timestamp replyDate;
-        private Host host;
-        private User user;
+        private String hostid;
+        private String userid;
     }
 }
