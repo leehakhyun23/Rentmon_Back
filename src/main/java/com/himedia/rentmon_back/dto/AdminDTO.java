@@ -55,22 +55,6 @@ public class AdminDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class ResponseC {
-        private int num;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
-    public static class ResponseD {
-        private int num;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Builder
     public static class ResponseUser {
         private String userid;
         private String name;
@@ -93,7 +77,6 @@ public class AdminDTO {
         private String phone;
         private String email;
         private List<SpaceDTO> spaces;
-        private boolean disable;
     }
 
     @Data
@@ -109,6 +92,7 @@ public class AdminDTO {
         private String village;
         private String addressdetail;
         private int declaCount;
+        private boolean disable;
     }
 
     @Data
@@ -126,7 +110,34 @@ public class AdminDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
+    public static class ResponseCoupon {
+        private String couponStr;
+        private String title;
+        private Integer discount;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private LocalDateTime limitDateTime;
+        private boolean useYn;
+        private String userid;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class ResponseDeclaration {
+        List<DeclaUserSpace> userSpaceList;
+        List<DeclaHostUser> hostUserList;
+        private int totalPages;
+        private int currentPage;
+        private int size;
+        private long totalElements;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class DeclaUserSpace {
         private int dseq;
         private String title;
         private String content;
@@ -135,5 +146,34 @@ public class AdminDTO {
         private String reply;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
         private Timestamp replyDate;
+        private String userid;
+        private String spaceTitle;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class DeclaHostUser {
+        private int dseq;
+        private String title;
+        private String content;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp createdAt;
+        private String reply;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp replyDate;
+        private String hostid;
+        private String userid;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ReqeustDeclarationReply {
+        private int dseq;
+        private String reply;
+        private LocalDateTime replyDate;
     }
 }
