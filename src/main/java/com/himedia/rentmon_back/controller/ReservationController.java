@@ -92,6 +92,14 @@ public class ReservationController {
         return ResponseEntity.ok(map);
     }
 
+    @GetMapping("/useCoupon")
+    public ResponseEntity<Map<String, Object>> useCoupon(@RequestParam("userid") String userid, @RequestParam("couponstr") String couponstr) {
+        Map<String, Object> map = new HashMap<>();
+        Coupon coupon = cs.useCoupon(userid, couponstr);
+        map.put("coupon", coupon);
+        return ResponseEntity.ok(map);
+    }
+
     @GetMapping("/findSseqByTitle")
     public ResponseEntity<List<Reservation>> findSseqByTitle(@RequestParam("title") String title) {
         try {
