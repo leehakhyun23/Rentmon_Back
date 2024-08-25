@@ -8,6 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +32,10 @@ class RentmonBackApplicationTests {
     private SpaceRepository spaceRepository;
     @Autowired
     private DeclarationRepository declarationRepository;
+    @Autowired
+    private ReservationRepository reservationRepository;
+    @Autowired
+    private VisitRepository visitRepository;
 
     @Test
     void contextLoads() {
@@ -238,5 +245,56 @@ class RentmonBackApplicationTests {
 
         // Save all declarations to the repository
         declarationRepository.saveAll(declarations);
+    }
+
+    @Test
+    void insertReservation() {
+        Random random = new Random();
+
+        for (int i = 0; i < 300; i++) {
+            Reservation reservation = new Reservation();
+
+            // User와 Space를 랜덤으로 선택
+            User user = userRepository.findById("user" + (random.nextInt(20) + 1)).orElse(null);
+            Space space = spaceRepository.findById(random.nextInt(71) + 67).orElse(null);
+
+            // 4년 전부터 현재까지의 랜덤한 날짜 생성
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime start = now.minusYears(4).plusDays(random.nextInt((int) ChronoUnit.DAYS.between(now.minusYears(4), now)));
+            LocalDateTime end = start.plusHours(random.nextInt(48)); // 예약 기간을 1시간에서 48시간 사이로 설정
+
+            reservation.setUser(user);
+            reservation.setSpace(space);
+            reservation.setPayment(random.nextInt(50000) + 5000); // 5000원에서 50000원 사이의 랜덤 금액
+            reservation.setRequest("요청사항 " + i);
+            reservation.setReservestart(Timestamp.valueOf(start));
+            reservation.setReserveend(Timestamp.valueOf(end));
+
+            reservationRepository.save(reservation);
+        }
+    }
+
+    @Test
+    public void generateTestVisits() {
+        Random random = new Random();
+
+        for (int i = 0; i < 300; i++) {
+            Visit visit = new Visit();
+
+            // 랜덤 IP 주소 생성
+            String ipAddress = random.nextInt(256) + "." +
+                    random.nextInt(256) + "." +
+                    random.nextInt(256) + "." +
+                    random.nextInt(256);
+
+            // 현재 시각에서 4년간의 랜덤한 시간 생성
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime randomDate = now.minusDays(random.nextInt(365 * 4));
+
+            visit.setIpAddress(ipAddress);
+            visit.setCreatedAt(Timestamp.valueOf(randomDate));  // 4년 내 랜덤 날짜 설정
+
+            visitRepository.save(visit);
+        }
     }
 }

@@ -22,17 +22,20 @@ public class AdminController {
     private final CouponService couponService;
     private final SpaceService spaceService;
     private final ReservationService reservationService;
+    private final VisitService visitService;
 
     @GetMapping("/main")
     public ResponseEntity<AdminDTO.ResponseDashBoard> getMainInfo(@RequestParam String period) {
         List<AdminDTO.ResponseCategory> category = spaceService.findAll();
         AdminDTO.ResponseMember memberStatistics = memberService.getMemberStatistics();
         List<AdminDTO.ResponseReservation> reservations = reservationService.getReservationsByPeriod(period);
+        List<AdminDTO.ResponseVisit> visits = visitService.getAllVisitsGroupedByDate();
 
         AdminDTO.ResponseDashBoard dashBoard = AdminDTO.ResponseDashBoard.builder()
                 .category(category)
                 .member(memberStatistics)
                 .reservation(reservations)
+                .visit(visits)
                 .build();
 
         return ResponseEntity.ok(dashBoard);
