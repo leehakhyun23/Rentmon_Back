@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -78,31 +79,50 @@ public class AdminService {
         Specification<Host> spec = AdminSpecification.HostSpe.searchByHostList(searchType, keyword);
         Page<Host> hostList = hostRepository.findAll(spec, pageable);
 
-        return hostList.map(host -> {
-            List<AdminDTO.SpaceDTO> spaceDTO = host.getSpaces().stream().map(space -> {
-                int declaCount = declarationRepository.countBySpaceAndHostIsNull(space);
+        List<AdminDTO.ResponseHost> filteredHosts = hostList.stream()
+                .map(host -> {
+                    List<AdminDTO.SpaceDTO> spaceDTOs = host.getSpaces().stream()
+                            .filter(space -> {
+                                if ("title".equals(searchType)) {
+                                    return space.getTitle().contains(keyword);
+                                } else if ("category".equals(searchType)) {
+                                    return space.getCategory() != null && space.getCategory().getName().contains(keyword);
+                                }
+                                return true;
+                            })
+                            .map(space -> {
+                                int declaCount = declarationRepository.countBySpaceAndHostIsNull(space);
 
-                return AdminDTO.SpaceDTO.builder()
-                        .category(space.getCategory() != null ? space.getCategory().getName() : null)
-                        .title(space.getTitle())
-                        .price(space.getPrice())
-                        .province(space.getProvince())
-                        .town(space.getTown())
-                        .village(space.getVillage())
-                        .addressdetail(space.getAddressdetail())
-                        .declaCount(declaCount)
-                        .disable(true)
-                        .build();
-            }).collect(Collectors.toList());
+                                return AdminDTO.SpaceDTO.builder()
+                                        .category(space.getCategory() != null ? space.getCategory().getName() : null)
+                                        .title(space.getTitle())
+                                        .price(space.getPrice())
+                                        .province(space.getProvince())
+                                        .town(space.getTown())
+                                        .village(space.getVillage())
+                                        .addressdetail(space.getAddressdetail())
+                                        .declaCount(declaCount)
+                                        .disable(true)
+                                        .build();
+                            })
+                            .collect(Collectors.toList());
 
-            return AdminDTO.ResponseHost.builder()
-                    .hostid(host.getHostid())
-                    .nickname(host.getNickname())
-                    .phone(host.getPhone())
-                    .email(host.getEmail())
-                    .spaces(spaceDTO)
-                    .build();
-        });
+                    if (!spaceDTOs.isEmpty() || !"title".equals(searchType) && !"category".equals(searchType)) {
+                        return AdminDTO.ResponseHost.builder()
+                                .hostid(host.getHostid())
+                                .nickname(host.getNickname())
+                                .phone(host.getPhone())
+                                .email(host.getEmail())
+                                .spaces(spaceDTOs)
+                                .build();
+                    } else {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(filteredHosts, pageable, hostList.getTotalElements());
     }
 
     public Page<AdminDTO.ResponseCoupon> getCouponList(Pageable pageable) {
