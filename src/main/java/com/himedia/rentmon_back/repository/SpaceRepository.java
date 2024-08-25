@@ -4,8 +4,6 @@ import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Space;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -23,7 +21,7 @@ public interface SpaceRepository extends JpaRepository<Space, Integer>, JpaSpeci
     @Query("select s from Space s order by s.created_at desc ")
     Page<Space> getSpaceRecent(Pageable pageable);
 
-    @Query("select s from Space s where s.province LIKE concat(:station, '%')  and s.category.cnum in(:category1 , :category2 , :category3) order by s.created_at desc ")
+    @Query("select s from Space s where (s.province LIKE concat(:station, '%')  and s.category.cnum in(:category1 , :category2 , :category3)) OR (s.province LIKE concat('', '%')  and s.category.cnum in(:category1 , :category2 , :category3))  order by s.created_at desc ")
     Page<Space> getRecommandSpace(@Param("station") String station,@Param("category1") int category1,@Param("category2") int category2, @Param("category3") int category3, Pageable pageable);
 
     @Query("select s from Space s where s.category.cnum = :cnum order by s.created_at desc ")
