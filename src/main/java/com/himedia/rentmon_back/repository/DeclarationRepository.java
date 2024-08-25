@@ -17,6 +17,14 @@ public interface DeclarationRepository extends JpaRepository<Declaration, Intege
     int countBySpaceAndHostIsNull(Space space);
     @Query("SELECT d FROM Declaration d WHERE d.host IS NULL AND d.space IS NOT NULL")
     Page<Declaration> findUserSpaceDeclarations(Pageable pageable);
+    @Query("SELECT d FROM Declaration d WHERE d.host IS NULL AND d.space IS NOT NULL AND d.reply IS NULL")
+    Page<Declaration> findUserSpaceDeclarationsByReplyIsNull(Pageable pageable);
+    @Query("SELECT d FROM Declaration d WHERE d.host IS NULL AND d.space IS NOT NULL AND d.reply IS NOT NULL")
+    Page<Declaration> findUserSpaceDeclarationsByReplyIsNotNull(Pageable pageable);
     @Query("SELECT d FROM Declaration d WHERE d.space IS NULL AND d.host IS NOT NULL")
     Page<Declaration> findHostUserDeclarations(Pageable pageable);
+    @Query("SELECT d FROM Declaration d WHERE d.space IS NULL AND d.host IS NOT NULL AND d.reply IS NULL")
+    Page<Declaration> findHostUserDeclarationsByReplyIsNull(Pageable pageable);
+    @Query("SELECT d FROM Declaration d WHERE d.space IS NULL AND d.host IS NOT NULL AND d.reply IS NOT NULL")
+    Page<Declaration> findHostUserDeclarationsByReplyIsNotNull(Pageable pageable);
 }

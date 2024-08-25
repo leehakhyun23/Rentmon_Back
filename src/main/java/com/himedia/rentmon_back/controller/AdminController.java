@@ -1,7 +1,6 @@
 package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.dto.AdminDTO;
-import com.himedia.rentmon_back.entity.Coupon;
 import com.himedia.rentmon_back.entity.Declaration;
 import com.himedia.rentmon_back.service.*;
 import lombok.RequiredArgsConstructor;
@@ -110,17 +109,15 @@ public class AdminController {
 
     @GetMapping("/declaration")
     public ResponseEntity<AdminDTO.ResponseDeclaration> getDeclarationList(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam String tab) {
-
-        Pageable pageable = PageRequest.of(page, size);
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+            @RequestParam String tab, @RequestParam(required = false) String reply) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "dseq"));
         AdminDTO.ResponseDeclaration declarationList;
 
         if ("userSpace".equals(tab)) {
-            declarationList = adminService.getUserSpaceDeclarations(pageable);
+            declarationList = adminService.getUserSpaceDeclarations(pageable, reply);
         } else if ("hostUser".equals(tab)) {
-            declarationList = adminService.getHostUserDeclarations(pageable);
+            declarationList = adminService.getHostUserDeclarations(pageable, reply);
         } else {
             return ResponseEntity.badRequest().build();
         }
@@ -133,5 +130,16 @@ public class AdminController {
         return adminService.getDeclarationById(dseq)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/declaration")
+    public ResponseEntity<Declaration> createDeclarationReply(@RequestBody AdminDTO.ReqeustDeclarationReply request) {
+        Declaration updatedDeclaration = adminService.saveReply(request);
+
+        if (updatedDeclaration == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(updatedDeclaration);
     }
 }

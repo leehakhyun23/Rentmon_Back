@@ -166,4 +166,14 @@ public class AdminDTO {
         private String hostid;
         private String userid;
     }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ReqeustDeclarationReply {
+        private int dseq;
+        private String reply;
+        private LocalDateTime replyDate;
+    }
 }

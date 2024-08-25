@@ -1,7 +1,6 @@
 package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.AdminDTO;
-import com.himedia.rentmon_back.entity.Coupon;
 import com.himedia.rentmon_back.entity.Declaration;
 import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.User;
@@ -18,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -139,8 +139,16 @@ public class AdminService {
         return declarationRepository.findById(dseq);
     }
 
-    public AdminDTO.ResponseDeclaration getUserSpaceDeclarations(Pageable pageable) {
-        Page<Declaration> declarationList = declarationRepository.findUserSpaceDeclarations(pageable);
+    public AdminDTO.ResponseDeclaration getUserSpaceDeclarations(Pageable pageable, String reply) {
+        Page<Declaration> declarationList;
+
+        if ("null".equals(reply)) {
+            declarationList = declarationRepository.findUserSpaceDeclarationsByReplyIsNull(pageable);
+        } else if ("notNull".equals(reply)) {
+            declarationList = declarationRepository.findUserSpaceDeclarationsByReplyIsNotNull(pageable);
+        } else {
+            declarationList = declarationRepository.findUserSpaceDeclarations(pageable);
+        }
 
         List<AdminDTO.DeclaUserSpace> userSpaceList = declarationList.stream()
                 .map(declaration -> AdminDTO.DeclaUserSpace.builder()
@@ -164,8 +172,16 @@ public class AdminService {
                 .build();
     }
 
-    public AdminDTO.ResponseDeclaration getHostUserDeclarations(Pageable pageable) {
-        Page<Declaration> declarationList = declarationRepository.findHostUserDeclarations(pageable);
+    public AdminDTO.ResponseDeclaration getHostUserDeclarations(Pageable pageable, String reply) {
+        Page<Declaration> declarationList;
+
+        if ("null".equals(reply)) {
+            declarationList = declarationRepository.findHostUserDeclarationsByReplyIsNull(pageable);
+        } else if ("notNull".equals(reply)) {
+            declarationList = declarationRepository.findHostUserDeclarationsByReplyIsNotNull(pageable);
+        } else {
+            declarationList = declarationRepository.findHostUserDeclarations(pageable);
+        }
 
         List<AdminDTO.DeclaHostUser> hostUserList = declarationList.stream()
                 .map(declaration -> AdminDTO.DeclaHostUser.builder()
@@ -187,5 +203,17 @@ public class AdminService {
                 .size(declarationList.getSize())
                 .totalElements(declarationList.getTotalElements())
                 .build();
+    }
+
+    public Declaration saveReply(AdminDTO.ReqeustDeclarationReply request) {
+        Declaration declaration = declarationRepository.findById(request.getDseq()).orElse(null);
+        if (declaration == null) {
+            return null;
+        }
+
+        declaration.setReply(request.getReply());
+        declaration.setReplydate(Timestamp.valueOf(request.getReplyDate()));
+
+        return declarationRepository.save(declaration);
     }
 }
