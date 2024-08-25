@@ -90,7 +90,7 @@ public class AdminController {
     @GetMapping("/host")
     public ResponseEntity<Page<AdminDTO.ResponseHost>> getHostList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
             @RequestParam(value = "searchType", required = false) String searchType, @RequestParam(value = "keyword", required = false) String keyword) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("hostid").ascending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "member.createdAt"));
         Page<AdminDTO.ResponseHost> hostList = adminService.getHostList(pageable, searchType, keyword);
 
         if (hostList.isEmpty()) {

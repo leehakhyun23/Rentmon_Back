@@ -79,7 +79,7 @@ public class AdminService {
         Page<Host> hostList = hostRepository.findAll(spec, pageable);
 
         return hostList.map(host -> {
-            List<AdminDTO.SpaceDTO> spaceDTOs = host.getSpaces().stream().map(space -> {
+            List<AdminDTO.SpaceDTO> spaceDTO = host.getSpaces().stream().map(space -> {
                 int declaCount = declarationRepository.countBySpaceAndHostIsNull(space);
 
                 return AdminDTO.SpaceDTO.builder()
@@ -100,7 +100,7 @@ public class AdminService {
                     .nickname(host.getNickname())
                     .phone(host.getPhone())
                     .email(host.getEmail())
-                    .spaces(spaceDTOs)
+                    .spaces(spaceDTO)
                     .build();
         });
     }
