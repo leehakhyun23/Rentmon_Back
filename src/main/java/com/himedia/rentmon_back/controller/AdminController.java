@@ -71,9 +71,15 @@ public class AdminController {
     }
 
     @GetMapping("/coupon")
-    public ResponseEntity<Page<Coupon>> getCouponList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Coupon> couponList = adminService.getCouponList(pageable);
+    public ResponseEntity<Page<AdminDTO.ResponseCoupon>> getCouponList(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) Boolean useyn) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("limitdate").ascending());
+        Page<AdminDTO.ResponseCoupon> couponList;
+
+        if (useyn != null) {
+            couponList = adminService.getCouponListByUseyn(pageable, useyn);
+        } else {
+            couponList = adminService.getCouponList(pageable);
+        }
 
         if(couponList.isEmpty()) {
             return ResponseEntity.noContent().build();

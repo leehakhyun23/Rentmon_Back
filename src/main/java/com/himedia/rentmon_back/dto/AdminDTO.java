@@ -110,6 +110,20 @@ public class AdminDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
+    public static class ResponseCoupon {
+        private String couponStr;
+        private String title;
+        private Integer discount;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private LocalDateTime limitDateTime;
+        private boolean useYn;
+        private String userid;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
     public static class ResponseDeclaration {
         List<DeclaUserSpace> userSpaceList;
         List<DeclaHostUser> hostUserList;

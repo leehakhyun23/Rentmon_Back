@@ -34,23 +34,20 @@ public class AdminService {
     public Page<AdminDTO.ResponseUser> getUserList(Pageable pageable, String searchType, String keyword, Boolean isLogin, Boolean sortByDeclasCount) {
         Specification<User> spec = AdminSpecification.UserSpe.searchByUserList(searchType, keyword);
 
-        // 로그인 상태에 따른 필터 추가
         if (isLogin != null) {
             spec = spec.and(AdminSpecification.UserSpe.filterByLoginStatus(isLogin));
         }
 
-        List<User> users = userRepository.findAll(spec); // findAll로 모든 데이터를 가져옵니다.
+        List<User> users = userRepository.findAll(spec);
 
-        // declaCount 기준으로 수동 정렬
         if (Boolean.TRUE.equals(sortByDeclasCount)) {
             users.sort((u1, u2) -> {
                 int declaCount1 = declarationRepository.countByUserAndSpaceIsNull(u1);
                 int declaCount2 = declarationRepository.countByUserAndSpaceIsNull(u2);
-                return Integer.compare(declaCount2, declaCount1); // 내림차순 정렬
+                return Integer.compare(declaCount2, declaCount1);
             });
         }
 
-        // 필요한 페이지로 잘라서 리턴
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), users.size());
         List<AdminDTO.ResponseUser> responseUsers = users.subList(start, end).stream()
@@ -94,6 +91,7 @@ public class AdminService {
                         .village(space.getVillage())
                         .addressdetail(space.getAddressdetail())
                         .declaCount(declaCount)
+                        .disable(true)
                         .build();
             }).collect(Collectors.toList());
 
@@ -107,10 +105,31 @@ public class AdminService {
         });
     }
 
-    public Page<Coupon> getCouponList(Pageable pageable) {
-        return couponRepository.findAll(pageable);
+    public Page<AdminDTO.ResponseCoupon> getCouponList(Pageable pageable) {
+        return couponRepository.findAll(pageable)
+                .map(coupon -> AdminDTO.ResponseCoupon.builder()
+                        .couponStr(coupon.getCouponstr())
+                        .title(coupon.getCouponTitle())
+                        .discount(coupon.getDiscount())
+                        .limitDateTime(coupon.getLimitdate())
+                        .useYn(coupon.isUseyn())
+                        .userid(coupon.getUser().getUserid())
+                        .build()
+                );
     }
 
+    public Page<AdminDTO.ResponseCoupon> getCouponListByUseyn(Pageable pageable, Boolean useyn) {
+        return couponRepository.findAllByUseyn(useyn, pageable)
+                .map(coupon -> AdminDTO.ResponseCoupon.builder()
+                        .couponStr(coupon.getCouponstr())
+                        .title(coupon.getCouponTitle())
+                        .discount(coupon.getDiscount())
+                        .limitDateTime(coupon.getLimitdate())
+                        .useYn(coupon.isUseyn())
+                        .userid(coupon.getUser().getUserid())
+                        .build()
+                );
+    }
 
 //    public int updateHostIsLoginStatus(List<String> hostids) {
 //        return hostRepository.updateIsLoginStatus(hostids);
