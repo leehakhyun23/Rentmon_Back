@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -16,6 +17,7 @@ import java.util.List;
 @Table(name = "space")
 @Getter
 @Setter
+@ToString
 public class Space {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

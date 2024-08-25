@@ -16,9 +16,11 @@ public class CouponScheduler {
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void expireCoupons() {
+        LocalDateTime now = LocalDateTime.now();
+
         List<Coupon> expiredCoupons = couponRepository.findAll()
                 .stream()
-                .filter(coupon -> coupon.getLimitdate().isBefore(LocalDateTime.now()))
+                .filter(coupon -> coupon.getLimitdate().isBefore(now))
                 .toList();
 
         for (Coupon coupon : expiredCoupons) {
@@ -26,4 +28,5 @@ public class CouponScheduler {
             couponRepository.save(coupon);
         }
     }
+
 }
