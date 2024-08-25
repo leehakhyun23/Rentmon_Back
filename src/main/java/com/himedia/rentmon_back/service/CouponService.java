@@ -39,26 +39,36 @@ public class CouponService {
         return list.getContent();
     }
 
-    public Optional<Coupon> useCoupon(String couponstr, String userid) {
+    public Coupon useCoupon(String userid, String couponstr) {
         Optional<Coupon> couponOpt = cr.findByCouponstr(couponstr);
+
+        String message = "";
 
         if (couponOpt.isPresent()) {
             Coupon coupon = couponOpt.get();
+//            if (coupon.getUser().getUserid() != userid){
+//                message="당신은 해당 쿠폰이 없습니다.";
+//                throw new IllegalArgumentException("당신은 해당 쿠폰이 없습니다.");
+//            }
 
             if (coupon.getLimitdate().isBefore(LocalDateTime.now())) {
+                message="쿠폰의 유효기간이 지났습니다.";
                 throw new IllegalArgumentException("쿠폰의 유효기간이 지났습니다.");
             }
 
-            if (coupon.isUseyn()) {
+            if (!coupon.isUseyn()) {
+                message= "이 쿠폰은 이미 사용되었습니다.";
                 throw new IllegalArgumentException("이 쿠폰은 이미 사용되었습니다.");
             }
 
+            message="쿠폰을 사용합니다";
             coupon.setUseyn(false);
             cr.save(coupon);
-            return Optional.of(coupon);
+            return coupon;
         }
+        message="쿠폰이 없습니다";
 
-        return Optional.empty();
+        return null;
     }
 
     public void createAndAssignCoupons(AdminDTO.RequestCoupon issuedCoupon) {
