@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -275,10 +277,36 @@ class RentmonBackApplicationTests {
     }
 
     @Test
+    @Transactional
+    public void updateCreatedAtForReservations() {
+        Random random = new Random();
+        ZoneId zone = ZoneId.of("Asia/Seoul");
+
+        for (int i = 40; i <= 341; i++) {
+            Reservation reservation = reservationRepository.findById(i).orElse(null);
+            if (reservation != null) {
+                // 1년 전부터 현재까지의 날짜를 랜덤으로 생성
+                LocalDateTime start = LocalDateTime.now().minusYears(1);
+                LocalDateTime end = LocalDateTime.now();
+                long startEpochMilli = start.atZone(zone).toInstant().toEpochMilli();
+                long endEpochMilli = end.atZone(zone).toInstant().toEpochMilli();
+
+                // 랜덤한 날짜와 시간을 생성
+                long randomEpochMilli = startEpochMilli + (long) (random.nextDouble() * (endEpochMilli - startEpochMilli));
+                Timestamp randomTimestamp = new Timestamp(randomEpochMilli);
+
+                // 생성한 날짜를 created_at 필드에 설정하여 업데이트
+                reservation.setCreated_at(randomTimestamp);
+                reservationRepository.save(reservation);
+            }
+        }
+    }
+
+    @Test
     public void generateTestVisits() {
         Random random = new Random();
 
-        for (int i = 0; i < 300; i++) {
+        for (int i = 0; i < 3000; i++) {
             Visit visit = new Visit();
 
             // 랜덤 IP 주소 생성
@@ -287,12 +315,11 @@ class RentmonBackApplicationTests {
                     random.nextInt(256) + "." +
                     random.nextInt(256);
 
-            // 현재 시각에서 4년간의 랜덤한 시간 생성
             LocalDateTime now = LocalDateTime.now();
-            LocalDateTime randomDate = now.minusDays(random.nextInt(365 * 4));
+            LocalDateTime randomDate = now.minusDays(random.nextInt(365));
 
             visit.setIpAddress(ipAddress);
-            visit.setCreatedAt(Timestamp.valueOf(randomDate));  // 4년 내 랜덤 날짜 설정
+            visit.setCreatedAt(Timestamp.valueOf(randomDate));
 
             visitRepository.save(visit);
         }

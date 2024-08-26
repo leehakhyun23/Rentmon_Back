@@ -26,10 +26,10 @@ public class AdminController {
 
     @GetMapping("/main")
     public ResponseEntity<AdminDTO.ResponseDashBoard> getMainInfo(@RequestParam String period) {
-        List<AdminDTO.ResponseCategory> category = spaceService.findAll();
-        AdminDTO.ResponseMember memberStatistics = memberService.getMemberStatistics();
-        List<AdminDTO.ResponseReservation> reservations = reservationService.getReservationsByPeriod(period);
         List<AdminDTO.ResponseVisit> visits = visitService.getAllVisitsGroupedByDate();
+        AdminDTO.ResponseMember memberStatistics = memberService.getMemberStatistics();
+        List<AdminDTO.ResponseCategory> category = spaceService.findAll();
+        List<AdminDTO.ResponseReservation> reservations = reservationService.getReservationsByPeriod(period);
 
         AdminDTO.ResponseDashBoard dashBoard = AdminDTO.ResponseDashBoard.builder()
                 .category(category)
