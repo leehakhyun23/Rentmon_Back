@@ -17,9 +17,20 @@ public class AdminDTO {
     @NoArgsConstructor
     @Builder
     public static class ResponseDashBoard {
+        private List<ResponseVisit> visit;
         private List<ResponseCategory> category;
         private ResponseMember member;
         private List<ResponseReservation> reservation;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseVisit {
+        private int count;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp createdAt;
     }
 
     @Data
