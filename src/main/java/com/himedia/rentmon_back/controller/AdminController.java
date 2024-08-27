@@ -65,6 +65,14 @@ public class AdminController {
         return ResponseEntity.ok(updatedCount);
     }
 
+    @DeleteMapping("/user")
+    public ResponseEntity<String> userdelete(@RequestBody List<String> userids) {
+        System.out.println(userids);
+//        adminService.deleteUser(userids);
+
+        return ResponseEntity.ok("");
+    }
+
     @PostMapping("/issuedcoupon")
     public ResponseEntity<String> createdCoupon(@RequestBody AdminDTO.RequestCoupon issuedCoupon) {
         couponService.createAndAssignCoupons(issuedCoupon);

@@ -74,6 +74,9 @@ public class AdminService {
     public int updateUserIsLoginStatus(List<String> userids) {
         return userRepository.updateIsLoginStatus(userids);
     }
+    public void deleteUser(List<String> userids) {
+        userRepository.deleteAllById(userids);
+    }
 
     public Page<AdminDTO.ResponseHost> getHostList(Pageable pageable, String searchType, String keyword) {
         Specification<Host> spec = AdminSpecification.HostSpe.searchByHostList(searchType, keyword);
