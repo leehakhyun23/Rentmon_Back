@@ -92,6 +92,14 @@ public class ReservationController {
         return ResponseEntity.ok(map);
     }
 
+    @GetMapping("/getMyCoupon")
+    public ResponseEntity<Map<String, Object>> getMyCoupon(@RequestParam("userid") String userid) {
+        Map<String, Object> map = new HashMap<>();
+        List<Coupon> list = cs.getMyCoupon(userid);
+        map.put("couponList", list);
+        return ResponseEntity.ok(map);
+    }
+
     @GetMapping("/useCoupon")
     public ResponseEntity<Map<String, Object>> useCoupon(@RequestParam("userid") String userid, @RequestParam("couponstr") String couponstr) {
         Map<String, Object> map = new HashMap<>();
