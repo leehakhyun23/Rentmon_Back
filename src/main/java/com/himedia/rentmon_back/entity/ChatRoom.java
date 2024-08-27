@@ -14,25 +14,21 @@ import java.sql.Timestamp;
 public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cmseq")
-    private int cmseq;
+    @Column(name = "crseq")
+    private int crseq;
 
-    @Column(name = "subject", nullable = false)
-    private String subject;
+    @Column(name = "nickname", nullable = false)
+    private String nickName;
 
     @Column(name = "status")
-    private String status;
+    private boolean status;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp created_at;
+    private Timestamp createdAt;
 
     @ManyToOne
     @JoinColumn(name = "userid")
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "hostid")
-    private Host host;
 }

@@ -1,13 +1,11 @@
 package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.AdminDTO;
+import com.himedia.rentmon_back.entity.ChatRoom;
 import com.himedia.rentmon_back.entity.Declaration;
 import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.User;
-import com.himedia.rentmon_back.repository.CouponRepository;
-import com.himedia.rentmon_back.repository.DeclarationRepository;
-import com.himedia.rentmon_back.repository.HostRepository;
-import com.himedia.rentmon_back.repository.UserRepository;
+import com.himedia.rentmon_back.repository.*;
 import com.himedia.rentmon_back.specification.AdminSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,6 +29,7 @@ public class AdminService {
     private final HostRepository hostRepository;
     private final CouponRepository couponRepository;
     private final DeclarationRepository declarationRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     public Page<AdminDTO.ResponseUser> getUserList(Pageable pageable, String searchType, String keyword, Boolean isLogin, Boolean sortByDeclasCount) {
         Specification<User> spec = AdminSpecification.UserSpe.searchByUserList(searchType, keyword);
@@ -238,5 +237,9 @@ public class AdminService {
         declaration.setReplydate(Timestamp.valueOf(request.getReplyDate()));
 
         return declarationRepository.save(declaration);
+    }
+
+    public List<ChatRoom> getChatRoomList() {
+        return chatRoomRepository.findAll();
     }
 }

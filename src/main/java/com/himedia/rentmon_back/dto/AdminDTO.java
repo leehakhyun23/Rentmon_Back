@@ -187,4 +187,15 @@ public class AdminDTO {
         private String reply;
         private LocalDateTime replyDate;
     }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseChatRoom {
+//        private String profileImage;
+        private String nickName;
+        private String lastMessage;
+        private Timestamp sendTime;
+    }
 }
