@@ -19,10 +19,13 @@ public class ChatMsg {
     private int cmseq;
 
     @Column(name = "sender_type", nullable = false)
-    private RoleType senderType;
+    private String senderType;
 
     @Column(name = "message")
     private String message;
+
+    @Column(name = "is_read", nullable = false)
+    private boolean isRead;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)

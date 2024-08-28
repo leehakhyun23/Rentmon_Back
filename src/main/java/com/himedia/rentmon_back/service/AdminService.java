@@ -1,10 +1,7 @@
 package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.AdminDTO;
-import com.himedia.rentmon_back.entity.ChatRoom;
-import com.himedia.rentmon_back.entity.Declaration;
-import com.himedia.rentmon_back.entity.Host;
-import com.himedia.rentmon_back.entity.User;
+import com.himedia.rentmon_back.entity.*;
 import com.himedia.rentmon_back.repository.*;
 import com.himedia.rentmon_back.specification.AdminSpecification;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,6 +28,7 @@ public class AdminService {
     private final CouponRepository couponRepository;
     private final DeclarationRepository declarationRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
     public Page<AdminDTO.ResponseUser> getUserList(Pageable pageable, String searchType, String keyword, Boolean isLogin, Boolean sortByDeclasCount) {
         Specification<User> spec = AdminSpecification.UserSpe.searchByUserList(searchType, keyword);
@@ -239,7 +238,28 @@ public class AdminService {
         return declarationRepository.save(declaration);
     }
 
-    public List<ChatRoom> getChatRoomList() {
-        return chatRoomRepository.findAll();
+    public List<AdminDTO.ResponseChatRoom> getChatRoomList() {
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
+
+        return chatRoomList.stream().map(
+                chatRoom -> AdminDTO.ResponseChatRoom.builder()
+                        .crseq(chatRoom.getCrseq())
+                        .nickName(chatRoom.getNickName())
+//                        .lastMessage(chatRoom.get)
+                        .lastSendTime(chatRoom.getCreatedAt())
+                        .build()
+        ).collect(Collectors.toList());
+    }
+
+    public List<AdminDTO.ResponseChatMessage> getChatMessage(int crseq) {
+        List<ChatMsg> chatMsgList = chatMessageRepository.findAllById(Collections.singleton(crseq));
+
+        return chatMsgList.stream().map(
+                chatMsg -> AdminDTO.ResponseChatMessage.builder()
+                        .cmseq(chatMsg.getCmseq())
+                        .message(chatMsg.getMessage())
+                        .sendTime(chatMsg.getCreatedAt())
+                        .build()
+        ).collect(Collectors.toList());
     }
 }

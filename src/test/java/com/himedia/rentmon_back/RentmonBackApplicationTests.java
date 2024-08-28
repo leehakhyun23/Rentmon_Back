@@ -13,10 +13,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.IntStream;
 
 @SpringBootTest
 class RentmonBackApplicationTests {
@@ -38,11 +36,26 @@ class RentmonBackApplicationTests {
     private ReservationRepository reservationRepository;
     @Autowired
     private VisitRepository visitRepository;
+    @Autowired
+    private ChatRoomRepository chatRoomRepository;
+    @Autowired
+    private ChatMessageRepository chatMessageRepository;
 
     @Test
     void contextLoads() {
         PasswordEncoder ps = new BCryptPasswordEncoder();
         System.out.println(ps.encode("1234"));
+    }
+
+    @Test
+    void insertAdmin() {
+        PasswordEncoder ps = new BCryptPasswordEncoder();
+
+        Member admin = new Member();
+        admin.setUserid("admin");
+        admin.setPwd(ps.encode("1234"));
+        admin.setRole("admin");
+        memberRepository.save(admin);
     }
 
     @Test
@@ -104,42 +117,32 @@ class RentmonBackApplicationTests {
             String username = "user" + (i + 1);
             Member member = memberRepository.findById(98L + i).orElse(null);
 
-            // Generate random bankId between 1 and 18
             int bankId = random.nextInt(18) + 1;
 
-            // Retrieve the bank if it exists, otherwise create a new one
 //            Bank bank = bankRepository.findById(bankId).orElse(new Bank(bankId, "BankName"));
 
-            // Generate random 16-digit card number
             String cardNumber = String.format("%04d-%04d-%04d-%04d",
                     random.nextInt(10000),
                     random.nextInt(10000),
                     random.nextInt(10000),
                     random.nextInt(10000));
 
-            // Generate random expiration date in MMYY format
             String expirationDate = String.format("%02d%02d",
                     random.nextInt(12) + 1,  // Month between 01 and 12
                     random.nextInt(10) + 25); // Year between 25 and 34
 
-            // Generate random 3-digit CVC code
             int cvc = random.nextInt(900) + 100;
 
-            // Create Card object
 //            Card card = new Card(0, bank, cardNumber, expirationDate, cvc);
 
-            // Save the Card object to get a persistent reference
 //            card = cardRepository.save(card);
 
-            // Create Grade object (assuming Grade needs to be persisted)
             Grade grade = new Grade(1, "bronze", 1000);
 
-            // Create User and add to the list
 //            User user = new User(username, member, card, grade, null, "", "", null, null, null, null, null, null, null);
 //            users.add(user);
         }
 
-        // Save all users to the repository
         userRepository.saveAll(users);
     }
 
@@ -168,7 +171,7 @@ class RentmonBackApplicationTests {
                 new Host("host20", "$2a$10$3IPp6Qee881rn/w7KiTR6OEGObx8mrtoxROBb9/7Vb/uGNsc4xtxe", "host20@example.com", "010-0123-4567", memberRepository.findById(137L).orElse(null), null, "노을빛사냥꾼")
         );
 
-        hostRepository.saveAll(hosts);
+//        hostRepository.saveAll(hosts);
     }
 
     @Test
@@ -176,7 +179,6 @@ class RentmonBackApplicationTests {
         Random random = new Random();
         List<Declaration> declarations = new ArrayList<>();
 
-        // 예시로 사용할 신고 제목 및 내용
         String[] userToSpaceTitles = {
                 "공간 청결 상태 불만",
                 "예약이 제대로 되지 않았습니다",
@@ -209,7 +211,6 @@ class RentmonBackApplicationTests {
                 "예약된 시간 외에도 공간을 사용했습니다."
         };
 
-        // Generate 30 declarations for user -> space
         for (int i = 0; i < 30; i++) {
             String title = userToSpaceTitles[random.nextInt(userToSpaceTitles.length)];
             String content = userToSpaceContents[random.nextInt(userToSpaceContents.length)];
@@ -227,13 +228,12 @@ class RentmonBackApplicationTests {
             }
         }
 
-        // Generate 30 declarations for host -> user
         for (int i = 0; i < 30; i++) {
             String title = hostToUserTitles[random.nextInt(hostToUserTitles.length)];
             String content = hostToUserContents[random.nextInt(hostToUserContents.length)];
 
             Host host = hostRepository.findById("host" + (random.nextInt(20) + 1)).orElse(null);
-            User user = userRepository.findById("user" + (random.nextInt(20) + 1)).orElse(null); // Random user between user1 and user20
+            User user = userRepository.findById("user" + (random.nextInt(20) + 1)).orElse(null);
 
             if (host != null && user != null) {
                 Declaration declaration = new Declaration();
@@ -245,7 +245,6 @@ class RentmonBackApplicationTests {
             }
         }
 
-        // Save all declarations to the repository
         declarationRepository.saveAll(declarations);
     }
 
@@ -256,18 +255,16 @@ class RentmonBackApplicationTests {
         for (int i = 0; i < 300; i++) {
             Reservation reservation = new Reservation();
 
-            // User와 Space를 랜덤으로 선택
             User user = userRepository.findById("user" + (random.nextInt(20) + 1)).orElse(null);
             Space space = spaceRepository.findById(random.nextInt(71) + 67).orElse(null);
 
-            // 4년 전부터 현재까지의 랜덤한 날짜 생성
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime start = now.minusYears(4).plusDays(random.nextInt((int) ChronoUnit.DAYS.between(now.minusYears(4), now)));
-            LocalDateTime end = start.plusHours(random.nextInt(48)); // 예약 기간을 1시간에서 48시간 사이로 설정
+            LocalDateTime end = start.plusHours(random.nextInt(48));
 
             reservation.setUser(user);
             reservation.setSpace(space);
-            reservation.setPayment(random.nextInt(50000) + 5000); // 5000원에서 50000원 사이의 랜덤 금액
+            reservation.setPayment(random.nextInt(50000) + 5000);
             reservation.setRequest("요청사항 " + i);
             reservation.setReservestart(Timestamp.valueOf(start));
             reservation.setReserveend(Timestamp.valueOf(end));
@@ -285,17 +282,14 @@ class RentmonBackApplicationTests {
         for (int i = 40; i <= 341; i++) {
             Reservation reservation = reservationRepository.findById(i).orElse(null);
             if (reservation != null) {
-                // 1년 전부터 현재까지의 날짜를 랜덤으로 생성
                 LocalDateTime start = LocalDateTime.now().minusYears(1);
                 LocalDateTime end = LocalDateTime.now();
                 long startEpochMilli = start.atZone(zone).toInstant().toEpochMilli();
                 long endEpochMilli = end.atZone(zone).toInstant().toEpochMilli();
 
-                // 랜덤한 날짜와 시간을 생성
                 long randomEpochMilli = startEpochMilli + (long) (random.nextDouble() * (endEpochMilli - startEpochMilli));
                 Timestamp randomTimestamp = new Timestamp(randomEpochMilli);
 
-                // 생성한 날짜를 created_at 필드에 설정하여 업데이트
                 reservation.setCreated_at(randomTimestamp);
                 reservationRepository.save(reservation);
             }
@@ -309,7 +303,6 @@ class RentmonBackApplicationTests {
         for (int i = 0; i < 3000; i++) {
             Visit visit = new Visit();
 
-            // 랜덤 IP 주소 생성
             String ipAddress = random.nextInt(256) + "." +
                     random.nextInt(256) + "." +
                     random.nextInt(256) + "." +
@@ -323,5 +316,43 @@ class RentmonBackApplicationTests {
 
             visitRepository.save(visit);
         }
+    }
+
+    @Test
+    public void insertChatRoom() {
+        // User1부터 User20까지의 유저들에 대해 작업합니다.
+        IntStream.rangeClosed(1, 20).forEach(i -> {
+            // 각 유저를 가져옵니다.
+            User user = userRepository.findByUserid("user" + i);
+
+            // 각 유저와 Admin 간의 채팅방을 생성합니다.
+            ChatRoom chatRoom = new ChatRoom();
+            chatRoom.setNickName(user.getMember().getNickname());
+            chatRoom.setStatus(true);
+            chatRoom.setUser(user);
+            chatRoomRepository.save(chatRoom); // 이 시점에서 chatRoom의 crseq가 생성됩니다.
+
+            // 해당 채팅방에 20개의 메시지를 주고받는 형태로 생성합니다.
+            IntStream.rangeClosed(1, 20).forEach(j -> {
+                ChatMsg chatMsg = new ChatMsg();
+                if (j % 2 == 0) {
+                    // 짝수 번째 메시지는 Admin이 보낸 것으로 설정
+                    chatMsg.setSenderType("admin");
+                    chatMsg.setMessage("Message " + j + " from Admin to " + user.getUserid());
+                } else {
+                    // 홀수 번째 메시지는 해당 유저가 보낸 것으로 설정
+                    chatMsg.setSenderType("user");
+                    chatMsg.setMessage("Message " + j + " from " + user.getUserid() + " to Admin");
+                }
+                chatMsg.setRead(false); // 기본값으로 읽지 않은 상태로 설정
+                chatMsg.setChatroom(chatRoom); // ChatRoom을 설정함으로써 crseq가 연결됩니다.
+                chatMessageRepository.save(chatMsg);
+            });
+        });
+    }
+
+    @Test
+    public void insertChatMessage() {
+
     }
 }

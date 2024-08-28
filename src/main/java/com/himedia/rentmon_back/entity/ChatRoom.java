@@ -28,6 +28,11 @@ public class ChatRoom {
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
     private Timestamp createdAt;
 
+    @Column(name = "last_message_at", insertable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+    private Timestamp lastMessageAt;
+
     @ManyToOne
     @JoinColumn(name = "userid")
     private User user;

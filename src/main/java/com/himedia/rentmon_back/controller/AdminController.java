@@ -1,7 +1,6 @@
 package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.dto.AdminDTO;
-import com.himedia.rentmon_back.entity.ChatRoom;
 import com.himedia.rentmon_back.entity.Declaration;
 import com.himedia.rentmon_back.service.*;
 import lombok.RequiredArgsConstructor;
@@ -156,12 +155,24 @@ public class AdminController {
     }
 
     @GetMapping("/chatlist")
-    public ResponseEntity<List<ChatRoom>> getChatRoomList() {
-        List<ChatRoom> chatRoomList = adminService.getChatRoomList();
+    public ResponseEntity<List<AdminDTO.ResponseChatRoom>> getChatRoomList() {
+        List<AdminDTO.ResponseChatRoom> chatRoomList = adminService.getChatRoomList();
 
         if (chatRoomList.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(chatRoomList);
+    }
+
+    @GetMapping("/chatroom/{crseq}")
+    public ResponseEntity<List<AdminDTO.ResponseChatMessage>> getChatMessage(@PathVariable("crseq") int crseq) {
+        System.out.println("ksajdhfljkhsda");
+        List<AdminDTO.ResponseChatMessage> chatMsgList = adminService.getChatMessage(crseq);
+
+        if (chatMsgList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(chatMsgList);
     }
 }
