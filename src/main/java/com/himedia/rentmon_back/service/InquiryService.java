@@ -67,4 +67,13 @@ public class InquiryService {
     public List<Inquiry> findInquirysBysseq(List<Integer> sseqs) {
         return ir.findBySseqIn(sseqs);
     }
+
+    @Transactional
+    public Inquiry addReply(int iseq, String reply) {
+        Inquiry inquiry = ir.findById(iseq)
+                .orElseThrow(() -> new RuntimeException("리뷰를 찾을 수 없습니다. iseq: " + iseq));
+        inquiry.setReply(reply);
+        inquiry.setReplydate(new Timestamp(System.currentTimeMillis())); // 현재 시간 설정
+        return ir.save(inquiry);
+    }
 }

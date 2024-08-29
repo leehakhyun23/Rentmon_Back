@@ -1,5 +1,6 @@
 package com.himedia.rentmon_back.controller;
 
+import com.himedia.rentmon_back.dto.ReplyiRequest;
 import com.himedia.rentmon_back.entity.Inquiry;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.service.InquiryService;
@@ -74,5 +75,9 @@ public class InquiryController {
         }
     }
 
-    
+    @PostMapping("/insertreply")
+    public ResponseEntity<Inquiry> addReply(@RequestBody ReplyiRequest replyRequest) {
+        Inquiry updatedInquiry = is.addReply(replyRequest.getIseq(), replyRequest.getReply());
+        return ResponseEntity.ok(updatedInquiry);
+    }
 }
