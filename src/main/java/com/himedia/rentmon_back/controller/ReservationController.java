@@ -123,6 +123,12 @@ public class ReservationController {
         }
     }
 
+    @GetMapping("/checkReservationStatus")
+    public String checkReservationStatus(@RequestParam("userid") String userid, @RequestParam("sseq") int sseq) {
+        return reservationService.checkReservationStatus(userid, sseq);
+
+    }
+
 
 
 }
