@@ -117,4 +117,11 @@ public class ReviewController {
         Review updatedReview = reviewService.addReply(replyRequest.getRseq(), replyRequest.getReply());
         return ResponseEntity.ok(updatedReview);
     }
+
+    @GetMapping("/delete/{rseq}")
+    public ResponseEntity<String> delete(@PathVariable Integer rseq) {
+        reviewService.deleteReview(rseq);
+        return ResponseEntity.ok("ok");
+    }
+
 }

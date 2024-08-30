@@ -14,6 +14,7 @@ import com.himedia.rentmon_back.repository.HostRepository;
 import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.repository.UserRepository;
 import com.himedia.rentmon_back.util.ImageFileupload;
+import com.himedia.rentmon_back.util.JoinCoupon;
 import com.himedia.rentmon_back.util.MailSend;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -41,6 +42,8 @@ public class UserSnsLoginService {
     private final PasswordEncoder pe;
     private final MailSend ms;
     private final ImageFileupload imgupload;
+    private final JoinCoupon jc;
+
 
     public OAuthToken getKakaoToken(String code, String kakaoclinetId, String redirectUri) {
         OAuthToken token = new OAuthToken();
@@ -127,6 +130,7 @@ public class UserSnsLoginService {
             user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinkakaoMember);
+            jc.joinconponFn(user.getUserid());
         }
 
         return member;
@@ -218,6 +222,7 @@ public class UserSnsLoginService {
             user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinNaverMember);
+            jc.joinconponFn(user.getUserid());
         }
 
         return member;
@@ -359,6 +364,7 @@ public class UserSnsLoginService {
             user.setGnum(new Grade(1, "bronze", 0));
             ur.save(user);
             member = Optional.of(joinGoogleMember);
+            jc.joinconponFn(user.getUserid());
         }
 
         return member;
@@ -422,6 +428,9 @@ public class UserSnsLoginService {
         user.setName(userDTO.getName());
         if(profileimg !=null) user.setProfileimg(imgupload.saveFile(profileimg , "/profile_images"));
         ur.save(user);
+
+        jc.joinconponFn(user.getUserid());
+
     }
 
 

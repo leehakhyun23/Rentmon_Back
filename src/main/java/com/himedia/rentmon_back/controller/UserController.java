@@ -5,7 +5,6 @@ import com.himedia.rentmon_back.dto.usersnsdto.GoogleApi;
 import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
-import com.himedia.rentmon_back.entity.Bank;
 import com.himedia.rentmon_back.entity.Category;
 import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.entity.User;
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

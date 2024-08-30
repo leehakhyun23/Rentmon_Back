@@ -1,7 +1,5 @@
 package com.himedia.rentmon_back.service;
 
-import com.himedia.rentmon_back.entity.Inquiry;
-import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.repository.ReviewImageRepository;
 import com.himedia.rentmon_back.repository.ReviewRepository;
@@ -68,5 +66,9 @@ public class ReviewService {
         review.setReply(reply);
         review.setReplydate(new Timestamp(System.currentTimeMillis())); // 현재 시간 설정
         return reviewRepository.save(review);
+    }
+
+    public void deleteReview(Integer rseq) {
+        reviewRepository.deleteById(rseq);
     }
 }
