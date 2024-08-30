@@ -428,4 +428,12 @@ public class SpaceService {
                 .collect(Collectors.toList());
     }
 
+    public String getSpaceTitle(Integer sseq) {
+        Space space = spaceRepository.findTitleBySseq(sseq);
+        if (space != null) {
+            return space.getTitle(); // Space 엔티티에서 제목을 반환
+        } else {
+            throw new RuntimeException("Space not found with sseq: " + sseq);
+        }
+    }
 }
