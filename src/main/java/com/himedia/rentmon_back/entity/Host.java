@@ -47,7 +47,8 @@ public class Host {
         this.member = new Member();
     }
 
-    public void setMseq(int mseq) {this.member.setMseq(mseq);}
+    public void setMseq(int mseq) {
+        this.member.setMseq(mseq);}
 
 
 }

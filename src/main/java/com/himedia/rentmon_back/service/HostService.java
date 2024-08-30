@@ -2,11 +2,16 @@ package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Member;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.HostRepository;
 import com.himedia.rentmon_back.repository.MemberRepository;
 import com.himedia.rentmon_back.repository.SpaceRepository;
+import com.himedia.rentmon_back.util.MailSend;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +21,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class HostService {
-
+    private final MailSend ms;
     private final HostRepository hr;
     private final MemberRepository memberRepository;
 
@@ -109,12 +114,39 @@ public class HostService {
                 .orElseThrow(() -> new RuntimeException("호스트를 찾을 수 없습니다."));
         hr.delete(host);
     }
-//
-//    public Host getHost(String hostid) {return hr.getHost(hostid);}
-//
-//    public void insertHost(Host host) {hr.insertHost(host);}
-//
-//    public void withDrawal(String hostid) {
-//        hr.widtDrawal(hostid);
-//    }
+
+    public Host searchHost(String hostid, String email) {
+        Optional<Host> host = hr.findByHostidAndEmail(hostid, email);
+        if(host.isPresent()) return host.get();
+        else return null;
+    }
+
+    public void pwdSearchMailsender(String hostid, String email, String resetPasswordUrl) {
+        String content = "<div style='line-height: 1.6; padding: 20px; max-width: 600px; margin: auto;'>" +
+                "<p style='font-size: 24px; font-weight: bold; margin-bottom: 20px; color: #333;'>안녕하세요,</p>" +
+                "<p style='font-size: 16px; color: #555;'>로그인 사이트를 방문해 주셔서 감사합니다.</p>" +
+                "<p style='font-size: 16px; color: #555;'>비밀번호 재설정을 위해 아래 링크를 클릭해주세요:</p>" +
+                "<p style='text-align: left;'>" +
+                "<a href='" + resetPasswordUrl + "' target='_blank' style='padding: 18px 20px; " +
+                " font-size: 16px; color: #fff; background: #0090df; text-decoration: none;  font-weight: bold; display: inline-block;\n" +
+                " margin: 10px 0;'>비밀번호 재설정 페이지로 이동</a></p>" +
+                "<p style='font-size: 16px; color: #555;'>감사합니다.</p>" +
+                "<p style='font-size: 16px; color: #555;'>로그인 사이트 팀</p>" +
+                "</div>";
+        ms.sendEmail(email, resetPasswordUrl+"/"+hostid , content);
+    }
+
+    public String changePassword(String pwd, String userid) {
+        PasswordEncoder ps = new BCryptPasswordEncoder();
+        Optional<Member> memberOptional  = memberRepository.findByUseridAndRole(userid , "host");
+        if(memberOptional.isPresent()){
+            Member member = memberOptional.get();
+            member.setPwd(ps.encode(pwd));
+            memberRepository.save(member);
+            return  "ok";
+        }
+        return "호스트를 찾을 수 없습니다!";
+    }
 }
+
+

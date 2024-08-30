@@ -7,6 +7,7 @@ import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
 import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Member;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.security.CustomSecurityConfig;
 import com.himedia.rentmon_back.service.HostService;
 import com.himedia.rentmon_back.service.MemberService;
@@ -256,6 +257,22 @@ public class HostController {
             e.printStackTrace();
         }
 
+    }
+
+    @PostMapping("/searchPwd")
+    public String searchPwd(@RequestParam("userid") String hostid , @RequestParam("email") String email , @RequestParam("resetPasswordUrl") String resetPasswordUrl){
+        Host host = hs.searchHost(hostid, email);
+        if( host == null){
+            return "회원가입된 계정이 없습니다.";
+        }
+        hs.pwdSearchMailsender( hostid , email , resetPasswordUrl);
+
+        return "메일을 보냈습니다. 해당 이메일에서 확인 해주세요.";
+    }
+
+    @PostMapping("/changePassword")
+    public String changePassword(@RequestBody Map<String, String> map){
+        return hs.changePassword(map.get("pwd"), map.get("userid"));
     }
 
     @DeleteMapping("/delete")

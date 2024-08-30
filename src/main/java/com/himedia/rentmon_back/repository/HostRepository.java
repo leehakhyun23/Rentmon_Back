@@ -32,6 +32,8 @@ public interface HostRepository extends JpaRepository<Host, String>, JpaSpecific
 
     Optional<Host> findByNickname(String nickname);
 
+    Optional<Host> findByHostidAndEmail(String hostid, String email);
+
     // admin
 //    @Modifying // isLogin Toggle
 //    @Query("UPDATE User u SET u.islogin = CASE WHEN u.islogin = TRUE THEN FALSE ELSE TRUE END WHERE u.userid IN :userids")

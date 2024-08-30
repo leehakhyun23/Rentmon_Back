@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.Random;
 
 @Repository
@@ -27,6 +28,7 @@ public class MailSend {
 
         return Integer.toString(authNumber);
     }
+
 
 
     public String setEmail(String email){
@@ -68,4 +70,6 @@ public class MailSend {
         }
         authNumber = Integer.parseInt(randomNumber);
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.himedia.rentmon_back.repository;
 
 import com.himedia.rentmon_back.entity.Hashtag;
+import com.himedia.rentmon_back.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
