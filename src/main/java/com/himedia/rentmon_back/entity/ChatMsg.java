@@ -18,19 +18,21 @@ public class ChatMsg {
     @Column(name = "cmseq")
     private int cmseq;
 
-    @Column(name = "isfid")
-    private String isfid;
+    @Column(name = "sender_type", nullable = false)
+    private String senderType;
 
-    @Column(name = "content")
-    private String content;
+    @Column(name = "message")
+    private String message;
+
+    @Column(name = "is_read", nullable = false)
+    private boolean isRead;
 
     @Column(name = "created_at", nullable = false, updatable = false, insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-    private Timestamp created_at;
+    private Timestamp createdAt;
 
     @ManyToOne
     @JoinColumn(name = "crseq")
     private ChatRoom chatroom;
-
 }

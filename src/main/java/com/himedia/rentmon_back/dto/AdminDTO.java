@@ -187,4 +187,28 @@ public class AdminDTO {
         private String reply;
         private LocalDateTime replyDate;
     }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseChatRoom {
+        private int crseq;
+//        private String profileImage;
+        private String nickName;
+        private String lastMessage;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp lastSendTime;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class ResponseChatMessage {
+        private int cmseq;
+        private String message;
+        @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+        private Timestamp sendTime;
+    }
 }

@@ -65,6 +65,14 @@ public class AdminController {
         return ResponseEntity.ok(updatedCount);
     }
 
+    @DeleteMapping("/user")
+    public ResponseEntity<String> userdelete(@RequestBody List<String> userids) {
+        System.out.println(userids);
+//        adminService.deleteUser(userids);
+
+        return ResponseEntity.ok("");
+    }
+
     @PostMapping("/issuedcoupon")
     public ResponseEntity<String> createdCoupon(@RequestBody AdminDTO.RequestCoupon issuedCoupon) {
         couponService.createAndAssignCoupons(issuedCoupon);
@@ -144,5 +152,27 @@ public class AdminController {
         }
 
         return ResponseEntity.ok(updatedDeclaration);
+    }
+
+    @GetMapping("/chatlist")
+    public ResponseEntity<List<AdminDTO.ResponseChatRoom>> getChatRoomList() {
+        List<AdminDTO.ResponseChatRoom> chatRoomList = adminService.getChatRoomList();
+
+        if (chatRoomList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(chatRoomList);
+    }
+
+    @GetMapping("/chatroom/{crseq}")
+    public ResponseEntity<List<AdminDTO.ResponseChatMessage>> getChatMessage(@PathVariable("crseq") int crseq) {
+        System.out.println("ksajdhfljkhsda");
+        List<AdminDTO.ResponseChatMessage> chatMsgList = adminService.getChatMessage(crseq);
+
+        if (chatMsgList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(chatMsgList);
     }
 }
