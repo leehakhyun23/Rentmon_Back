@@ -34,4 +34,6 @@ public interface CouponRepository extends JpaRepository<Coupon, Long>, JpaSpecif
     Optional<Coupon> findByCouponstr(String couponstr);
     boolean existsByCouponstr(String couponstr);
     Page<Coupon> findAllByUseyn(Boolean useyn, Pageable pageable);
+
+    List<Coupon> findByUserUserid(String userid);
 }
