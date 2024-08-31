@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -87,7 +86,8 @@ public class MainService {
     public List<Space> getspaceviewlist(List<Integer> rctvw) {
         List<Space> list = new ArrayList<>();
         for(int rcv : rctvw){
-            list.add(sp.findBySseq(rcv).get());
+            Optional<Space> bySseq = sp.findBySseq(rcv);
+            if(bySseq.isPresent())list.add(bySseq.get());
         }
         return  list;
     }
