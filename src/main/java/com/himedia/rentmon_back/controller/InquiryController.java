@@ -62,12 +62,8 @@ public class InquiryController {
     @GetMapping("/igetsseq")
     public ResponseEntity<List<Inquiry>> getSseqsByHostid(@RequestParam("hostid") String hostid) {
         try {
-            System.out.println("여기까진 되눈중~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             List<Integer> sseqs = ss.findSseqsByHostid(hostid);
-            System.out.println(sseqs + "--------------------------인쿼리 관련이세요 ------------------------------------------------");
             List<Inquiry> inquirys = is.findInquirysBysseq(sseqs);
-            // 여기부분에 sseqs 과 관련된 모든 예약정보를 찾는 코드
-            System.out.println("아아아아아아아아아아아아아ㅏㅏㅣㅓㅙㅣㅑㅙㅔㅑ"+inquirys);
             return ResponseEntity.ok(inquirys);
         } catch (Exception e) {
             e.printStackTrace();
