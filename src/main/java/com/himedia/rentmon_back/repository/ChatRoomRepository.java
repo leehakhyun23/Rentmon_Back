@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
-    List<ChatRoom> findAllByOrderByCreatedAtDesc();
+//    List<ChatRoom> findAllByOrderByCreatedAtDesc();
     Optional<ChatRoom> findByUser(User user);
 
     // user쪽
