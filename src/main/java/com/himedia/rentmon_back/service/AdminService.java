@@ -247,6 +247,8 @@ public class AdminService {
             String lastMessage = "";
             Timestamp lastSendTime = chatRoom.getCreatedAt();
 
+            int unreadCount = chatMessageRepository.countByChatroomAndIsReadAndSenderTypeNot(chatRoom, false, "admin");
+
             if (lastMessageOpt.isPresent()) {
                 lastMessage = lastMessageOpt.get().getMessage();
                 lastSendTime = lastMessageOpt.get().getCreatedAt();
@@ -257,9 +259,11 @@ public class AdminService {
                     .nickName(chatRoom.getNickName())
                     .lastMessage(lastMessage)
                     .lastSendTime(lastSendTime)
+                    .unreadCount(unreadCount)
                     .build();
         }).collect(Collectors.toList());
     }
+
 
     public List<AdminDTO.ResponseChatMessage> getChatMessage(int crseq) {
         List<ChatMsg> chatMsgList = chatMessageRepository.findAllByChatroomCrseqOrderByCreatedAtAsc(crseq);
@@ -272,5 +276,14 @@ public class AdminService {
                         .createdAt(chatMsg.getCreatedAt())
                         .build()
         ).collect(Collectors.toList());
+    }
+
+    public void markMessagesAsRead(int crseq) {
+        List<ChatMsg> unreadMessages = chatMessageRepository.findByChatroom_CrseqAndSenderTypeAndIsRead(crseq, "user", false);
+
+        for (ChatMsg msg : unreadMessages) {
+            msg.setRead(true);
+        }
+        chatMessageRepository.saveAll(unreadMessages);
     }
 }

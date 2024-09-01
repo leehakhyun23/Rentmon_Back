@@ -199,6 +199,7 @@ public class AdminDTO {
         private String lastMessage;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
         private Timestamp lastSendTime;
+        private int unreadCount;
     }
 
     @Data
