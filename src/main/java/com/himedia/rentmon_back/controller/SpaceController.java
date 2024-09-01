@@ -218,5 +218,4 @@ public class SpaceController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
-
 }
