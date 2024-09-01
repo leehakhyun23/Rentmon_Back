@@ -166,7 +166,6 @@ public class AdminController {
 
     @GetMapping("/chatroom/{crseq}")
     public ResponseEntity<List<AdminDTO.ResponseChatMessage>> getChatMessage(@PathVariable("crseq") int crseq) {
-        System.out.println("ksajdhfljkhsda");
         List<AdminDTO.ResponseChatMessage> chatMsgList = adminService.getChatMessage(crseq);
 
         if (chatMsgList.isEmpty()) {
