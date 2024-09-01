@@ -55,7 +55,7 @@ public class ReviewController {
 
                     // Save the file
 //                    file.transferTo(new File(uploadPath));
-                    String uploadFilePathName = sus.saveFile( file, "review_image");
+                    String uploadFilePathName = sus.saveFile( file, "review_images");
 
                     // Create ReviewImage object and set properties
                     ReviewImage image = new ReviewImage();
