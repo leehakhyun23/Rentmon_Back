@@ -26,7 +26,20 @@ public class S3UploadService {
 
         amazonS3.putObject(bucket, originalFilename, multipartFile.getInputStream(), metadata);
         // 업로드된 파일의 경로와 이름 리턴
-        return amazonS3.getUrl(bucket, originalFilename).toString();
+        return originalFilename;
     }
+
+    public String saveFile(MultipartFile multipartFile, String filpath) throws IOException {
+        String originalFilename = multipartFile.getOriginalFilename();
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(multipartFile.getSize());
+        metadata.setContentType(multipartFile.getContentType());
+
+        amazonS3.putObject(bucket, filpath+"/"+originalFilename, multipartFile.getInputStream(), metadata);
+        // 업로드된 파일의 경로와 이름 리턴
+        return originalFilename;
+    }
+
 
 }
