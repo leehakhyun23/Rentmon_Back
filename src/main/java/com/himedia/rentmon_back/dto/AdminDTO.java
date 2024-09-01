@@ -208,7 +208,8 @@ public class AdminDTO {
     public static class ResponseChatMessage {
         private int cmseq;
         private String message;
+        private String senderType;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-        private Timestamp sendTime;
+        private Timestamp createdAt;
     }
 }

@@ -106,6 +106,9 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/inquery/getsseq")) return true;
 
         if(path.startsWith("/admin")) return true;
+        if(path.startsWith("/chat")) return true;
+        if(path.startsWith("/topic")) return true;
+        if(path.startsWith("/ws")) return true;
 
         return false;
     }
