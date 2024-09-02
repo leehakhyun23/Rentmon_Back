@@ -192,6 +192,11 @@ public class UserController {
         return ResponseEntity.ok(userid+" : " + password);
     }
 
+    @PostMapping("/updateemail")
+    public ResponseEntity<String> updateemail(@RequestParam("userid")String userid, @RequestParam("updateemail") String updateemail){
+        ms.updateemail(userid, updateemail);
+        return ResponseEntity.ok(userid+" : " + updateemail);
+    }
     @GetMapping("/getCrseq")
     public ChatInfoDto getCrseqAndUnreadMessages(@RequestParam("userid") String userid) {
         return chatService.getChatInfo(userid);

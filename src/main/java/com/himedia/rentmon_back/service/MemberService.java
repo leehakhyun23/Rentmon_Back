@@ -2,8 +2,10 @@ package com.himedia.rentmon_back.service;
 
 import com.himedia.rentmon_back.dto.AdminDTO;
 import com.himedia.rentmon_back.entity.Member;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.HostRepository;
 import com.himedia.rentmon_back.repository.MemberRepository;
+import com.himedia.rentmon_back.repository.UserRepository;
 import com.himedia.rentmon_back.security.util.CustomJWTException;
 import com.himedia.rentmon_back.security.util.JWTUtil;
 import com.himedia.rentmon_back.util.TokenRefreshUtil;
@@ -22,6 +24,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final HostRepository hostRepository;
+    private final UserRepository userRepository;
     private TokenRefreshUtil trfu = new TokenRefreshUtil();
 
 
@@ -68,4 +71,11 @@ public class MemberService {
                 .hostCount(hostCount)
                 .build();
     }
+
+    public void updateemail(String userid, String updateemail) {
+        User user = userRepository.findByUserid(userid);
+        user.setEmail(updateemail);
+        userRepository.save(user);
+    }
+    
 }
