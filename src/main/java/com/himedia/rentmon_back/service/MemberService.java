@@ -77,5 +77,5 @@ public class MemberService {
         user.setEmail(updateemail);
         userRepository.save(user);
     }
-    
+
 }
