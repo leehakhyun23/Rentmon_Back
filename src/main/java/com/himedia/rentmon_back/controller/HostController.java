@@ -191,7 +191,7 @@ public class HostController {
     @RequestMapping("/sns/naverlogin")
     public void loginnaver(@RequestParam("code") String code, @RequestParam("state") String state, HttpServletResponse response) {
         try {
-            OAuthToken oAuthToken = usersls.getNaverToken(code, state, naverClinet_id, naverRedirect_uri , "XxT4MYfubz");
+            OAuthToken oAuthToken = usersls.getNaverToken(code, state, naverClinet_id, naverRedirect_uri , "wNH8RZ5hit");
             if (oAuthToken == null || oAuthToken.getAccess_token() == null) {
                 throw new RuntimeException("Failed to obtain access token from Naver.");
             }
