@@ -1,14 +1,13 @@
 package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.dto.FnumDTO;
-import com.himedia.rentmon_back.dto.SpaceAndReviewRaterDTO;
 import com.himedia.rentmon_back.dto.SpaceDTO;
 import com.himedia.rentmon_back.dto.SpaceImageDTO;
 import com.himedia.rentmon_back.dto.SpaceUpdateRequest;
-import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.service.SpaceService;
+import com.himedia.rentmon_back.util.ImageFileupload;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -29,7 +28,7 @@ import java.util.stream.Collectors;
 public class SpaceController {
 
     private final SpaceService spaceService;
-
+    private final ImageFileupload imageFileupload;
     @GetMapping("/getSpaceList")
     public ResponseEntity<List<SpaceDTO>> getSpaceList(
             @RequestParam int page,
@@ -121,21 +120,10 @@ public class SpaceController {
         Map<String, String> result = new HashMap<>();
         try {
             // 이미지 저장 경로 설정
-            String path = context.getRealPath("/space_images");
-            Calendar today = Calendar.getInstance();
-            long dt = today.getTimeInMillis();
-            String filename = file.getOriginalFilename();
-            String fn1 = filename.substring(0, filename.indexOf("."));
-            String fn2 = filename.substring(filename.indexOf("."));
-            String realname = fn1 + dt + fn2;  // 실 저장 파일명
-            String uploadPath = path + "/" + realname;
-
-            // 파일 저장
-            file.transferTo(new File(uploadPath));
-
+            String filename = imageFileupload.saveFile(file, "space_images");
             // 원본 파일명과 저장된 파일명을 결과로 반
             result.put("originalname", filename);
-            result.put("realname", realname);
+            result.put("realname", filename);
         } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
