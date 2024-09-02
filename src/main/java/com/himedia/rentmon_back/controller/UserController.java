@@ -7,10 +7,8 @@ import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
 import com.himedia.rentmon_back.entity.Category;
-import com.himedia.rentmon_back.entity.ChatMsg;
 import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.entity.User;
-import com.himedia.rentmon_back.repository.ChatMessageRepository;
 import com.himedia.rentmon_back.service.*;
 import com.himedia.rentmon_back.util.SnsException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,7 +39,7 @@ public class UserController {
     }
 
     private String kakaoclinet_id="0a261c5101ce9fc314d111962604fbae";
-    private String redirect_uri ="http://localhost:8070/user/sns/kakaoLogin";
+    private String redirect_uri ="https://magracarta.pe.kr:8070/user/sns/kakaoLogin";
 
     @RequestMapping("/sns/kakaostart")
     public @ResponseBody String getKakaoLogin(){
@@ -62,14 +60,14 @@ public class UserController {
             if(kakaoProfile == null) throw new SnsException("카카오 로그인 실패");
             System.out.println(kakaoProfile);
             Optional<Member> member = usersls.getKakaoMember(kakaoProfile);
-            response.sendRedirect("http://localhost:3000/getsnsuserinfo/"+member.get().getUserid()+"/kakao");
+            response.sendRedirect("https://magracarta.pe.kr/user/getsnsuserinfo/"+member.get().getUserid()+"/kakao");
         } catch (SnsException e) {
             e.printStackTrace();
         }
     }
 
     private String naverClinet_id="91PQCpHwsJKS6Ni5owXS";
-    private String naverRedirect_uri ="http://localhost:8070/user/sns/naverlogin";
+    private String naverRedirect_uri ="https://magracarta.pe.kr:8070/user/sns/naverlogin";
 
     @RequestMapping("/sns/naverstart")
     public @ResponseBody String getnaverLogin(){
@@ -90,7 +88,7 @@ public class UserController {
             NaverApi naverapi = usersls.getLoginAPI(oAuthToken.getAccess_token());
             if(naverapi == null) throw new SnsException("네이버 로그인 실패");
             Optional<Member> member = usersls.getNaverMember(naverapi);
-            response.sendRedirect("http://localhost:3000/getsnsuserinfo/"+member.get().getUserid()+"/naver");
+            response.sendRedirect("hhttps://magracarta.pe.kr/user/getsnsuserinfo/"+member.get().getUserid()+"/naver");
         } catch (SnsException | IOException e) {
             throw new RuntimeException(e);
         } 
@@ -98,7 +96,7 @@ public class UserController {
 
 
     private String googleClinet_id="1006482080940-2h22le2b0elv4lv4hivccbeao91et93u.apps.googleusercontent.com";
-    private String gooleRedirect_uri ="http://localhost:8070/user/sns/googlelogin";
+    private String gooleRedirect_uri ="https://magracarta.pe.kr:8070/user/sns/googlelogin";
     private String googleClientPw= "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";
     @RequestMapping("/sns/googlestart")
     public @ResponseBody String getgooleLogin(){
@@ -122,7 +120,7 @@ public class UserController {
             googleapi = usersls.getGoogleProfile(oAuthToken.getAccess_token());
             if(googleapi == null) throw new SnsException("구글 로그인 실패");
             Optional<Member> member = usersls.getGoogleMember(googleapi);
-            response.sendRedirect("http://localhost:3000/getsnsuserinfo/"+member.get().getUserid()+"/google");
+            response.sendRedirect("https://magracarta.pe.kr/user/getsnsuserinfo/"+member.get().getUserid()+"/google");
 
         } catch (SnsException | IOException e) {
             e.printStackTrace();
