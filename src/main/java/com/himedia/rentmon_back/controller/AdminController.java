@@ -174,4 +174,11 @@ public class AdminController {
 
         return ResponseEntity.ok(chatMsgList);
     }
+
+    @PostMapping("/chatroom/{crseq}/markRead")
+    public ResponseEntity<Void> markMessagesAsRead(@PathVariable int crseq) {
+        adminService.markMessagesAsRead(crseq);
+
+        return ResponseEntity.ok().build();
+    }
 }
