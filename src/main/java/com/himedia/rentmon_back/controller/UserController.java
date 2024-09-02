@@ -144,7 +144,6 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<String> join (@ModelAttribute UserDTO userDTO , @RequestParam(value = "profileimg" , required = false) MultipartFile profileimg){
-
         usersls.joinUser(userDTO, profileimg);
         return ResponseEntity.ok(userDTO.getUserid());
     }

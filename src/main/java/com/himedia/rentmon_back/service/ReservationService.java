@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +25,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
 import java.time.temporal.IsoFields;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -140,6 +138,26 @@ public class ReservationService {
             case "daily" -> dateTime.toLocalDate().toString();
             default -> throw new IllegalArgumentException("Invalid period: " + period);
         };
+    }
+
+    public String checkReservationStatus(String userid, int sseq) {
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+
+        // 해당 사용자가 공간을 예약했는지 확인
+        Optional<Reservation> reservationOpt = reservationRepository.findByUserUseridAndSpaceSseq(userid, sseq);
+
+        if (reservationOpt.isPresent()) {
+            // 예약이 있고, 예약 종료 시간이 현재 시각을 지났는지 확인
+            Optional<Reservation> pastReservationOpt = reservationRepository.findByUserUseridAndSpaceSseqAndReserveendBefore(userid, sseq, currentTimestamp);
+
+            if (pastReservationOpt.isPresent()) {
+                return "OK";  // 예약 시간이 지남
+            } else {
+                return "NO";  // 예약 시간이 아직 남음
+            }
+        } else {
+            return "NO";  // 예약 자체가 없음
+        }
     }
 }
 

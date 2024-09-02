@@ -1,7 +1,5 @@
 package com.himedia.rentmon_back.service;
 
-import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
-import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.repository.*;
 import com.himedia.rentmon_back.util.ImageFileupload;
@@ -10,10 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -46,10 +43,14 @@ public class UserService {
 
     public void setProfileimg(String userid, MultipartFile profileimg) {
         User user = ur.findByUserid(userid);
-        if(user.getProfileimg() != null) imgf.removeFile(user.getProfileimg(), "/profile_images");
+        if(user.getProfileimg() != null) imgf.removeFile(user.getProfileimg(), "profile_images");
         user.setProfileimg(null);
         if (profileimg != null ) {
-            user.setProfileimg(imgf.saveFile(profileimg , "/profile_images"));
+            try {
+                user.setProfileimg(imgf.saveFile(profileimg , "profile_images"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         ur.save(user);
 

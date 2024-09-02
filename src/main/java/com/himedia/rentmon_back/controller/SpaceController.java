@@ -218,4 +218,16 @@ public class SpaceController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/getSpaceTitle")
+    public ResponseEntity<String> getSpaceTitle(@RequestParam Integer sseq) {
+        try {
+            String title = spaceService.getSpaceTitle(sseq);
+            System.out.println(ResponseEntity.ok(title));
+            return ResponseEntity.ok(title);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
 }
