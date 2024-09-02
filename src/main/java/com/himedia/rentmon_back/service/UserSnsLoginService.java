@@ -426,7 +426,13 @@ public class UserSnsLoginService {
         user.setGnum(new Grade(1, "bronze", 0));
         user.setEmail(userDTO.getEmail());
         user.setName(userDTO.getName());
-        if(profileimg !=null) user.setProfileimg(imgupload.saveFile(profileimg , "/profile_images"));
+        if(profileimg !=null) {
+            try {
+                user.setProfileimg(imgupload.saveFile(profileimg , "/profile_images"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         ur.save(user);
 
         jc.joinconponFn(user.getUserid());

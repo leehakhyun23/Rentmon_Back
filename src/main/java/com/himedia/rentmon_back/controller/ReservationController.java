@@ -92,6 +92,14 @@ public class ReservationController {
         return ResponseEntity.ok(map);
     }
 
+    @GetMapping("/getMyCoupon")
+    public ResponseEntity<Map<String, Object>> getMyCoupon(@RequestParam("userid") String userid) {
+        Map<String, Object> map = new HashMap<>();
+        List<Coupon> list = cs.getMyCoupon(userid);
+        map.put("couponList", list);
+        return ResponseEntity.ok(map);
+    }
+
     @GetMapping("/useCoupon")
     public ResponseEntity<Map<String, Object>> useCoupon(@RequestParam("userid") String userid, @RequestParam("couponstr") String couponstr) {
         Map<String, Object> map = new HashMap<>();
@@ -113,6 +121,12 @@ public class ReservationController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
+    @GetMapping("/checkReservationStatus")
+    public String checkReservationStatus(@RequestParam("userid") String userid, @RequestParam("sseq") int sseq) {
+        return reservationService.checkReservationStatus(userid, sseq);
+
     }
 
 

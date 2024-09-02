@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -241,25 +238,54 @@ public class AdminService {
     public List<AdminDTO.ResponseChatRoom> getChatRoomList() {
         List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
 
-        return chatRoomList.stream().map(
-                chatRoom -> AdminDTO.ResponseChatRoom.builder()
-                        .crseq(chatRoom.getCrseq())
-                        .nickName(chatRoom.getNickName())
-//                        .lastMessage(chatRoom.get)
-                        .lastSendTime(chatRoom.getCreatedAt())
-                        .build()
-        ).collect(Collectors.toList());
+        return chatRoomList.stream()
+                .map(chatRoom -> {
+                    Optional<ChatMsg> lastMessageOpt = chatMessageRepository.findFirstByChatroomOrderByCreatedAtDesc(chatRoom);
+
+                    String lastMessage = "";
+                    Timestamp lastSendTime = chatRoom.getCreatedAt();
+
+                    int unreadCount = chatMessageRepository.countByChatroomAndIsReadAndSenderTypeNot(chatRoom, false, "admin");
+
+                    if (lastMessageOpt.isPresent()) {
+                        lastMessage = lastMessageOpt.get().getMessage();
+                        lastSendTime = lastMessageOpt.get().getCreatedAt();
+                    }
+
+                    return AdminDTO.ResponseChatRoom.builder()
+                            .crseq(chatRoom.getCrseq())
+                            .userid(chatRoom.getUser().getUserid())
+                            .nickName(chatRoom.getNickName())
+                            .lastMessage(lastMessage)
+                            .lastSendTime(lastSendTime)
+                            .unreadCount(unreadCount)
+                            .build();
+                })
+                .sorted(Comparator.comparing(AdminDTO.ResponseChatRoom::getUnreadCount).reversed()
+                        .thenComparing(Comparator.comparing(AdminDTO.ResponseChatRoom::getLastSendTime).reversed()))
+                .collect(Collectors.toList());
     }
 
+
     public List<AdminDTO.ResponseChatMessage> getChatMessage(int crseq) {
-        List<ChatMsg> chatMsgList = chatMessageRepository.findAllById(Collections.singleton(crseq));
+        List<ChatMsg> chatMsgList = chatMessageRepository.findAllByChatroomCrseqOrderByCreatedAtAsc(crseq);
 
         return chatMsgList.stream().map(
                 chatMsg -> AdminDTO.ResponseChatMessage.builder()
                         .cmseq(chatMsg.getCmseq())
                         .message(chatMsg.getMessage())
-                        .sendTime(chatMsg.getCreatedAt())
+                        .senderType(chatMsg.getSenderType())
+                        .createdAt(chatMsg.getCreatedAt())
                         .build()
         ).collect(Collectors.toList());
+    }
+
+    public void markMessagesAsRead(int crseq) {
+        List<ChatMsg> unreadMessages = chatMessageRepository.findByChatroom_CrseqAndSenderTypeAndIsRead(crseq, "user", false);
+
+        for (ChatMsg msg : unreadMessages) {
+            msg.setRead(true);
+        }
+        chatMessageRepository.saveAll(unreadMessages);
     }
 }

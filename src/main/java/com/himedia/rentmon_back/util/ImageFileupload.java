@@ -1,14 +1,16 @@
 package com.himedia.rentmon_back.util;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Calendar;
 
 @Repository
 @RequiredArgsConstructor
@@ -16,31 +18,26 @@ import java.util.Calendar;
 public class ImageFileupload {
 
     private final ServletContext context;
+    private final AmazonS3 amazonS3;
 
-    public String saveFile(MultipartFile profileimg , String filpath) {
-        String result = "";
-        String realpath = context.getRealPath(filpath);
-        System.out.println("profile_images-------------------"+realpath);
-        File realpathfile = new File(realpath);
-        if (!realpathfile.exists()) realpathfile.mkdirs();
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
-        Calendar today = Calendar.getInstance();
-        long dt = today.getTimeInMillis();
-        String filename = profileimg.getOriginalFilename();
-        String fn1 = filename.substring(0, filename.indexOf(".") );
-        String fn2 = filename.substring(filename.indexOf(".") );
-        String uploadPath = realpath + "/" + fn1 + dt + fn2;
-        try {
-            profileimg.transferTo( new File(uploadPath) );
-            result = fn1 + dt + fn2;
+    public String saveFile(MultipartFile profileimg , String filpath) throws IOException {
+        String originalFilename = profileimg.getOriginalFilename();
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(profileimg.getSize());
+        metadata.setContentType(profileimg.getContentType());
+        amazonS3.putObject(bucket, filpath+"/"+originalFilename, profileimg.getInputStream(), metadata);
 
-        } catch (IllegalStateException | IOException e) {e.printStackTrace();}
-        return result;
+        return originalFilename;
     }
 
     public void removeFile(String filename , String filpath){
-        String realpath = context.getRealPath(filpath);
-        File removefile = new File(realpath + File.separator + filename);
-        removefile.delete();
+        try{
+        amazonS3.deleteObject(bucket, filpath+"/"+filename);
+        }catch(AmazonS3Exception e){
+            e.printStackTrace();
+        }
     }
 }

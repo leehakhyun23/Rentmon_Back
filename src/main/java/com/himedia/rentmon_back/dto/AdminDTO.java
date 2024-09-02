@@ -194,11 +194,12 @@ public class AdminDTO {
     @Builder
     public static class ResponseChatRoom {
         private int crseq;
-//        private String profileImage;
+        private String userid;
         private String nickName;
         private String lastMessage;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
         private Timestamp lastSendTime;
+        private int unreadCount;
     }
 
     @Data
@@ -208,7 +209,8 @@ public class AdminDTO {
     public static class ResponseChatMessage {
         private int cmseq;
         private String message;
+        private String senderType;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
-        private Timestamp sendTime;
+        private Timestamp createdAt;
     }
 }

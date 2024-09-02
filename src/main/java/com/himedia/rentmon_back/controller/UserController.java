@@ -1,17 +1,17 @@
 package com.himedia.rentmon_back.controller;
 
+import com.himedia.rentmon_back.dto.ChatInfoDto;
 import com.himedia.rentmon_back.dto.UserDTO;
 import com.himedia.rentmon_back.dto.usersnsdto.GoogleApi;
 import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
 import com.himedia.rentmon_back.entity.Category;
+import com.himedia.rentmon_back.entity.ChatMsg;
 import com.himedia.rentmon_back.entity.Member;
 import com.himedia.rentmon_back.entity.User;
-import com.himedia.rentmon_back.service.CategoryService;
-import com.himedia.rentmon_back.service.MemberService;
-import com.himedia.rentmon_back.service.UserService;
-import com.himedia.rentmon_back.service.UserSnsLoginService;
+import com.himedia.rentmon_back.repository.ChatMessageRepository;
+import com.himedia.rentmon_back.service.*;
 import com.himedia.rentmon_back.util.SnsException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +32,7 @@ public class UserController {
     private final UserService us;
     private final CategoryService cs;
     private final UserSnsLoginService usersls;
+    private final ChatService chatService;
 
     @GetMapping("/getuseinfo")
     public ResponseEntity<User> getUseInfo(@RequestParam("userid") String userid){
@@ -143,7 +144,6 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<String> join (@ModelAttribute UserDTO userDTO , @RequestParam(value = "profileimg" , required = false) MultipartFile profileimg){
-
         usersls.joinUser(userDTO, profileimg);
         return ResponseEntity.ok(userDTO.getUserid());
     }
@@ -194,4 +194,8 @@ public class UserController {
         return ResponseEntity.ok(userid+" : " + password);
     }
 
+    @GetMapping("/getCrseq")
+    public ChatInfoDto getCrseqAndUnreadMessages(@RequestParam("userid") String userid) {
+        return chatService.getChatInfo(userid);
+    }
 }
