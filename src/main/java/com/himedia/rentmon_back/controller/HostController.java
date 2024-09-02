@@ -1,15 +1,16 @@
 package com.himedia.rentmon_back.controller;
 
-import com.himedia.rentmon_back.dto.ReportDTO;
 import com.himedia.rentmon_back.dto.usersnsdto.GoogleApi;
 import com.himedia.rentmon_back.dto.usersnsdto.KakaoProfile;
 import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
 import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Member;
-import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.security.CustomSecurityConfig;
-import com.himedia.rentmon_back.service.*;
+import com.himedia.rentmon_back.service.HostService;
+import com.himedia.rentmon_back.service.MemberService;
+import com.himedia.rentmon_back.service.UserService;
+import com.himedia.rentmon_back.service.UserSnsLoginService;
 import com.himedia.rentmon_back.util.MailSend;
 import com.himedia.rentmon_back.util.SnsException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/host")
@@ -33,8 +36,6 @@ public class HostController {
     private final UserSnsLoginService usersls;
     private final CustomSecurityConfig cc;
     private final MailSend mailSend;
-    private final SpaceService spaceService;
-    private final HostService hostService;
 
     @GetMapping("/gethostinfo")
     public ResponseEntity<Host> getHostInfo(@RequestParam("hostid") String hostid){
@@ -266,40 +267,5 @@ public class HostController {
 //            result.put("error", "회원 탈퇴 중 오류가 발생했습니다: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
-    }
-
-    @GetMapping("/getspaces")
-    public ResponseEntity<List<Space>> getSpaces(String hostid) {
-        List<Space> spaces = spaceService.getSpaces(hostid);
-
-        if (spaces == null || spaces.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(spaces);
-    }
-
-    @GetMapping("/totalsales")
-    public ResponseEntity<ReportDTO.ResponseTotalSales> getTotalSales(@RequestParam String hostid) {
-        List<ReportDTO.SpaceSalesData> spaceSalesDataList = spaceService.getSpaceSalesData(hostid);
-
-        ReportDTO.ResponseTotalSales response = ReportDTO.ResponseTotalSales.builder()
-                .spaceSalesDataList(spaceSalesDataList)
-                .build();
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/reservations")
-    public ResponseEntity<ReportDTO.ResponseReservations> getReservations(@RequestParam String hostid) {
-        List<ReportDTO.ReservationDetail> reservationDetails = spaceService.getReservationDetails(hostid);
-        int totalReservations = reservationDetails.size();
-
-        ReportDTO.ResponseReservations response = ReportDTO.ResponseReservations.builder()
-                .totalReservations(totalReservations)
-                .reservationDetails(reservationDetails)
-                .build();
-
-        return ResponseEntity.ok(response);
     }
 }

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,12 +28,6 @@ public class CouponService {
     private final UserRepository userRepository;
     private LocalDateTime now = LocalDateTime.now();
 
-    public List<Coupon> getMyCoupon(String userid) {
-        List<Coupon> coupons = new ArrayList<>();
-        coupons = cr.findByUserUserid(userid);
-        return coupons;
-    }
-
     public int getUsedAllcount(String userid) {
         return cr.getUsedAllcount(userid , now);
     }
@@ -45,8 +38,6 @@ public class CouponService {
         Page<Coupon> list = cr.getUsedList(userid, now, pageable);
         return list.getContent();
     }
-
-
 
     public Coupon useCoupon(String userid, String couponstr) {
         Optional<Coupon> couponOpt = cr.findByCouponstr(couponstr);

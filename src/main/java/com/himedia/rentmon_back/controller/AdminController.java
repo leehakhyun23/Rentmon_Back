@@ -166,6 +166,7 @@ public class AdminController {
 
     @GetMapping("/chatroom/{crseq}")
     public ResponseEntity<List<AdminDTO.ResponseChatMessage>> getChatMessage(@PathVariable("crseq") int crseq) {
+        System.out.println("ksajdhfljkhsda");
         List<AdminDTO.ResponseChatMessage> chatMsgList = adminService.getChatMessage(crseq);
 
         if (chatMsgList.isEmpty()) {
@@ -173,12 +174,5 @@ public class AdminController {
         }
 
         return ResponseEntity.ok(chatMsgList);
-    }
-
-    @PostMapping("/chatroom/{crseq}/markRead")
-    public ResponseEntity<Void> markMessagesAsRead(@PathVariable int crseq) {
-        adminService.markMessagesAsRead(crseq);
-
-        return ResponseEntity.ok().build();
     }
 }

@@ -18,10 +18,6 @@ public class ChatMsg {
     @Column(name = "cmseq")
     private int cmseq;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
-    private MessageType type;
-
     @Column(name = "sender_type", nullable = false)
     private String senderType;
 

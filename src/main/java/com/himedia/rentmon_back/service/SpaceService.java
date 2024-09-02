@@ -1,6 +1,9 @@
 package com.himedia.rentmon_back.service;
 
-import com.himedia.rentmon_back.dto.*;
+import com.himedia.rentmon_back.dto.AdminDTO;
+import com.himedia.rentmon_back.dto.FnumDTO;
+import com.himedia.rentmon_back.dto.SpaceDTO;
+import com.himedia.rentmon_back.dto.SpaceUpdateRequest;
 import com.himedia.rentmon_back.entity.*;
 import com.himedia.rentmon_back.repository.*;
 import com.himedia.rentmon_back.specification.SpaceSpecifications;
@@ -432,44 +435,5 @@ public class SpaceService {
         } else {
             throw new RuntimeException("Space not found with sseq: " + sseq);
         }
-    }
-    public List<Space> getSpaces(String hostid) {
-        return spaceRepository.findByHost_Hostid(hostid);
-    }
-
-    public List<ReportDTO.SpaceSalesData> getSpaceSalesData(String hostid) {
-        List<Space> spaces = spaceRepository.findByHost_Hostid(hostid);
-        List<ReportDTO.SpaceSalesData> spaceSalesDataList = new ArrayList<>();
-
-        for (Space space : spaces) {
-            int totalReservations = rr.countBySpace(space);
-            int totalSales = rr.sumPaymentBySpace(space);
-
-            spaceSalesDataList.add(ReportDTO.SpaceSalesData.builder()
-                    .spaceTitle(space.getTitle())
-                    .totalReservations(totalReservations)
-                    .totalSales(totalSales)
-                    .build());
-        }
-
-        return spaceSalesDataList;
-    }
-
-    public List<ReportDTO.ReservationDetail> getReservationDetails(String hostid) {
-        List<Space> spaces = spaceRepository.findByHost_Hostid(hostid);
-        List<ReportDTO.ReservationDetail> reservationDetails = new ArrayList<>();
-
-        for (Space space : spaces) {
-            List<Reservation> reservations = rr.findBySpace(space);
-            for (Reservation reservation : reservations) {
-                reservationDetails.add(ReportDTO.ReservationDetail.builder()
-                        .payment(reservation.getPayment())  // 결제 금액
-                        .reservestart(reservation.getReservestart())  // 예약 시작 시간
-                        .reserveend(reservation.getReserveend())  // 예약 종료 시간
-                        .build());
-            }
-        }
-
-        return reservationDetails;
     }
 }

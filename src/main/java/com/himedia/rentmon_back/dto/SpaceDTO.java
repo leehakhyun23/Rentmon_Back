@@ -36,5 +36,7 @@ public class SpaceDTO {
         this.reviewCount = reviewCount;
         this.rating = rating;
         this.zzimCount = zzimCount;
+
     }
+
 }

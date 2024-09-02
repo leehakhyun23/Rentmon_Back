@@ -38,6 +38,5 @@ public interface SpaceRepository extends JpaRepository<Space, Integer>, JpaSpeci
     List<Integer> findSseqsByHostId(@Param("host") Host host);
 
     Space findTitleBySseq(Integer sseq);
-    List<Space> findByHost_Hostid(String hostid);
 }
 
