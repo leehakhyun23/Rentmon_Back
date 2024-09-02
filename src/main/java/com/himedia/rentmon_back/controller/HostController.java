@@ -7,6 +7,7 @@ import com.himedia.rentmon_back.dto.usersnsdto.NaverApi;
 import com.himedia.rentmon_back.dto.usersnsdto.OAuthToken;
 import com.himedia.rentmon_back.entity.Host;
 import com.himedia.rentmon_back.entity.Member;
+import com.himedia.rentmon_back.entity.User;
 import com.himedia.rentmon_back.entity.Space;
 import com.himedia.rentmon_back.security.CustomSecurityConfig;
 import com.himedia.rentmon_back.service.*;
@@ -146,8 +147,8 @@ public class HostController {
 
 
 
-    private String kakaoclinet_id="af83d61f2710ca5e0a91faa716b35322";
-    private String redirect_uri ="http://localhost:8070/host/sns/kakaoLogin";
+    private String kakaoclinet_id="5cd7c126d71b8e1c602a9c3f5d646c3f";
+    private String redirect_uri ="http://3.24.74.142/host/sns/kakaoLogin";
 
     @RequestMapping("/sns/kakaostart")
     public @ResponseBody String getKakaoLogin(){
@@ -166,7 +167,7 @@ public class HostController {
         KakaoProfile kakaoProfile = usersls.getKakaoProfile(oAuthToken);
         try {
             Optional<Member> member = usersls.getKakaoHost(kakaoProfile);
-            response.sendRedirect("http://localhost:3001/getsnshostinfo/"+member.get().getUserid()+"/kakao");
+            response.sendRedirect("http://3.24.74.142/host/getsnshostinfo/"+member.get().getUserid()+"/kakao");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -174,7 +175,7 @@ public class HostController {
 
     // naver
     private String naverClinet_id="urF5LV2yokGTpt925Ejm";
-    private String naverRedirect_uri ="http://localhost:8070/host/sns/naverlogin";
+    private String naverRedirect_uri ="http://3.24.74.142/host/sns/naverlogin";
 
     @RequestMapping("/sns/naverstart")
     public @ResponseBody String getnaverLogin(){
@@ -207,7 +208,7 @@ public class HostController {
                 throw new RuntimeException("Failed to get member information.");
             }
 
-            response.sendRedirect("http://localhost:3001/getsnshostinfo/" + member.get().getUserid() + "/naver");
+            response.sendRedirect("http://3.24.74.142/host/getsnshostinfo/" + member.get().getUserid() + "/naver");
         } catch (Exception e) {
             e.printStackTrace(); // 로그에 오류 기록
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -221,7 +222,7 @@ public class HostController {
 
 
     private String googleClinet_id="325806549360-rfnkgftjf45c468fs66jrf24k1o1ga8t.apps.googleusercontent.com";
-    private String gooleRedirect_uri ="http://localhost:8070/host/sns/googlelogin";
+    private String gooleRedirect_uri ="http://3.24.74.142/host/sns/googlelogin";
     private String googleClientPw= "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";
     @RequestMapping("/sns/googlestart")
     public @ResponseBody String getgooleLogin(){
@@ -245,7 +246,7 @@ public class HostController {
             googleapi = usersls.getGoogleProfile(oAuthToken.getAccess_token());
             if(googleapi == null) throw new SnsException("구글 로그인 실패");
             Optional<Member> member = usersls.getGoogleHost(googleapi);
-            response.sendRedirect("http://localhost:3001/getsnshostinfo/"+member.get().getUserid()+"/google");
+            response.sendRedirect("http://3.24.74.142/host/getsnshostinfo/"+member.get().getUserid()+"/google");
 
         } catch (SnsException | IOException e) {
             e.printStackTrace();
