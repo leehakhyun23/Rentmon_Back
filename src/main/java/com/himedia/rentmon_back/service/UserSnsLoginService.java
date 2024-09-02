@@ -168,7 +168,6 @@ public class UserSnsLoginService {
         System.out.println("Received naverRedirectUri: " + naverRedirectUri);
         OAuthToken oAuthToken = null;
         try {
-            System.out.println("kljsflkjdslkfjdlks");
             URL url= new URL("https://nid.naver.com/oauth2.0/token");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");

@@ -40,8 +40,8 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    private String kakaoclinet_id="0a261c5101ce9fc314d111962604fbae";
-    private String redirect_uri ="http://localhost:8070/user/sns/kakaoLogin";
+    private String kakaoclinet_id="e277dc57901b63ae2b6cddddfc99b9a3";
+    private String redirect_uri ="http://13.125.67.78/api/user/sns/kakaoLogin";
 
     @RequestMapping("/sns/kakaostart")
     public @ResponseBody String getKakaoLogin(){
@@ -62,7 +62,7 @@ public class UserController {
             if(kakaoProfile == null) throw new SnsException("카카오 로그인 실패");
             System.out.println(kakaoProfile);
             Optional<Member> member = usersls.getKakaoMember(kakaoProfile);
-            response.sendRedirect("http://localhost:3000/getsnsuserinfo/"+member.get().getUserid()+"/kakao");
+            response.sendRedirect("http://13.125.67.78/user/getsnsuserinfo/"+member.get().getUserid()+"/kakao");
         } catch (SnsException e) {
             e.printStackTrace();
         }

@@ -39,7 +39,6 @@ public class HostController {
     @GetMapping("/gethostinfo")
     public ResponseEntity<Host> getHostInfo(@RequestParam("hostid") String hostid){
         Host host = hs.getHostInfo(hostid);
-        System.out.println(host.toString());
         return ResponseEntity.ok(host);
     }
 
@@ -146,8 +145,8 @@ public class HostController {
 
 
 
-    private String kakaoclinet_id="af83d61f2710ca5e0a91faa716b35322";
-    private String redirect_uri ="http://localhost:8070/host/sns/kakaoLogin";
+    private String kakaoclinet_id="e277dc57901b63ae2b6cddddfc99b9a3";
+    private String redirect_uri ="http://13.125.67.78:8070/host/sns/kakaoLogin";
 
     @RequestMapping("/sns/kakaostart")
     public @ResponseBody String getKakaoLogin(){
@@ -166,7 +165,7 @@ public class HostController {
         KakaoProfile kakaoProfile = usersls.getKakaoProfile(oAuthToken);
         try {
             Optional<Member> member = usersls.getKakaoHost(kakaoProfile);
-            response.sendRedirect("http://localhost:3001/getsnshostinfo/"+member.get().getUserid()+"/kakao");
+            response.sendRedirect("http://13.125.67.78/getsnshostinfo/"+member.get().getUserid()+"/kakao");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
