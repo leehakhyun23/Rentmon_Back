@@ -88,7 +88,7 @@ public class UserController {
             NaverApi naverapi = usersls.getLoginAPI(oAuthToken.getAccess_token());
             if(naverapi == null) throw new SnsException("네이버 로그인 실패");
             Optional<Member> member = usersls.getNaverMember(naverapi);
-            response.sendRedirect("hhttps://magracarta.pe.kr/user/getsnsuserinfo/"+member.get().getUserid()+"/naver");
+            response.sendRedirect("https://magracarta.pe.kr/user/getsnsuserinfo/"+member.get().getUserid()+"/naver");
         } catch (SnsException | IOException e) {
             throw new RuntimeException(e);
         } 
