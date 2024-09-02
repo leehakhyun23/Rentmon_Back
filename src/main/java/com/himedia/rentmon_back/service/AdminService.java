@@ -254,6 +254,7 @@ public class AdminService {
 
                     return AdminDTO.ResponseChatRoom.builder()
                             .crseq(chatRoom.getCrseq())
+                            .userid(chatRoom.getUser().getUserid())
                             .nickName(chatRoom.getNickName())
                             .lastMessage(lastMessage)
                             .lastSendTime(lastSendTime)
