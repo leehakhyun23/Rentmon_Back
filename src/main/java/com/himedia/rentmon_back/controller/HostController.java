@@ -147,7 +147,7 @@ public class HostController {
 
 
     private String kakaoclinet_id="af83d61f2710ca5e0a91faa716b35322";
-    private String redirect_uri ="https://magracarta.pe.kr:8070/host/sns/kakaoLogin";
+    private String redirect_uri ="https://magracarta.pe.kr/api/host/sns/kakaoLogin";
 
     @RequestMapping("/sns/kakaostart")
     public @ResponseBody String getKakaoLogin(){
@@ -174,7 +174,7 @@ public class HostController {
 
     // naver
     private String naverClinet_id="urF5LV2yokGTpt925Ejm";
-    private String naverRedirect_uri ="https://magracarta.pe.kr:8070/host/sns/naverlogin";
+    private String naverRedirect_uri ="https://magracarta.pe.kr/api/host/sns/naverlogin";
 
     @RequestMapping("/sns/naverstart")
     public @ResponseBody String getnaverLogin(){
@@ -221,7 +221,7 @@ public class HostController {
 
 
     private String googleClinet_id="325806549360-rfnkgftjf45c468fs66jrf24k1o1ga8t.apps.googleusercontent.com";
-    private String gooleRedirect_uri ="https://magracarta.pe.kr:8070/host/sns/googlelogin";
+    private String gooleRedirect_uri ="https://magracarta.pe.kr/api/host/sns/googlelogin";
     private String googleClientPw= "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";
     @RequestMapping("/sns/googlestart")
     public @ResponseBody String getgooleLogin(){
