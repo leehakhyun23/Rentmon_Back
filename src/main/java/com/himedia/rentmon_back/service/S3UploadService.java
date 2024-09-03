@@ -48,7 +48,7 @@ public class S3UploadService {
 
         amazonS3.putObject(bucket, filpath + "/" + newFilename, multipartFile.getInputStream(), metadata);
         // 업로드된 파일의 경로와 이름 리턴
-        return originalFilename;
+        return newFilename;
     }
 
 
