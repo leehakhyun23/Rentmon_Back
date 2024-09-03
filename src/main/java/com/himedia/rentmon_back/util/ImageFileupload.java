@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Repository
 @RequiredArgsConstructor
@@ -25,12 +27,22 @@ public class ImageFileupload {
 
     public String saveFile(MultipartFile profileimg , String filpath) throws IOException {
         String originalFilename = profileimg.getOriginalFilename();
+
+        String timestamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+        String extension = "";
+        int dotIndex = originalFilename.lastIndexOf('.');
+        if (dotIndex > 0) {
+            extension = originalFilename.substring(dotIndex);
+        }
+        String newFilename = originalFilename.substring(0, dotIndex) + "_" + timestamp + extension;
+
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(profileimg.getSize());
         metadata.setContentType(profileimg.getContentType());
-        amazonS3.putObject(bucket, filpath+"/"+originalFilename, profileimg.getInputStream(), metadata);
 
-        return originalFilename;
+        amazonS3.putObject(bucket, filpath + "/" + newFilename, profileimg.getInputStream(), metadata);
+        // 업로드된 파일의 경로와 이름 리턴
+        return newFilename;
     }
 
     public void removeFile(String filename , String filpath){
