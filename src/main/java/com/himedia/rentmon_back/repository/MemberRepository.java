@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Member findByUserid(String userid);
+
     Optional<Member> findByUseridAndRole(String username, String role);
 
     @Query("SELECT m.mseq FROM Member m WHERE m.userid = :userid")

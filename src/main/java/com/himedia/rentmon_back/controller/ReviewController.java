@@ -1,15 +1,12 @@
 package com.himedia.rentmon_back.controller;
 
 import com.himedia.rentmon_back.dto.ReplyRequest;
-import com.himedia.rentmon_back.entity.Inquiry;
-import com.himedia.rentmon_back.entity.Reservation;
 import com.himedia.rentmon_back.entity.Review;
 import com.himedia.rentmon_back.entity.ReviewImage;
 import com.himedia.rentmon_back.service.ReviewService;
 import com.himedia.rentmon_back.service.S3UploadService;
 import com.himedia.rentmon_back.service.SpaceService;
 import com.himedia.rentmon_back.util.PagingMj;
-import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/review")
@@ -60,7 +59,7 @@ public class ReviewController {
                     // Create ReviewImage object and set properties
                     ReviewImage image = new ReviewImage();
                     image.setOriginname(uploadFilePathName);
-//                    image.setRealname(fn1 + dt + fn2);
+                    image.setRealname(uploadFilePathName);
                     reviewImages.add(image);
 
                 } catch (IllegalStateException | IOException e) {
