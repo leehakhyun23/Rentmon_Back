@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,9 +143,9 @@ public class ReservationService {
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 
         // 해당 사용자가 공간을 예약했는지 확인
-        Optional<Reservation> reservationOpt = reservationRepository.findByUserUseridAndSpaceSseq(userid, sseq);
+        List<Reservation> reservationOpt = reservationRepository.findByUserUseridAndSpaceSseq(userid, sseq);
 
-        if (reservationOpt.isPresent()) {
+        if (reservationOpt.size() > 0) {
             // 예약이 있고, 예약 종료 시간이 현재 시각을 지났는지 확인
             Optional<Reservation> pastReservationOpt = reservationRepository.findByUserUseridAndSpaceSseqAndReserveendBefore(userid, sseq, currentTimestamp);
 

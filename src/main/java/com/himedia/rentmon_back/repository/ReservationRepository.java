@@ -57,7 +57,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     // 특정 공간의 총 매출 계산
     @Query("SELECT SUM(r.payment) FROM Reservation r WHERE r.space = :space")
     int sumPaymentBySpace(Space space);
-    Optional<Reservation> findByUserUseridAndSpaceSseq(String userid, int sseq);
+    List<Reservation> findByUserUseridAndSpaceSseq(String userid, int sseq);
 
     List<Reservation> findBySpace(Space space);
     Optional<Reservation> findByUserUseridAndSpaceSseqAndReserveendBefore(String userid, int sseq, Timestamp currentTimestamp);
