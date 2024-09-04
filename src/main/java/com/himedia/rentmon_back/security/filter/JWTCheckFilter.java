@@ -103,6 +103,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         if(path.startsWith("/space/insertSpace")) return true;
         if(path.startsWith("/space/insertfnum")) return true;
         if(path.startsWith("/space/insertImgSrc")) return true;
+        if(path.startsWith("/review/GetReviewList")) return true;
+        if(path.startsWith("/inquery/getInqueryListToHost")) return true;
         if(path.startsWith("/inquery/getsseq")) return true;
 
         if(path.startsWith("/admin")) return true;
