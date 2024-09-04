@@ -60,7 +60,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findByUserUseridAndSpaceSseq(String userid, int sseq);
 
     List<Reservation> findBySpace(Space space);
-    Optional<Reservation> findByUserUseridAndSpaceSseqAndReserveendBefore(String userid, int sseq, Timestamp currentTimestamp);
+    List<Reservation> findByUserUseridAndSpaceSseqAndReserveendBefore(String userid, int sseq, Timestamp currentTimestamp);
 
     // admin
 //    List<Reservation> findByReservestartBetween(Timestamp startDate, Timestamp endDate);

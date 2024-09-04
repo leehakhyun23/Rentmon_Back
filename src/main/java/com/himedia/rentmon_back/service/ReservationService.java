@@ -147,9 +147,9 @@ public class ReservationService {
 
         if (reservationOpt.size() > 0) {
             // 예약이 있고, 예약 종료 시간이 현재 시각을 지났는지 확인
-            Optional<Reservation> pastReservationOpt = reservationRepository.findByUserUseridAndSpaceSseqAndReserveendBefore(userid, sseq, currentTimestamp);
+            List<Reservation> pastReservationOpt = reservationRepository.findByUserUseridAndSpaceSseqAndReserveendBefore(userid, sseq, currentTimestamp);
 
-            if (pastReservationOpt.isPresent()) {
+            if (pastReservationOpt.size() > 0) {
                 return "OK";  // 예약 시간이 지남
             } else {
                 return "NO";  // 예약 시간이 아직 남음
