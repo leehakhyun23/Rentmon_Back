@@ -74,11 +74,22 @@ public class ChatService {
     }
 
     public ChatInfoDto getChatInfo(String userid) {
-        int crseq = chatRoomRepository.findCrseqByUserId(userid);
+        Optional<Integer> optionalCrseq = chatRoomRepository.findCrseqByUserId(userid);
+        Integer crseq = optionalCrseq.orElse(null);
+
+        if (crseq == null) {
+            ChatRoom newChatRoom = new ChatRoom();
+            newChatRoom.setUser(userRepository.findById(userid).orElseThrow(() -> new IllegalArgumentException("Invalid user ID")));
+            newChatRoom.setNickName(userid);
+            ChatRoom savedChatRoom = chatRoomRepository.save(newChatRoom);
+            crseq = savedChatRoom.getCrseq();
+        }
+
         int unreadMessages = chatMessageRepository.countUnreadMessagesByCrseqAndSenderTypeNotUser(crseq);
 
         return new ChatInfoDto(crseq, unreadMessages);
     }
+
 
     public void markMessagesAsRead(int crseq) {
         ChatRoom chatRoom = chatRoomRepository.findById(crseq)

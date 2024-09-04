@@ -194,7 +194,7 @@ public class AdminDTO {
     @Builder
     public static class ResponseChatRoom {
         private int crseq;
-//        private String profileImage;
+        private String userid;
         private String nickName;
         private String lastMessage;
         @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")

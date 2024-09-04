@@ -16,5 +16,5 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
 
     // user쪽
     @Query("SELECT c.crseq FROM ChatRoom c WHERE c.user.userid = :userid")
-    int findCrseqByUserId(String userid);
+    Optional<Integer> findCrseqByUserId(String userid);
 }

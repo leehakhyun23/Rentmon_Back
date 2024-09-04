@@ -254,17 +254,17 @@ public class AdminService {
 
                     return AdminDTO.ResponseChatRoom.builder()
                             .crseq(chatRoom.getCrseq())
+                            .userid(chatRoom.getUser().getUserid())
                             .nickName(chatRoom.getNickName())
                             .lastMessage(lastMessage)
                             .lastSendTime(lastSendTime)
                             .unreadCount(unreadCount)
                             .build();
                 })
-                .sorted(Comparator.comparing(AdminDTO.ResponseChatRoom::getUnreadCount).reversed()
-                        .thenComparing(Comparator.comparing(AdminDTO.ResponseChatRoom::getLastSendTime).reversed()))
+                .sorted(Comparator.comparing(AdminDTO.ResponseChatRoom::getLastSendTime).reversed()
+                        .thenComparing(Comparator.comparing(AdminDTO.ResponseChatRoom::getUnreadCount).reversed()))
                 .collect(Collectors.toList());
     }
-
 
     public List<AdminDTO.ResponseChatMessage> getChatMessage(int crseq) {
         List<ChatMsg> chatMsgList = chatMessageRepository.findAllByChatroomCrseqOrderByCreatedAtAsc(crseq);
