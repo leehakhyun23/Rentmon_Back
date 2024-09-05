@@ -43,6 +43,7 @@ public class UserSnsLoginService {
     private final MailSend ms;
     private final ImageFileupload imgupload;
     private final JoinCoupon jc;
+    private final S3UploadService sus;
 
 
     public OAuthToken getKakaoToken(String code, String kakaoclinetId, String redirectUri) {
@@ -428,7 +429,7 @@ public class UserSnsLoginService {
         user.setName(userDTO.getName());
         if(profileimg !=null) {
             try {
-                user.setProfileimg(imgupload.saveFile(profileimg , "/profile_images"));
+                user.setProfileimg(sus.saveFile(profileimg , "/profile_images"));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
